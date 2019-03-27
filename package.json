@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "font-awesome": "^4.7.0",
+    "icetea-common": "github:TradaTech/icetea-common",
+    "icetea-web3": "github:TradaTech/icetea-web3",
+    "node-sass": "^4.11.0",
+    "promise": "^8.0.3",
     "react": "^16.8.5",
     "react-dom": "^16.8.5",
     "react-router-dom": "^5.0.0",

@@ -1,7 +1,54 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 class TransactionsBox extends Component {
+
+  // getHashId = (id) => {
+  //   console.log(id);
+  // }
+
+  loadTransactionsData = () => {
+    return(
+      this.props.allTransactions && this.props.allTransactions.map((item, index) => {
+        var txType ='transfer'
+        const txdata = JSON.parse(item.tx.data) || {}
+        if (txdata.op === 0) {
+          txType = 'deploy'
+          // t.to = fmtHex(t.tx_result.data);
+        } else if (txdata.op === 1) {
+          txType = 'call'
+        }
+        
+        return(
+          <div className="row_transactions" key={index}>
+            <div className="info_tx flex">
+                <div className="tx">
+                  TX#: 
+                  <Link to={`/tx/${item.hash}`} >{item.hash}</Link>
+                  {/* <button onClick={() => this.getHashId(item.hash)}>{item.hash}</button> */}
+                </div>
+                <div className="seconds_time">1 sec ago</div>
+            </div>
+            <div className="transactions flex">
+              <div className="from_to">
+                <div className="from">
+                  From: <Link to="/address/">{item.tags['tx.from'] ? item.tags['tx.from'] : '--'}</Link>
+                </div>
+                <div className="to">
+                  To: <Link to="/address/">{item.tags['tx.to'] ? item.tags['tx.to'] : '--'}</Link>
+                </div>
+              </div>
+              <div className="status_order">
+                <span className="fa fa-circle"></span> { txType }
+              </div>
+            </div>
+          </div>
+        )
+      })
+    )
+  }
+
   render() {
     return (
       <div className="transactions_box">
@@ -11,232 +58,18 @@ class TransactionsBox extends Component {
         </div>
 
         <div className="box_wrap">
-        
-          <div className="row_transactions">
-            <div className="info_tx flex">
-                <div className="tx">
-                  TX#: 
-                  <Link to="/tx/">9E5510B70414DB4BF335C2517DA0722071DE112CCD27FF304720C31D000FD8BC</Link>
-                </div>
-                <div className="seconds_time">1 sec ago</div>
-            </div>
-            <div className="transactions flex">
-              <div className="from_to">
-                <div className="from">
-                  From: <Link to="/address/">tbnb1vsmjsq6sjzu3f0cf3vfaj8689zpc79wdlhrvv9</Link>
-                </div>
-                <div className="to">
-                  To: <span>--</span>
-                </div>
-              </div>
-              <div className="status_order">
-                <span className="fa fa-circle"></span> Place Order
-              </div>
-            </div>
-          </div>
-          <div className="row_transactions">
-            <div className="info_tx flex">
-                <div className="tx">
-                  TX#: 
-                  <Link to="/tx/">9E5510B70414DB4BF335C2517DA0722071DE112CCD27FF304720C31D000FD8BC</Link>
-                </div>
-                <div className="seconds_time">1 sec ago</div>
-            </div>
-            <div className="transactions flex">
-              <div className="from_to">
-                <div className="from">
-                  From: <Link to="/address/">tbnb1vsmjsq6sjzu3f0cf3vfaj8689zpc79wdlhrvv9</Link>
-                </div>
-                <div className="to">
-                  To: <span>--</span>
-                </div>
-              </div>
-              <div className="status_order">
-                <span className="fa fa-circle"></span> Place Order
-              </div>
-            </div>
-          </div>
-          <div className="row_transactions">
-            <div className="info_tx flex">
-                <div className="tx">
-                  TX#: 
-                  <Link to="/tx/">9E5510B70414DB4BF335C2517DA0722071DE112CCD27FF304720C31D000FD8BC</Link>
-                </div>
-                <div className="seconds_time">1 sec ago</div>
-            </div>
-            <div className="transactions flex">
-              <div className="from_to">
-                <div className="from">
-                  From: <Link to="/address/">tbnb1vsmjsq6sjzu3f0cf3vfaj8689zpc79wdlhrvv9</Link>
-                </div>
-                <div className="to">
-                  To: <span>--</span>
-                </div>
-              </div>
-              <div className="status_order">
-                <span className="fa fa-circle"></span> Place Order
-              </div>
-            </div>
-          </div>
-          <div className="row_transactions">
-            <div className="info_tx flex">
-                <div className="tx">
-                  TX#: 
-                  <Link to="/tx/">9E5510B70414DB4BF335C2517DA0722071DE112CCD27FF304720C31D000FD8BC</Link>
-                </div>
-                <div className="seconds_time">1 sec ago</div>
-            </div>
-            <div className="transactions flex">
-              <div className="from_to">
-                <div className="from">
-                  From: <Link to="/address/">tbnb1vsmjsq6sjzu3f0cf3vfaj8689zpc79wdlhrvv9</Link>
-                </div>
-                <div className="to">
-                  To: <span>--</span>
-                </div>
-              </div>
-              <div className="status_order">
-                <span className="fa fa-circle"></span> Place Order
-              </div>
-            </div>
-          </div>
-          <div className="row_transactions">
-            <div className="info_tx flex">
-                <div className="tx">
-                  TX#: 
-                  <Link to="/tx/">9E5510B70414DB4BF335C2517DA0722071DE112CCD27FF304720C31D000FD8BC</Link>
-                </div>
-                <div className="seconds_time">1 sec ago</div>
-            </div>
-            <div className="transactions flex">
-              <div className="from_to">
-                <div className="from">
-                  From: <Link to="/address/">tbnb1vsmjsq6sjzu3f0cf3vfaj8689zpc79wdlhrvv9</Link>
-                </div>
-                <div className="to">
-                  To: <span>--</span>
-                </div>
-              </div>
-              <div className="status_order">
-                <span className="fa fa-circle"></span> Place Order
-              </div>
-            </div>
-          </div>
-          <div className="row_transactions">
-            <div className="info_tx flex">
-                <div className="tx">
-                  TX#: 
-                  <Link to="/tx/">9E5510B70414DB4BF335C2517DA0722071DE112CCD27FF304720C31D000FD8BC</Link>
-                </div>
-                <div className="seconds_time">1 sec ago</div>
-            </div>
-            <div className="transactions flex">
-              <div className="from_to">
-                <div className="from">
-                  From: <Link to="/address/">tbnb1vsmjsq6sjzu3f0cf3vfaj8689zpc79wdlhrvv9</Link>
-                </div>
-                <div className="to">
-                  To: <span>--</span>
-                </div>
-              </div>
-              <div className="status_order">
-                <span className="fa fa-circle"></span> Place Order
-              </div>
-            </div>
-          </div>
-          <div className="row_transactions">
-            <div className="info_tx flex">
-                <div className="tx">
-                  TX#: 
-                  <Link to="/tx/">9E5510B70414DB4BF335C2517DA0722071DE112CCD27FF304720C31D000FD8BC</Link>
-                </div>
-                <div className="seconds_time">1 sec ago</div>
-            </div>
-            <div className="transactions flex">
-              <div className="from_to">
-                <div className="from">
-                  From: <Link to="/address/">tbnb1vsmjsq6sjzu3f0cf3vfaj8689zpc79wdlhrvv9</Link>
-                </div>
-                <div className="to">
-                  To: <span>--</span>
-                </div>
-              </div>
-              <div className="status_order">
-                <span className="fa fa-circle"></span> Place Order
-              </div>
-            </div>
-          </div>
-          <div className="row_transactions">
-            <div className="info_tx flex">
-                <div className="tx">
-                  TX#: 
-                  <Link to="/tx/">9E5510B70414DB4BF335C2517DA0722071DE112CCD27FF304720C31D000FD8BC</Link>
-                </div>
-                <div className="seconds_time">1 sec ago</div>
-            </div>
-            <div className="transactions flex">
-              <div className="from_to">
-                <div className="from">
-                  From: <Link to="/address/">tbnb1vsmjsq6sjzu3f0cf3vfaj8689zpc79wdlhrvv9</Link>
-                </div>
-                <div className="to">
-                  To: <span>--</span>
-                </div>
-              </div>
-              <div className="status_order">
-                <span className="fa fa-circle"></span> Place Order
-              </div>
-            </div>
-          </div>
-          <div className="row_transactions">
-            <div className="info_tx flex">
-                <div className="tx">
-                  TX#: 
-                  <Link to="/tx/">9E5510B70414DB4BF335C2517DA0722071DE112CCD27FF304720C31D000FD8BC</Link>
-                </div>
-                <div className="seconds_time">1 sec ago</div>
-            </div>
-            <div className="transactions flex">
-              <div className="from_to">
-                <div className="from">
-                  From: <Link to="/address/">tbnb1vsmjsq6sjzu3f0cf3vfaj8689zpc79wdlhrvv9</Link>
-                </div>
-                <div className="to">
-                  To: <span>--</span>
-                </div>
-              </div>
-              <div className="status_order">
-                <span className="fa fa-circle"></span> Place Order
-              </div>
-            </div>
-          </div>
-          <div className="row_transactions">
-            <div className="info_tx flex">
-                <div className="tx">
-                  TX#: 
-                  <Link to="/tx/">9E5510B70414DB4BF335C2517DA0722071DE112CCD27FF304720C31D000FD8BC</Link>
-                </div>
-                <div className="seconds_time">1 sec ago</div>
-            </div>
-            <div className="transactions flex">
-              <div className="from_to">
-                <div className="from">
-                  From: <Link to="/address/">tbnb1vsmjsq6sjzu3f0cf3vfaj8689zpc79wdlhrvv9</Link>
-                </div>
-                <div className="to">
-                  To: <span>--</span>
-                </div>
-              </div>
-              <div className="status_order">
-                <span className="fa fa-circle"></span> Place Order
-              </div>
-            </div>
-          </div>
-          
+          { this.loadTransactionsData() }
         </div>
       </div>
     );
   }
 }
 
-export default TransactionsBox;
+const mapStateToProps = (state) => {
+  return{
+    allTransactions: state.Transactions,
+    hashId: state.HashIdChange,
+  }
+}
+
+export default connect(mapStateToProps)(TransactionsBox);

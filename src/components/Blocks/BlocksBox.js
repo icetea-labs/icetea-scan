@@ -1,7 +1,38 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 class BlocksBox extends Component {
+
+  loadBlocksData = () => {
+    return(
+      this.props.allBlocks && this.props.allBlocks.map((item, index) => {
+        // console.log(item);
+        return(
+          <div className="row_blocks" key={index}>
+            <div className="title flex">
+              <div className="block_count">
+                Blocks
+                <Link to="/blocks/blocks_number">{item.header.height}</Link>
+              </div>
+              <div className="seconds_time">1 sec ago</div>
+            </div>
+            <div className="includes flex">
+              <div className="in_detail">
+                Includes
+                <Link to="/txs?block="> {item.header.num_txs} Txns, </Link>
+                <span>Fees <i>0</i> BNB </span>
+              </div>
+              <div className="node">
+                Node: <span>Scafell</span>
+              </div>
+            </div>
+          </div>
+        )
+      })
+    )
+  }
+
   render() {
     return (
       <div className="blocks_box">
@@ -11,197 +42,7 @@ class BlocksBox extends Component {
         </div>
 
         <div className="box_wrap">
-          <div className="row_blocks">
-            <div className="title flex">
-              <div className="block_count">
-                Blocks
-                <Link to="/blocks/4139138">4139138</Link>
-              </div>
-              <div className="seconds_time">1 sec ago</div>
-            </div>
-            <div className="includes flex">
-              <div className="in_detail">
-                Includes
-                <Link to="/txs?block=">0 Txns, </Link>
-                <span>Fees <i>0</i> BNB </span>
-              </div>
-              <div className="node">
-                Node: <span>Scafell</span>
-              </div>
-            </div>
-          </div>
-          <div className="row_blocks">
-            <div className="title flex">
-              <div className="block_count">
-                Blocks
-                <Link to="/blocks/4139138">4139138</Link>
-              </div>
-              <div className="seconds_time">1 sec ago</div>
-            </div>
-            <div className="includes flex">
-              <div className="in_detail">
-                Includes
-                <Link to="/txs?block=">0 Txns, </Link>
-                <span>Fees <i>0</i> BNB </span>
-              </div>
-              <div className="node">
-                Node: <span>Scafell</span>
-              </div>
-            </div>
-          </div>
-          <div className="row_blocks">
-            <div className="title flex">
-              <div className="block_count">
-                Blocks
-                <Link to="/blocks/4139138">4139138</Link>
-              </div>
-              <div className="seconds_time">1 sec ago</div>
-            </div>
-            <div className="includes flex">
-              <div className="in_detail">
-                Includes
-                <Link to="/txs?block=">0 Txns, </Link>
-                <span>Fees <i>0</i> BNB </span>
-              </div>
-              <div className="node">
-                Node: <span>Scafell</span>
-              </div>
-            </div>
-          </div>
-          <div className="row_blocks">
-            <div className="title flex">
-              <div className="block_count">
-                Blocks
-                <Link to="/blocks/4139138">4139138</Link>
-              </div>
-              <div className="seconds_time">1 sec ago</div>
-            </div>
-            <div className="includes flex">
-              <div className="in_detail">
-                Includes
-                <Link to="/txs?block=">0 Txns, </Link>
-                <span>Fees <i>0</i> BNB </span>
-              </div>
-              <div className="node">
-                Node: <span>Scafell</span>
-              </div>
-            </div>
-          </div>
-          <div className="row_blocks">
-            <div className="title flex">
-              <div className="block_count">
-                Blocks
-                <Link to="/blocks/4139138">4139138</Link>
-              </div>
-              <div className="seconds_time">1 sec ago</div>
-            </div>
-            <div className="includes flex">
-              <div className="in_detail">
-                Includes
-                <Link to="/txs?block=">0 Txns, </Link>
-                <span>Fees <i>0</i> BNB </span>
-              </div>
-              <div className="node">
-                Node: <span>Scafell</span>
-              </div>
-            </div>
-          </div>
-          <div className="row_blocks">
-            <div className="title flex">
-              <div className="block_count">
-                Blocks
-                <Link to="/blocks/4139138">4139138</Link>
-              </div>
-              <div className="seconds_time">1 sec ago</div>
-            </div>
-            <div className="includes flex">
-              <div className="in_detail">
-                Includes
-                <Link to="/txs?block=">0 Txns, </Link>
-                <span>Fees <i>0</i> BNB </span>
-              </div>
-              <div className="node">
-                Node: <span>Scafell</span>
-              </div>
-            </div>
-          </div>
-          <div className="row_blocks">
-            <div className="title flex">
-              <div className="block_count">
-                Blocks
-                <Link to="/blocks/4139138">4139138</Link>
-              </div>
-              <div className="seconds_time">1 sec ago</div>
-            </div>
-            <div className="includes flex">
-              <div className="in_detail">
-                Includes
-                <Link to="/txs?block=">0 Txns, </Link>
-                <span>Fees <i>0</i> BNB </span>
-              </div>
-              <div className="node">
-                Node: <span>Scafell</span>
-              </div>
-            </div>
-          </div>
-          <div className="row_blocks">
-            <div className="title flex">
-              <div className="block_count">
-                Blocks
-                <Link to="/blocks/4139138">4139138</Link>
-              </div>
-              <div className="seconds_time">1 sec ago</div>
-            </div>
-            <div className="includes flex">
-              <div className="in_detail">
-                Includes
-                <Link to="/txs?block=">0 Txns, </Link>
-                <span>Fees <i>0</i> BNB </span>
-              </div>
-              <div className="node">
-                Node: <span>Scafell</span>
-              </div>
-            </div>
-          </div>
-          <div className="row_blocks">
-            <div className="title flex">
-              <div className="block_count">
-                Blocks
-                <Link to="/blocks/4139138">4139138</Link>
-              </div>
-              <div className="seconds_time">1 sec ago</div>
-            </div>
-            <div className="includes flex">
-              <div className="in_detail">
-                Includes
-                <Link to="/txs?block=">0 Txns, </Link>
-                <span>Fees <i>0</i> BNB </span>
-              </div>
-              <div className="node">
-                Node: <span>Scafell</span>
-              </div>
-            </div>
-          </div>
-          <div className="row_blocks">
-            <div className="title flex">
-              <div className="block_count">
-                Blocks
-                <Link to="/blocks/4139138">4139138</Link>
-              </div>
-              <div className="seconds_time">1 sec ago</div>
-            </div>
-            <div className="includes flex">
-              <div className="in_detail">
-                Includes
-                <Link to="/txs?block=">0 Txns, </Link>
-                <span>Fees <i>0</i> BNB </span>
-              </div>
-              <div className="node">
-                Node: <span>Scafell</span>
-              </div>
-            </div>
-          </div>
-          
+          { this.loadBlocksData() }
         </div>
 
       </div>
@@ -209,4 +50,11 @@ class BlocksBox extends Component {
   }
 }
 
-export default BlocksBox;
+const mapStateToProps = (state) => {
+  // console.log(state)
+  return{
+    allBlocks: state.Blocks
+  }
+}
+
+export default connect(mapStateToProps)(BlocksBox);

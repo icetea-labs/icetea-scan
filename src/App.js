@@ -4,6 +4,9 @@ import './sass/app.scss';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from './components/Home';
 import TransactionsInfo from './components/Transactions/TransactionsInfo';
+import BlockInfo from './components/Blocks/BlockInfo';
+import Blocks from './components/Blocks/Blocks';
+import Transactions from './components/Transactions/Transactions';
 
 class App extends Component {
   render() {
@@ -13,6 +16,9 @@ class App extends Component {
           <Switch>
             <Route exact path='/' component={Home} />
             <Route exact path={`/tx/:hashId` } component={TransactionsInfo} />;
+            <Route exact path={`/block/:blockId` } component={BlockInfo} />;
+            <Route exact path={`/blocks` } component={Blocks} />;
+            <Route exact path={`/txs` } component={Transactions} />;
           </Switch>
         </Router>
       </div>

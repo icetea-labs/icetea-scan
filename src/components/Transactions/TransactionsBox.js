@@ -54,7 +54,7 @@ class TransactionsBox extends Component {
       <div className="transactions_box">
         <div className="header_top">
           <h3 className="title"><i className="fa fa-tasks"></i>Transactions</h3>
-          <Link to="/blocks">View All →</Link>
+          <Link to="/txs">View All →</Link>
         </div>
 
         <div className="box_wrap">

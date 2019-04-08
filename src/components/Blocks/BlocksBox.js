@@ -7,13 +7,12 @@ class BlocksBox extends Component {
   loadBlocksData = () => {
     return(
       this.props.allBlocks && this.props.allBlocks.map((item, index) => {
-        // console.log(item);
         return(
           <div className="row_blocks" key={index}>
             <div className="title flex">
               <div className="block_count">
                 Blocks
-                <Link to="/blocks/blocks_number">{item.header.height}</Link>
+                <Link to={`/block/${item.header.height}`}>{item.header.height}</Link>
               </div>
               <div className="seconds_time">1 sec ago</div>
             </div>

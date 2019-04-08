@@ -13,6 +13,9 @@ html, body{
 a{
   text-decoration: none;
   color: $color_blue_link;
+  &:hover{
+    text-decoration: underline;
+  }
 }
 
 ul, li{
@@ -28,4 +31,12 @@ input, button {
 .container{
   width: 1200px;
   margin: 0 auto;
+}
+
+.mt_50{
+  margin-top: 50px;
+}
+
+.mb_30{
+  margin-bottom: 30px;
 }

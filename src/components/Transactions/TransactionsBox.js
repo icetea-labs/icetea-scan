@@ -4,10 +4,6 @@ import { connect } from 'react-redux';
 
 class TransactionsBox extends Component {
 
-  // getHashId = (id) => {
-  //   console.log(id);
-  // }
-
   loadTransactionsData = () => {
     return(
       this.props.allTransactions && this.props.allTransactions.map((item, index) => {

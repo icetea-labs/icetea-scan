@@ -4,6 +4,13 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Layout from '../Layout';
 
+const mapStateToProps = (state) => {
+  return{
+    transactions: state.Transactions,
+    blocks: state.Blocks
+  }
+}
+
 class TransactionsInfo extends Component {
 
   transactionInfo = () => {
@@ -140,12 +147,4 @@ class TransactionsInfo extends Component {
     );
   }
 }
-
-const mapStateToProps = (state) => {
-  return{
-    transactions: state.Transactions,
-    blocks: state.Blocks
-  }
-}
-
 export default connect(mapStateToProps)(TransactionsInfo);

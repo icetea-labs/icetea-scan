@@ -3,6 +3,15 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { connect } from 'react-redux';
 
+
+// get data block
+const mapStateToProps = (state) => {
+  // console.log(state)
+  return{
+    allBlocks: state.getRealTimeData.blocks
+  }
+}
+
 class BlocksBox extends Component {
 
   loadBlocksData = () => {
@@ -67,11 +76,5 @@ class BlocksBox extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  // console.log(state)
-  return{
-    allBlocks: state.Blocks
-  }
-}
 
 export default connect(mapStateToProps)(BlocksBox);

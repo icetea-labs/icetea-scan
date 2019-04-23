@@ -2,12 +2,19 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+const mapStateToProps = (state) => {
+  return {
+    allTransactions: state.getRealTimeData.transactions,
+    hashId: state.HashIdChange,
+  }
+}
+
 class TransactionsBox extends Component {
 
   loadTransactionsData = () => {
-    return(
+    return (
       this.props.allTransactions && this.props.allTransactions.map((item, index) => {
-        var txType ='transfer'
+        var txType = 'transfer'
         const txdata = JSON.parse(item.tx.data) || {}
         if (txdata.op === 0) {
           txType = 'deploy'
@@ -15,16 +22,16 @@ class TransactionsBox extends Component {
         } else if (txdata.op === 1) {
           txType = 'call'
         }
-        
-        return(
+
+        return (
           <div className="row_transactions" key={index}>
             <div className="info_tx flex">
-                <div className="tx">
-                  TX#: 
+              <div className="tx">
+                TX#:
                   <Link to={`/tx/${item.hash}`} >{item.hash}</Link>
-                  {/* <button onClick={() => this.getHashId(item.hash)}>{item.hash}</button> */}
-                </div>
-                <div className="seconds_time">1 sec ago</div>
+                {/* <button onClick={() => this.getHashId(item.hash)}>{item.hash}</button> */}
+              </div>
+              <div className="seconds_time">1 sec ago</div>
             </div>
             <div className="transactions flex">
               <div className="from_to">
@@ -36,7 +43,7 @@ class TransactionsBox extends Component {
                 </div>
               </div>
               <div className="status_order">
-                <span className="fa fa-circle"></span> { txType }
+                <span className="fa fa-circle"></span> {txType}
               </div>
             </div>
           </div>
@@ -54,17 +61,10 @@ class TransactionsBox extends Component {
         </div>
 
         <div className="box_wrap">
-          { this.loadTransactionsData() }
+          {this.loadTransactionsData()}
         </div>
       </div>
     );
-  }
-}
-
-const mapStateToProps = (state) => {
-  return{
-    allTransactions: state.Transactions,
-    hashId: state.HashIdChange,
   }
 }
 

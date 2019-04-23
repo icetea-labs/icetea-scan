@@ -4,6 +4,13 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import Layout from '../Layout';
 
+const mapStateToProps = (state) => {
+  return{
+    blocks: state.Blocks,
+    transactions: state.getRealTimeData.transactions,
+  }
+}
+
 class Transactions extends Component {
 
   loadTransactions = () =>{
@@ -115,11 +122,6 @@ class Transactions extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return{
-    blocks: state.Blocks,
-    transactions: state.Transactions,
-  }
-}
+
 
 export default connect(mapStateToProps)(Transactions);

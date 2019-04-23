@@ -4,33 +4,51 @@ import { connect } from 'react-redux';
 import Layout from '../Layout';
 import moment from 'moment';
 
+
+const mapStateToProps = (state) => {
+  return {
+    blocks: state.Blocks,
+    pageState: state.changePageState,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toFirstIndex: () => dispatch({ type: 'FIRST_INDEX' }),
+    toLastIndex: () => dispatch({ type: 'LAST_INDEX' }),
+    nextIndex: (pageIndex) => dispatch({ type: 'NEXT_INDEX', pageIndex }),
+    beyondIndex: (pageIndex) => dispatch({ type: 'BEYOND_INDEX', pageIndex })
+  }
+}
+
 class Blocks extends Component {
 
-  loadBlocks = () =>{
+
+  loadBlocks = () => {
     const blocks = this.props.blocks && this.props.blocks.map((item, index) => {
-      let currentTime  = moment(new Date()).format("DD/MM/YYYY HH:mm:ss");
+      let currentTime = moment(new Date()).format("DD/MM/YYYY HH:mm:ss");
       let blockTime = moment(item.header.time).format("DD/MM/YYYY HH:mm:ss");
-      const ms = moment(currentTime,"DD/MM/YYYY HH:mm:ss").diff(moment(blockTime,"DD/MM/YYYY HH:mm:ss"));
+      const ms = moment(currentTime, "DD/MM/YYYY HH:mm:ss").diff(moment(blockTime, "DD/MM/YYYY HH:mm:ss"));
       const d = moment.duration(ms);
       // diffTime
       var diffTime = null;
-      if(d.days() > 0){
+      if (d.days() > 0) {
         diffTime = `${d.days()} days ${d.hours()} hours ago`;
-      }else if(d.hours() > 0){
+      } else if (d.hours() > 0) {
         diffTime = `${d.hours()} hours ${d.minutes()} mins ago`;
-      }else if(d.minutes() > 0){
+      } else if (d.minutes() > 0) {
         diffTime = `${d.minutes()} mins ${d.seconds()} secs ago`;
-      }else{
+      } else {
         diffTime = `${d.seconds()} secs ago`;
       }
 
-      return(
+      return (
         <tr key={index}>
           <td><Link to={`/block/${item.header.height}`}>{item.header.height}</Link></td>
           <td>{moment(item.header.time).format("MMMM-DD-YYYY h:mm:ss")}</td>
           <td>{diffTime}</td>
           <td>
-            { (item.header.num_txs > 0) ? <Link to="">{ item.header.num_txs }</Link> : 0 }
+            {(item.header.num_txs > 0) ? <Link to="">{item.header.num_txs}</Link> : 0}
           </td>
           <td>VN</td>
           <td>0 BNB</td>
@@ -68,10 +86,10 @@ class Blocks extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  { this.loadBlocks() }
+                  {this.loadBlocks()}
                 </tbody>
               </table>
-              
+
             </div>
             <div className="pagination">
               <ul>
@@ -79,17 +97,19 @@ class Blocks extends Component {
               </ul>
             </div>
           </div>
+          <div>
+            <button className="" onClick={this.props.toFirstIndex}>Fisrt</button>
+            <button onClick={() => { this.props.beyondIndex(this.props.pageState.pageIndex) }} > beyond </button>
+            <label>Page {this.props.pageState.pageIndex} of {this.props.pageState.pageSize} </label>
+            <button onClick={() => { this.props.nextIndex(this.props.pageState.pageIndex) }}> next</button>
+            <button onClick={this.props.toLastIndex} > Last </button>
+          </div>
         </div>
-        
+
       </Layout>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return{
-    blocks: state.Blocks
-  }
-}
 
-export default connect(mapStateToProps)(Blocks);
+export default connect(mapStateToProps, mapDispatchToProps)(Blocks);

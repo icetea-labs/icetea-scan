@@ -3,33 +3,47 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Layout from '../Layout';
 import moment from 'moment';
-
+import * as handledata from '../../service/handledata';
+import MaterialIcon from 'material-icons-react';
+import './Blocks.scss';
+// import { diffTime } from "../../service/findtimebyblock";
 
 const mapStateToProps = (state) => {
   return {
-    blocks: state.Blocks,
+    blocks: state.handleListBlocks,
     pageState: state.changePageState,
   }
 }
 
+// Paging 
 const mapDispatchToProps = (dispatch) => {
   return {
-    toFirstIndex: () => dispatch({ type: 'FIRST_INDEX' }),
-    toLastIndex: () => dispatch({ type: 'LAST_INDEX' }),
-    nextIndex: (pageIndex) => dispatch({ type: 'NEXT_INDEX', pageIndex }),
-    beyondIndex: (pageIndex) => dispatch({ type: 'BEYOND_INDEX', pageIndex })
   }
 }
 
 class Blocks extends Component {
 
+  constructor(){
+    super();
+    this.state = {
+      pageIndex: 1
+    }
+  }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props !== nextProps) {
+      this.loadBlocks();
+    }
+  }
+
+  // Set Time For Block
   loadBlocks = () => {
     const blocks = this.props.blocks && this.props.blocks.map((item, index) => {
       let currentTime = moment(new Date()).format("DD/MM/YYYY HH:mm:ss");
       let blockTime = moment(item.header.time).format("DD/MM/YYYY HH:mm:ss");
       const ms = moment(currentTime, "DD/MM/YYYY HH:mm:ss").diff(moment(blockTime, "DD/MM/YYYY HH:mm:ss"));
       const d = moment.duration(ms);
+
       // diffTime
       var diffTime = null;
       if (d.days() > 0) {
@@ -57,6 +71,25 @@ class Blocks extends Component {
     })
 
     return blocks;
+  }
+
+  // Set Data By Page Index
+  getBlocksByPageIndex(pageIndex) {
+    let maxheight = this.props.pageState.total_blocks;
+
+    if(pageIndex <= 0){
+      pageIndex = 1;
+    }
+
+    if(pageIndex >=this.props.pageState.pageBlockLimit){
+      pageIndex = this.props.pageState.pageBlockLimit 
+    }
+    
+    this.setState({
+      pageIndex
+    })
+
+    return handledata.getBlocks(maxheight, pageIndex, 20);
   }
 
   render() {
@@ -96,17 +129,24 @@ class Blocks extends Component {
                 <li></li>
               </ul>
             </div>
-          </div>
-          <div>
-            <button className="" onClick={this.props.toFirstIndex}>Fisrt</button>
-            <button onClick={() => { this.props.beyondIndex(this.props.pageState.pageIndex) }} > beyond </button>
-            <label>Page {this.props.pageState.pageIndex} of {this.props.pageState.pageSize} </label>
-            <button onClick={() => { this.props.nextIndex(this.props.pageState.pageIndex) }}> next</button>
-            <button onClick={this.props.toLastIndex} > Last </button>
+            <div className="page-index">
+              <div className="paging">
+                <button className="btn-common" onClick={() => { this.getBlocksByPageIndex(1)}}>First</button>
+                <button className="btn-cusor" onClick={() => { this.getBlocksByPageIndex(this.state.pageIndex - 1)}} >
+                  <MaterialIcon icon="keyboard_arrow_left" />
+                </button>
+                <span className="state">Page {this.state.pageIndex} of {this.props.pageState.pageBlockLimit} </span>
+                <button className="btn-cusor" onClick={() => { this.getBlocksByPageIndex(this.state.pageIndex + 1)}}>
+                  <MaterialIcon icon="keyboard_arrow_right" />
+                </button>
+                <button className="btn-common" onClick={() => { this.getBlocksByPageIndex(this.props.pageState.pageBlockLimit)}}>
+                  Last
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-
-      </Layout>
+      </Layout >
     );
   }
 }

@@ -1,8 +1,3 @@
-
-
-
-
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
@@ -10,25 +5,20 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 // Provider
 import { Provider } from 'react-redux';
-import { store } from './service/getdata';
-import { getData } from './service/getdata';
+// import { createStore } from 'redux';
 import { getRealTimeData } from './service/getrealtimedata';
 import { setInterval } from 'timers';
-
-// store.subscribe(() => {
-//   console.log(store.getState())
-// })
-
-getData();
+import { store, getData } from "./service/init-store";
+// import { myReducer } from './redux/reducers/reducer';
 
 /**
  * @param setTimeout get blocks and transactions
  */
-setTimeout(() => {
+setInterval(() => {
   getRealTimeData();
-}, 1000);
+}, 2000);
 
-
+getData();
 
 ReactDOM.render(
   <Provider store={store}>

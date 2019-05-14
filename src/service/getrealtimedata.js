@@ -1,8 +1,8 @@
 import tweb3 from "../tweb3";
-import { store } from "./getdata";
-import { getFromTenderMint } from "../redux/actions/getRealTimeBlock";
-import { setPageSize } from "../redux/actions/pageState";
+import { getRealTimeBlocksAndTxs } from "../redux/actions/handleRealTimeData";
+import { setIndex } from "../redux/actions/handlePageState";
 import { utils } from 'icetea-web3';
+import { store } from './init-store';
 
 export const getRealTimeData = async () => {
     // number to get values
@@ -16,6 +16,7 @@ export const getRealTimeData = async () => {
     if (minHeight < 0) {
         minHeight = 0;
     }
+    // console.log(last_block);
 
     let options = { minHeight, maxHeight }
 
@@ -32,36 +33,37 @@ export const getRealTimeData = async () => {
     for (let i = maxHeight; i > limit_block; i--) {
         let data = await tweb3.getBlock({ height: i });
 
-        // 
         if (ave_trx >= limit_blocks_txs) {
             limit_block = i - 1;
         } else {
-            ave_trx += data.block.header.num_txs;
+            let num_txs = parseInt(data.block.header.num_txs);
+            ave_trx += num_txs;
+            // console.log(data.block.header.num_txs);
         }
     }
-    // console.log(limit_block);
 
     for (let i = maxHeight; i > limit_block; i--) {
-        let data_txs = await tweb3.searchTransactions('tx.height=' + i, { per_page: 10 });
+        let data_txs = await tweb3.searchTransactions('tx.height=' + i);
         let data = data_txs.txs;
 
+        // console.log(data);
+
         for (let j = 0; j < data.length; j++) {
-            // console.log(data[j]);
             transactions.push(utils.decode(data[j]));
         }
     }
+    
     // console.log(transactions);
-
     /**
-     * @param getFromTenderMint set value for realtime data 10 lastest block and 10 lastest transaction
+     * @param getRealTimeBlocksAndTxs set value for realtime data 10 lastest block and 10 lastest transaction
      * @param setPageSize update value from max height of all blocks tendermint node have
      */
 
     store.dispatch(
-        getFromTenderMint(blockchain.block_metas, transactions)
+        getRealTimeBlocksAndTxs(blockchain.block_metas, transactions)
     );
 
     store.dispatch(
-        setPageSize(maxHeight)
+        setIndex(parseInt(maxHeight), parseInt(last_block.block_meta.header.total_txs))
     );
 }

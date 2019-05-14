@@ -8,7 +8,7 @@ class Banner extends Component {
       <div className="banner">
         <div className="container">
           <div className="flex">
-            <div>
+            <div className="type-search">
               <h3>ICETEA CHAIN EXPLORER</h3>
               <a className="direc_link" href="http://trada.tech" rel="noopener noreferrer" target="_blank">Check out Icetea DEX →</a>
               <SearchBox />

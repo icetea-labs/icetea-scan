@@ -14,24 +14,33 @@ const mapStateToProps = (state) => {
 
 class BlocksBox extends Component {
 
+  constructor(){
+    super();
+    this.currentTime = null;
+    this.diffTime = null;
+    this.blockTime = null;
+    this.ms = null;
+    this.d = null;
+  }
+
   loadBlocksData = () => {
     return(
       this.props.allBlocks && this.props.allBlocks.map((item, index) => {
         // diffTime
-        let currentTime  = moment(new Date()).format("DD/MM/YYYY HH:mm:ss");
-        let blockTime = moment(item.header.time).format("DD/MM/YYYY HH:mm:ss");
-        const ms = moment(currentTime,"DD/MM/YYYY HH:mm:ss").diff(moment(blockTime,"DD/MM/YYYY HH:mm:ss"));
-        const d = moment.duration(ms);
+        this.currentTime  = moment(new Date()).format("DD/MM/YYYY HH:mm:ss");
+        this.blockTime = moment(item.header.time).format("DD/MM/YYYY HH:mm:ss");
+        this.ms = moment(this.currentTime,"DD/MM/YYYY HH:mm:ss").diff(moment(this.blockTime,"DD/MM/YYYY HH:mm:ss"));
+        this.d = moment.duration(this.ms);
 
-        var diffTime = null;
-        if(d.days() > 0){
-          diffTime = ` ${d.days()} days ${d.hours()} hr ago `;
-        }else if(d.hours() > 0){
-          diffTime = ` ${d.hours()} hr ${d.minutes()} mins ago `;
-        }else if(d.minutes() > 0){
-          diffTime = ` ${d.minutes()} mins ${d.seconds()} secs ago `;
+        this.diffTime = null;
+        if(this.d.days() > 0){
+          this.diffTime = ` ${this.d.days()} days ${this.d.hours()} hr ago `;
+        }else if(this.d.hours() > 0){
+          this.diffTime = ` ${this.d.hours()} hr ${this.d.minutes()} mins ago `;
+        }else if(this.d.minutes() > 0){
+          this.diffTime = ` ${this.d.minutes()} mins ${this.d.seconds()} secs ago `;
         }else{
-          diffTime = ` ${d.seconds()} secs ago `;
+          this.diffTime = ` ${this.d.seconds()} secs ago `;
         };
         
         return(
@@ -41,16 +50,15 @@ class BlocksBox extends Component {
                 Blocks
                 <Link to={`/block/${item.header.height}`}>{item.header.height}</Link>
               </div>
-              <div className="seconds_time">{diffTime}</div>
+              <div className="seconds_time">{this.diffTime}</div>
             </div>
             <div className="includes flex">
               <div className="in_detail">
                 Includes
                 <Link to="/txs?block="> {item.header.num_txs} Txns, </Link>
-                <span>Fees <i>0</i> BNB </span>
               </div>
               <div className="node">
-                Node: <span>Scafell</span>
+                Node: <span>{item.header.chain_id}</span>
               </div>
             </div>
           </div>
@@ -66,7 +74,6 @@ class BlocksBox extends Component {
           <h3 className="title"><i className="fa fa-cube"></i>Blocks</h3>
           <Link to="/blocks/">View All →</Link>
         </div>
-
         <div className="box_wrap">
           { this.loadBlocksData() }
         </div>
@@ -75,6 +82,5 @@ class BlocksBox extends Component {
     );
   }
 }
-
 
 export default connect(mapStateToProps)(BlocksBox);

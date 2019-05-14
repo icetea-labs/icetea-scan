@@ -1,13 +1,11 @@
-import * as types from '../constants/ActionTypes';
+// import * as types from '../constants/ActionTypes';
 
 const initialState = [];
 
-const Transactions = (state = initialState, action) => {
+export default function handleTransactions (state = initialState, action) {
   switch (action.type) {
-    case types.ALL_TRANSACTIONS:
-      return [...state, ...action.transactions]
+    case "GET_TRANSACTIONS":
+      return [...action.transactions];
     default: return state;
   }
 }
-
-export default Transactions;

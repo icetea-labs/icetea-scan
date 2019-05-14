@@ -2,13 +2,11 @@ import * as types from '../constants/ActionTypes';
 
 const initialState = [];
 
-const Blocks = ( state = initialState, action ) => {
+export default function handleListBlocks (state = initialState, action){
   switch (action.type) {
-    case (types.ALL_BLOCKS):
-      return [...state, ...action.blocks];
-      
+    case (types.GET_BLOCKS):
+      return [...action.blocks];
+
     default: return state;
   }
 }
-
-export default Blocks;

@@ -1,2 +1,2 @@
-export const ALL_BLOCKS = 'ALL_BLOCKS';
-export const ALL_TRANSACTIONS = 'ALL_TRANSACTIONS';
+export const GET_BLOCKS = 'GET_BLOCKS';
+export const GET_TRANSACTIONS = 'GET_TRANSACTIONS';

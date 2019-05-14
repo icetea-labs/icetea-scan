@@ -3,7 +3,7 @@ let initRealTimeData = {
     transactions: [],
 };
 
-export default function getRealTimeData (state = initRealTimeData, action) {
+export default function handleRealTimeData (state = initRealTimeData, action) {
     switch (action.type) {
         case 'GET_REALTIME':
             

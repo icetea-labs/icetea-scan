@@ -16,7 +16,7 @@ import { store, getData } from "./service/init-store";
  */
 setInterval(() => {
   getRealTimeData();
-}, 2000);
+}, 10000);
 
 getData();
 

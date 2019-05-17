@@ -1,18 +1,35 @@
 import tweb3 from "../tweb3";
 
-export const findBlocks = async (value) => {
+export const findBlocks = async (height, max_height) => {
+
+    console.log(max_height)
 
     let result = [];
-
     try {
 
-        // find by height
-        let height_result = await tweb3.getBlock({ height: value });
-        console.log(height_result);
+        for (let index = 0; index < max_height; index++) {
 
-        if (height_result !== null) {
-            result.push(height_result);
+            let check = 0;
+            let block_height = index.toString();
+            let data_height = height.toString();
+
+            for (let j = 0; j < block_height.length; j++) {
+
+
+                if (data_height[j] === block_height[j]) {
+                    check += 1;
+                }  else{
+                    check -=1;
+                }
+            }
+
+
+            if (check > 0) {
+                console.log(index)
+                result.push(await tweb3.getBlock({ height: block_height }));
+            }
         }
+        // find by height
 
         // find by hash 
         // not support
@@ -52,7 +69,6 @@ export const findTxs = async (hash) => {
 }
 
 export const findAccount = async (value) => {
-
     let result = [];
 
     return result;

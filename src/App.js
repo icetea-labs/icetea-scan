@@ -7,6 +7,7 @@ import TransactionsInfo from './components/Transactions/TransactionsInfo';
 import BlockInfo from './components/Blocks/BlockInfo';
 import Blocks from './components/Blocks/Blocks';
 import Transactions from './components/Transactions/Transactions';
+import Assets from './components/Assets/Assets';
 
 class App extends Component {
   render() {
@@ -19,6 +20,7 @@ class App extends Component {
             <Route exact path={`/block/:blockId` } component={BlockInfo} />;
             <Route exact path={`/blocks` } component={Blocks} />;
             <Route exact path={`/txs` } component={Transactions} />;
+            <Route exact path={`/assets`} component={Assets} />;
           </Switch>
         </Router>
       </div>

@@ -46,6 +46,10 @@ class Transactions extends Component {
         });
         this.getTxsByHeight(this.state.height);
       } else {
+
+        this.setState({
+          show_paging: true
+        })
         if (this.state.pageIndex === 1) {
           handleData.getTransactions(1, 20, null, this.props.pageState.total_blocks, this.props.pageState.total_txs);
         }

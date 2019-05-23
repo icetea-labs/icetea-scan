@@ -24,11 +24,12 @@ class SearchBox extends Component {
       all_data: [],
     }
 
-    this.all_data = []
+    this.blocks_data = [];
+    this.txs_data = [];
   }
 
   componentDidMount() {
-    console.log(this.props)
+    // console.log(this.props)
   }
 
   handleValue = (e) => {
@@ -52,43 +53,42 @@ class SearchBox extends Component {
   async findAsset(value) {
     // find by height or hash of txs
 
-    this.setState({
-      result_blocks: await findAsset.findBlocks(value, this.props.pageState.total_blocks)
-    })
+    setTimeout(
+      this.setState({
+        result_blocks: await findAsset.findBlocks(value, this.props.pageState.total_blocks),
+        result_txs: await findAsset.findTxs(value, this.props.pageState.pageTxsLimit)
+      })
+      , 200);
 
-    this.all_data = this.state.result_blocks.map((item, index) => {
-
+    this.blocks_data = this.state.result_blocks.map((item, index) => {
       return (
         <div className="result" key={index} >
           <div className="img">
             <i className='fa fa-photo'></i>
           </div>
           <div className="info">
-            <span>block: <Link to={`/block/${item.block_meta.header.height}`}>{item.block_meta.header.height}</Link></span>
-           
-            <span>hash</span>
+            <div id="block">block: <Link to={`/block/${item.block_meta.header.height}`}>{item.block_meta.header.height}</Link></div>
+            <span id="hash">hash:</span>
             <span>{item.block_meta.block_id.hash}</span>
+          </div>
+        </div>)
+    })
 
+    this.txs_data = this.state.result_txs.map((item, index) => {
+      return (
+        <div className="result" key={index} >
+          <div className="img">
+            <i className='fa fa-photo'></i>
+          </div>
+          <div className="info">
+            <div >transaction in block: {item.height}</div>
+            <div>index: {item.index}</div>
+            <span id="hash">hash:</span>
+            <span><Link to={`/tx/${item.hash}`}>{item.hash}</Link></span>
           </div>
         </div>)
     })
   }
-
-
-  // find by height or hash in all block;
-  // this.setState({
-  //   result_txs: await findAsset.findTxs(value)
-  // })
-
-  // for (let i = 8; i >= 0; i++) {
-  //   this.all_data.push(<li>block + {i}</li>);
-  // }
-
-  // for(let i = 0 ;i < this.state.result_blocks.length ; i++) {
-  //   if (this.state.result_blocks[i] !== null){
-  //     this.state.all_data.push(<li>txs + {i}</li>);
-  //   }
-  // }
 
   render() {
     return (
@@ -98,7 +98,8 @@ class SearchBox extends Component {
           <button className="btn_search"><i className="fa fa-search"></i></button>
         </div>
         <div className="search-result" style={{ display: this.state.isSearching ? 'block' : 'none' }} >
-          {this.all_data}
+          {this.blocks_data}
+          {this.txs_data}
         </div>
       </div>
     );

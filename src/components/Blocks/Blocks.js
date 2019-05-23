@@ -32,7 +32,7 @@ class Blocks extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props !== nextProps) {
-      this.loadBlocks();
+      this.getBlocksByPageIndex(this.state.pageIndex);
     }
   }
 
@@ -62,7 +62,7 @@ class Blocks extends Component {
           <td>{moment(item.header.time).format("MMMM-DD-YYYY h:mm:ss")}</td>
           <td>{diffTime}</td>
           <td>
-            {(item.header.num_txs > 0) ? <Link to="">{item.header.num_txs}</Link> : 0}
+            {(item.header.num_txs > 0) ? <Link to={`/txs?block=${item.header.height}`}>{item.header.num_txs}</Link> : 0}
           </td>
           <td>VN</td>
           <td>0 BNB</td>
@@ -98,7 +98,7 @@ class Blocks extends Component {
         <div className="block_page mt_50 mb_30">
           <div className="container">
             <div className="block_page page_info_header">
-              <div className="wrap">Block</div>
+              <h3>Blocks</h3>
               <div className="breadcrumb">
                 <ul>
                   <li><Link to="/">Home</Link></li>

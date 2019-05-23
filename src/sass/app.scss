@@ -173,7 +173,6 @@
     }
   }
 
-
   .transactions_box {
     width: calc(100% - 40% - 20px);
     margin-left: 20px;
@@ -293,9 +292,8 @@
   display: flex;
   justify-content: space-between;
   align-content: center;
+
   .wrap {
-    font-size: $font_size_above_medium;
-    font-weight: 500;
     .id_code {
       font-size: $font_size_medium;
       color: $color_secondary;
@@ -434,6 +432,6 @@
   }
 }
 
-.id_code{
+.id_code {
   margin-right: 30px;
 }

@@ -1,8 +1,11 @@
 import tweb3 from "../tweb3";
 
-export const findBlocks = async (height, max_height) => {
+/**
+ * @param {height: number, max_height: number} findBlock -return await of block
+ * 
+ */
 
-    console.log(max_height)
+export const findBlocks = async (height, max_height) => {
 
     let result = [];
     try {
@@ -14,18 +17,14 @@ export const findBlocks = async (height, max_height) => {
             let data_height = height.toString();
 
             for (let j = 0; j < block_height.length; j++) {
-
-
                 if (data_height[j] === block_height[j]) {
                     check += 1;
-                }  else{
-                    check -=1;
+                } else {
+                    check -= 1;
                 }
             }
 
-
             if (check > 0) {
-                console.log(index)
                 result.push(await tweb3.getBlock({ height: block_height }));
             }
         }
@@ -39,33 +38,90 @@ export const findBlocks = async (height, max_height) => {
         throw error;
     }
 
-    // TODO: find by hash
     return result;
 }
 
-export const findTxs = async (hash) => {
+/**
+ * 
+ *@param {findTxs: string} findTxs retrun await of txs
+ */
 
+export const findTxs = async (hash, pageIndex) => {
     let result = []
     //TODO: find by hash
+
+    let all_txs = [];
+    // console.log(hash, pageIndex);
+
+    for (let i = 0; i < pageIndex; i++) {
+
+        let data_txs = await tweb3.searchTransactions("tx.height>0", { page: i, per_page: 20 });
+        let data = data_txs.txs;
+        // console.log(data);
+
+        for (let j = 0; j < data.length; j++) {
+            all_txs.push(data[j]);
+        }
+    }
+
+    // console.log(all_txs);
+
+    let find_hash = hash.toString();
     try {
 
-        // find by height
-        let height_result = await tweb3.getTransaction(hash, 'hex');
-        console.log(height_result);
+        // find by hash
+        for (let i = 0; i < all_txs.length; i++) {
+            let tx = { ...all_txs[i], check: 0 };
 
-        if (height_result !== null) {
-            result.push(height_result);
+            for (let j = 0; j < find_hash.length; j++) {
+                if (tx.hash[j] === find_hash[j]) {
+                    tx.check += 1;
+                } else {
+                    tx.check -= 1;
+                }
+            }
+
+            if (tx.check >= 0) {
+                result.push(tx);
+            }
+        }
+        console.log(result);
+
+        if (result.length !== 0) {
+            quickSort(0, result.length - 1, (result.length - 1 + 0) / 2, result);
         }
 
-        // find by hash 
-        // not support
 
     } catch (error) {
         console.log(error);
         throw error;
     }
 
+    // console.log(result);
+
     return result;
+}
+
+function quickSort(max, min, center, result) {
+    if ((max - min) === 1) {
+        return -1;
+    } else {
+        let _max = result[max].check;
+        let _min = result[min].check;
+
+        // đệ quy
+        if (min + 1 === center) {
+            quickSort(min, center - 1, (center - 1 - min) / 2, result);
+            quickSort(center , max - 1, (max - 1 - center) / 2, result);
+        }
+
+        // Swap
+        if (_min > _max) {
+            let temp = result[min];
+            result[min] = result[max];
+            result[max] = temp;
+        }
+    }
 }
 
 export const findAccount = async (value) => {

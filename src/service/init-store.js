@@ -9,8 +9,8 @@ import { getDataTransactions } from '../redux/actions/handleTransactions';
 export const store = createStore(myReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 
-// get all blocks and transaction
-export const getData = async () => {
+// get first blocks and transaction
+export const getFirstTxsData= async () => {
     let blockCount = 0
 
     // load block data
@@ -23,13 +23,9 @@ export const getData = async () => {
         store.dispatch(getListBlocks(myBlocks));
 
         // load txs info
-        const MAX_SHOW_TX = 20 // only show last 30 txs
+        const MAX_SHOW_TX = 20 // only show last 20 txs
         let txCount = 0
         let fromBlock = myBlocks[0].header.height
-
-        // console.log(fromBlock)
-
-        // console.log(fromBlock);
 
         for (let i = 0; i < blockCount; i++) {
             const num = +myBlocks[i].header.num_txs
@@ -42,8 +38,6 @@ export const getData = async () => {
         // load data trans
         const myTxs = await tweb3.searchTransactions('tx.height>' + fromBlock, { per_page: 20 });
         // console.log(fromBlock, txCount);
-
-        // console.log(myTxs.txs)
 
         let tsn = [];
         let len = myTxs.txs.length;

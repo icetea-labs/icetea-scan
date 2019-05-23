@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import moment from 'moment';
 import Layout from '../Layout';
 import MaterialIcon from 'material-icons-react';
 import './Transactions.scss';
 import * as handleData from '../../service/handledata'
+import diffTime from '../../service/findtimebyblock';
+import { getData, getFirstTxsData } from '../../service/init-store';
 
 const mapStateToProps = (state) => {
   return {
-    blocks: state.handleListBlocks,
     transactions: state.handleTransactions,
     pageState: state.changePageState
   }
@@ -22,99 +22,104 @@ const mapDispatchToProps = (dispatch) => {
 
 class Transactions extends Component {
 
-  constructor(){
+  constructor() {
     super();
     this.state = {
-      pageIndex: 1
+      pageIndex: 1,
+      height: null,
+      show_paging: false,
+      list_time: []
     }
+
+    this.listTxs = [];
   }
 
-  componentWillReceiveProps(nextProps) {
+  async componentWillReceiveProps(nextProps) {
+
+    let search = this.props.location.search;
     if (this.props !== nextProps) {
-      this.loadTransactions();
+      if (this.props.location.search !== "") {
+        let data = search.split("?block=");
+        this.setState({
+          height: Number(data[1]),
+          show_paging: false
+        });
+        this.getTxsByHeight(this.state.height);
+      } else {
+        if (this.state.pageIndex === 1) {
+          handleData.getTransactions(1, 20, null, this.props.pageState.total_blocks, this.props.pageState.total_txs);
+        }
+      }
+
+      for (let i = 0; i < this.props.transactions.length; i++) {
+        let time = await diffTime(this.props.transactions[i].height);
+        this.state.list_time.push(time);
+      }
     }
   }
 
   getTransactionByBlock(pageIndex) {
     // console.log(this.props.pageState);
-    let total_blocks = this.props.pageState.total_blocks;
-    let total_txs = this.props.pageState.total_txs;
-
-    if(pageIndex <= 0){
+    if (pageIndex <= 0) {
       pageIndex = 1;
     }
 
-    if(pageIndex >=this.props.pageState.pageTxsLimit){
-      pageIndex = this.props.pageState.pageTxsLimit 
+    if (pageIndex >= this.props.pageState.pageTxsLimit) {
+      pageIndex = this.props.pageState.pageTxsLimit
     }
-    
+
     this.setState({
       pageIndex
     })
 
-    return handleData.getTransactions(total_blocks, total_txs, pageIndex, 20);
+    handleData.getTransactions(pageIndex, 20, null, this.props.pageState.total_blocks, this.props.pageState.total_txs);
   }
 
-  loadTransactions = () => {
-    let blocks = this.props.blocks;
-    let transactions = this.props.transactions;
+  getTxsByHeight() {
+    handleData.getTransactions(null, null, this.state.height, this.props.pageState.total_blocks, this.props.pageState.total_txs)
+  }
 
-    // add time in transactions
-    for (let b in blocks) {
-      for (let txn in transactions) {
-        if (blocks[b].header.height === transactions[txn].height) {
-          transactions[txn].time = blocks[b].header.time
+  loadTransactions() {
+    if (this.props.transactions.length === 0) {
+      return (<tr className="no_data"><span>No Data</span></tr>)
+    } else {
+      this.listTxs = this.props.transactions.map((item, index) => {
+        var txType = 'transfer';
+        const txdata = item.tx.data || {}
+        if (txdata.op === 0) {
+          txType = 'deploy'
+        } else if (txdata.op === 1) {
+          txType = 'call'
         }
-      }
+
+        // diffTime
+        return (
+          <tr key={index}>
+            <td className="text_overflow"> <Link to={`/tx/${item.hash}`}>{item.hash}</Link></td>
+            <td><Link to={`/block/${item.height}`} title={item.height}>{item.height}</Link></td>
+            <td>{this.state.list_time[index]}</td>
+            <td className="tx_type">
+              <div className="name_type">
+                <div className="circle-span"></div>
+                {txType}
+              </div>
+            </td>
+            <td className="text_overflow">
+              {
+                (item.tags['tx.from']) ? <Link to="/">{item.tags['tx.from']}</Link> : <span>--</span>
+              }
+            </td>
+            <td className="text_overflow">
+              {
+                (item.tags['tx.to']) ? <Link to="/">{item.tags['tx.to']}</Link> : <span>--</span>
+              }
+            </td>
+            <td>{(item.tx.value) ? item.tx.value : 0}</td>
+          </tr>
+        )
+      })
     }
-
-    let txns = transactions && transactions.map((item, index) => {
-      var txType = 'transfer';
-      const txdata = item.tx.data || {}
-      if (txdata.op === 0) {
-        txType = 'deploy'
-      } else if (txdata.op === 1) {
-        txType = 'call'
-      }
-
-      // diffTime
-      let currentTime = moment(new Date()).format("DD/MM/YYYY HH:mm:ss");
-      let txnTime = moment(item.time).format("DD/MM/YYYY HH:mm:ss");
-      const ms = moment(currentTime, "DD/MM/YYYY HH:mm:ss").diff(moment(txnTime, "DD/MM/YYYY HH:mm:ss"));
-      const d = moment.duration(ms);
-      var diffTime = null;
-
-      if (d.days() > 0) {
-        diffTime = `${d.days()} days ${d.hours()} hours ago`;
-      } else if (d.hours() > 0) {
-        diffTime = `${d.hours()} hours ${d.minutes()} mins ago`;
-      } else if (d.minutes() > 0) {
-        diffTime = `${d.minutes()} mins ${d.seconds()} secs ago`;
-      } else {
-        diffTime = `${d.seconds()} secs ago`;
-      }
-
-      return (
-        <tr key={index}>
-          <td className="text_overflow"> <Link to={`/tx/${item.hash}`}>{item.hash}</Link></td>
-          <td><Link to={`/block/${item.height}`} title={item.height}>{item.height}</Link></td>
-          <td>{diffTime}</td>
-          <td className="tx_type">{txType}</td>
-          <td className="text_overflow">
-            {
-              (item.tags['tx.from']) ? <Link to="/">{item.tags['tx.from']}</Link> : <span>--</span>
-            }
-          </td>
-          <td className="text_overflow">
-            {
-              (item.tags['tx.to']) ? <Link to="/">{item.tags['tx.to']}</Link> : <span>--</span>
-            }
-          </td>
-          <td>{(item.tx.value) ? item.tx.value : 0}</td>
-        </tr>
-      )
-    })
-    return txns;
+    return this.listTxs;
   }
 
   render() {
@@ -123,7 +128,8 @@ class Transactions extends Component {
         <div className="block_page mt_50 mb_30">
           <div className="container">
             <div className="block_page page_info_header">
-              <div className="wrap">Transactions</div>
+              <h3>Transactions</h3>
+              <span className="sub-tilter" style={{ display: this.state.show_paging ? 'none' : 'block' }}> For Block #{this.state.height}</span>
               <div className="breadcrumb">
                 <ul>
                   <li><Link to="/">Home</Link></li>
@@ -148,16 +154,11 @@ class Transactions extends Component {
                   {this.loadTransactions()}
                 </tbody>
               </table>
+            </div>
 
-            </div>
-            <div className="pagination">
-              <ul>
-                <li></li>
-              </ul>
-            </div>
-            <div className="page-index">
+            <div className="page-index" style={{ display: this.state.show_paging ? 'block' : 'none' }}>
               <div className="paging">
-                <button className="btn-common" onClick={() => { this.getTransactionByBlock(1)}}>First</button>
+                <button className="btn-common" onClick={() => { this.getTransactionByBlock(1) }}>First</button>
                 <button className="btn-cusor" onClick={() => { this.getTransactionByBlock(this.state.pageIndex - 1) }} >
                   <MaterialIcon icon="keyboard_arrow_left" />
                 </button>
@@ -165,7 +166,7 @@ class Transactions extends Component {
                 <button className="btn-cusor" onClick={() => { this.getTransactionByBlock(this.state.pageIndex + 1) }}>
                   <MaterialIcon icon="keyboard_arrow_right" />
                 </button>
-                <button className="btn-common" onClick={() => { this.getTransactionByBlock(this.props.pageState.pageTxsLimit)}}>
+                <button className="btn-common" onClick={() => { this.getTransactionByBlock(this.props.pageState.pageTxsLimit) }}>
                   Last
                 </button>
               </div>

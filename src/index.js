@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 // import { createStore } from 'redux';
 import { getRealTimeData } from './service/getrealtimedata';
 import { setInterval } from 'timers';
-import { store, getData } from "./service/init-store";
+import { store } from "./service/init-store";
 // import { myReducer } from './redux/reducers/reducer';
 
 /**
@@ -16,9 +16,7 @@ import { store, getData } from "./service/init-store";
  */
 setInterval(() => {
   getRealTimeData();
-}, 10000);
-
-getData();
+}, 1000);
 
 ReactDOM.render(
   <Provider store={store}>

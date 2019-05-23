@@ -55,7 +55,7 @@ class BlocksBox extends Component {
             <div className="includes flex">
               <div className="in_detail">
                 Includes
-                <Link to="/txs?block="> {item.header.num_txs} Txns, </Link>
+                <Link to={`/txs?block=${item.header.height}` } > {item.header.num_txs} Txns, </Link>
               </div>
               <div className="node">
                 Node: <span>{item.header.chain_id}</span>

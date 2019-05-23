@@ -5,6 +5,7 @@ import Layout from '../Layout';
 import tweb3 from '../../tweb3';
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import * as findTime from "../../service/findtimebyblock";
+import moment from 'moment';
 
 const mapStateToProps = (state) => {
   return {
@@ -28,7 +29,8 @@ class TransactionsInfo extends Component {
       op: "null",
       fee: "null",
       value: "null",
-      diffTime: ""
+      diffTime: "",
+      time: "",
     }
 
     this.format = null;
@@ -43,6 +45,8 @@ class TransactionsInfo extends Component {
     const response = await tweb3.getTransaction(this.props.match.params.hashId, 'hex');
     let height = response.height;
     let diffTime = await findTime.diffTime(height);
+    let data_block = await tweb3.getBlock({height: response.height});
+    let time = data_block.block_meta.header.time;
 
     this.setState({
       diffTime
@@ -64,7 +68,8 @@ class TransactionsInfo extends Component {
       tx_data: response,
       from: response.tags['tx.from'],
       to: response.tags['tx.to'],
-      data: response.tx.data
+      data: response.tx.data,
+      time
     })
 
     // console.log(blockInfo);
@@ -140,7 +145,7 @@ class TransactionsInfo extends Component {
                 </div>
                 <div className="row_detail">
                   <span className="label">TimeStamp:</span>
-                  <div className="text_wrap">{' [ ' + this.state.diffTime + ' ]'}</div>
+                  <div className="text_wrap">{ moment(this.state.time).format("DD/MM/YYYY HH:mm:ss") +' [ ' + this.state.diffTime + ' ]'}</div>
                 </div>
                 <div className="row_detail">
                   <span className="label">Transaction Type:</span>
@@ -148,7 +153,7 @@ class TransactionsInfo extends Component {
                 </div>
                 <div className="row_detail">
                   <span className="label">Fee:</span>
-                  <div className="text_wrap">{this.state.tx_data && this.state.tx_data.tx.fee} BNB</div>
+                  <div className="text_wrap">{this.state.tx_data && this.state.fee} ITEA</div>
                 </div>
                 <div className="row_detail">
                   <span className="label">From:</span>
@@ -175,7 +180,7 @@ class TransactionsInfo extends Component {
                 </div>
                 <div className="row_detail">
                   <span className="label">Value:</span>
-                  <div className="text_wrap">{this.state.tx_data && this.state.tx_data.tx.value} BNB</div>
+                  <div className="text_wrap">{this.state.tx_data && this.state.value} ITEA</div>
                 </div>
                 <div className="row_detail">
                   <span className="label">Data:</span>

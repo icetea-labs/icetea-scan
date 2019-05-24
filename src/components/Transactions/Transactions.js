@@ -6,7 +6,7 @@ import MaterialIcon from 'material-icons-react';
 import './Transactions.scss';
 import * as handleData from '../../service/handledata'
 import diffTime from '../../service/findtimebyblock';
-import { getData, getFirstTxsData } from '../../service/init-store';
+// import { getData, getFirstTxsData } from '../../service/init-store';
 
 const mapStateToProps = (state) => {
   return {
@@ -85,7 +85,15 @@ class Transactions extends Component {
 
   loadTransactions() {
     if (this.props.transactions.length === 0) {
-      return (<tr className="no_data"><span>No Data</span></tr>)
+      return (<tr className="no_data">
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>No Data</th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>)
     } else {
       this.listTxs = this.props.transactions.map((item, index) => {
         var txType = 'transfer';

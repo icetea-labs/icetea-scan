@@ -84,6 +84,7 @@ class Transactions extends Component {
   }
 
   loadTransactions() {
+    // window.location.reload();
     if (this.props.transactions.length === 0) {
       return (<tr className="no_data">
         <th></th>
@@ -118,12 +119,12 @@ class Transactions extends Component {
             </td>
             <td className="text_overflow">
               {
-                (item.tags['tx.from']) ? <Link to="/">{item.tags['tx.from']}</Link> : <span>--</span>
+                (item.tags['tx.from']) ? <Link to={`/contract/${item.tags['tx.from']}`}>{item.tags['tx.from']}</Link> : <span>--</span>
               }
             </td>
             <td className="text_overflow">
               {
-                (item.tags['tx.to']) ? <Link to="/">{item.tags['tx.to']}</Link> : <span>--</span>
+                (item.tags['tx.to']) ? <Link to={`/contract/${item.tags['tx.to']}`}>{item.tags['tx.to']}</Link> : <span>--</span>
               }
             </td>
             <td>{(item.tx.value) ? item.tx.value : 0}</td>
@@ -145,7 +146,7 @@ class Transactions extends Component {
               <div className="breadcrumb">
                 <ul>
                   <li><Link to="/">Home</Link></li>
-                  <li><Link to="/">Transactions</Link></li>
+                  <li><Link to="/txs">Transactions</Link></li>
                 </ul>
               </div>
             </div>

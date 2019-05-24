@@ -119,7 +119,7 @@ class TransactionsInfo extends Component {
               <div className="breadcrumb">
                 <ul>
                   <li><Link to="/">Home</Link></li>
-                  <li><Link to="/">Transactions</Link></li>
+                  <li><Link to="/txs">Transactions</Link></li>
                   <li><Link to="/">Tx Info</Link></li>
                 </ul>
               </div>

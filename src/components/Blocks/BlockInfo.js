@@ -2,14 +2,7 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import Layout from '../Layout/Layout';
-import { connect } from 'react-redux';
-import tweb3 from '../../tweb3';
-
-const mapStateToProps = (state) => {
-  return {
-    data: state
-  }
-}
+import { getDataBlock } from '../../service/get-single-data';
 
 class BlockInfo extends Component {
 
@@ -23,31 +16,43 @@ class BlockInfo extends Component {
       node: '',
       parrent_hash: '',
       parrent_height: 0,
+      height: ''
     }
   }
 
+  async componentDidMount() {
+    this.loadData();
+  }
+
   async componentWillReceiveProps(nextProps) {
-
     if (this.props !== nextProps) {
-      let height = this.props.match.params.blockId;
+      window.location.reload();
+      this.loadData();
+    }
+  }
 
-      const response = await tweb3.getBlock({ height });
-      const response1 = await tweb3.getBlock({ height: height - 1 });
-      // console.log(response, response1);
+  async loadData() {
+    let height = this.props.match.params.blockId;
+    let response = await getDataBlock(height);
+    let parrent_response = await getDataBlock(height - 1);
 
-      // console.log(height);
+    if (response.code === 200) {
+      this.setState({
+        blockInfo: response.data,
+        hash_id: response.data.block_id.hash,
+        num_txs: response.data.header.num_txs,
+        node: response.data.header.chain_id,
+        time: response.data.header.time,
+        height: response.data.header.height,
+      });
+    } else {
+      this.props.history.push('/not-found');
+    }
 
-      if (response !== null) {
-        this.setState({
-          blockInfo: response.block_meta,
-          hash_id: response.block_meta.block_id.hash,
-          num_txs: response.block_meta.header.total_txs,
-          node: response.block_meta.header.chain_id,
-          parrent_hash: response1.block_meta.block_id.hash,
-          parrent_height: height - 1,
-          time: response.block_meta.header.time
-        });
-      }
+    if (parrent_response.code === 200) {
+      this.setState({
+        parrent_hash: parrent_response.data.block_id.hash
+      })
     }
   }
 
@@ -59,13 +64,13 @@ class BlockInfo extends Component {
             <div className="block_info_header page_info_header">
               <div className="wrap">
                 Block
-            <span className="id_code">#{}</span>
+            <span className="id_code">#{this.state.height}</span>
               </div>
               <div className="breadcrumb">
                 <ul>
                   <li><Link to="/">Home</Link></li>
-                  <li><Link to="/">Blocks</Link></li>
-                  <li><Link to="/">Block</Link></li>
+                  <li><Link to="/blocks">Blocks</Link></li>
+                  <li><Link to="/block/1">Block</Link></li>
                 </ul>
               </div>
             </div>
@@ -85,7 +90,7 @@ class BlockInfo extends Component {
                 <div className="row_detail">
                   <span className="label">Transactions:</span>
                   <div className="text_wrap">
-                    {(this.state.blockInfo && this.state.num_txs > 0) ? <Link to="">{this.num_txs}</Link> : 0} Transactions in this block
+                    {this.state.num_txs > 0 ? <Link to={`/txs?block=${this.state.height}`}>{this.state.num_txs}</Link> : 0}  Transactions in this block
               </div>
                 </div>
                 <div className="row_detail">
@@ -94,7 +99,7 @@ class BlockInfo extends Component {
                 </div>
                 <div className="row_detail">
                   <span className="label">ParentHash:</span>
-                  <div className="text_wrap">{(this.state.blockInfo && this.state.num_txs > 0) ? <Link to={`/block/${this.state.parrent_height}`} >{this.state.parrent_hash}</Link> : '--'}</div>
+                  <div className="text_wrap">{(this.state.blockInfo && this.state.num_txs > 0) ? <Link to={`/block/${this.state.height - 1}`}>{this.state.parrent_hash}</Link> : '--'}</div>
                 </div>
                 <div className="row_detail">
                   <span className="label">Node:</span>
@@ -117,4 +122,4 @@ class BlockInfo extends Component {
   }
 }
 
-export default connect(mapStateToProps)(BlockInfo);
+export default BlockInfo;

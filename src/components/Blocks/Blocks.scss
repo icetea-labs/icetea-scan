@@ -52,5 +52,14 @@
     i {
       float: center;
     }
+
+    label {
+      color: blue !important;
+      
+    }
+
+    label:hover{
+      text-decoration: blue !important; 
+    }
   }
 }

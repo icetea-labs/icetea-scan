@@ -7,8 +7,9 @@ import TransactionsInfo from './components/Transactions/TransactionsInfo';
 import BlockInfo from './components/Blocks/BlockInfo';
 import Blocks from './components/Blocks/Blocks';
 import Transactions from './components/Transactions/Transactions';
-import Assets from './components/Assets/Assets';
 import NotFound from './components/NotFound/NotFound';
+import Contract from './components/Contract/Contract';
+import AllContract from './components/Contract/AllContract';
 
 class App extends Component {
   render() {
@@ -21,8 +22,10 @@ class App extends Component {
             <Route exact path={`/block/:blockId` } component={BlockInfo} />;
             <Route exact path={`/blocks` } component={Blocks} />;
             <Route exact path={`/txs` } component={Transactions} />;
-            <Route exact path={`/assets`} component={Assets} />;
+            <Route exact path={`/contract/:address`} component={Contract} />;
+            <Route exact path={`/contracts`} component={AllContract} />
             <Route component = {NotFound} />
+
           </Switch>
         </Router>
       </div>

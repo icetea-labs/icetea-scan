@@ -102,7 +102,7 @@ class Blocks extends Component {
               <div className="breadcrumb">
                 <ul>
                   <li><Link to="/">Home</Link></li>
-                  <li><Link to="/">Blocks</Link></li>
+                  <li><Link to="/blocks">Blocks</Link></li>
                 </ul>
               </div>
             </div>
@@ -122,7 +122,6 @@ class Blocks extends Component {
                   {this.loadBlocks()}
                 </tbody>
               </table>
-
             </div>
             <div className="pagination">
               <ul>

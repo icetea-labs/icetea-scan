@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Layout from '../Layout';
+import Layout from '../Layout/Layout';
 import moment from 'moment';
 import * as handledata from '../../service/handledata';
 import MaterialIcon from 'material-icons-react';

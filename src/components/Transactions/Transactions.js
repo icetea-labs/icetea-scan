@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Layout from '../Layout';
+import Layout from '../Layout/Layout';
 import MaterialIcon from 'material-icons-react';
 import './Transactions.scss';
 import * as handleData from '../../service/handledata'

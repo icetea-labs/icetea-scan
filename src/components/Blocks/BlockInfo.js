@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-import Layout from '../Layout';
+import Layout from '../Layout/Layout';
 import { connect } from 'react-redux';
 import tweb3 from '../../tweb3';
 
@@ -9,10 +9,6 @@ const mapStateToProps = (state) => {
   return {
     data: state
   }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return null;
 }
 
 class BlockInfo extends Component {
@@ -121,4 +117,4 @@ class BlockInfo extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BlockInfo);
+export default connect(mapStateToProps)(BlockInfo);

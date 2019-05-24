@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Layout from '../Layout';
+import Layout from '../Layout/Layout';
 import tweb3 from '../../tweb3';
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import * as findTime from "../../service/findtimebyblock";

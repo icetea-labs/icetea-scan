@@ -3,37 +3,67 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import Layout from '../Layout';
 import { connect } from 'react-redux';
+import tweb3 from '../../tweb3';
+
+const mapStateToProps = (state) => {
+  return {
+    data: state
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return null;
+}
 
 class BlockInfo extends Component {
 
-  blockInfo = () => {
-    const blockId = this.props.match.params.blockId;
-    const blockInfo = this.props.blocks.length > 0 && this.props.blocks.find(bid => bid.header.height === blockId);
-    if(blockInfo){
-      // diffTime
-      let currentTime  = moment(new Date()).format("DD/MM/YYYY HH:mm:ss");
-      let blockTime = moment(blockInfo.header.time).format("DD/MM/YYYY HH:mm:ss");
-      const ms = moment(currentTime,"DD/MM/YYYY HH:mm:ss").diff(moment(blockTime,"DD/MM/YYYY HH:mm:ss"));
-      const d = moment.duration(ms);
+  constructor() {
+    super();
+    this.state = {
+      blockInfo: null,
+      hash_id: '',
+      time: '',
+      num_txs: 0,
+      node: '',
+      parrent_hash: '',
+      parrent_height: 0,
+    }
+  }
 
-      var diffTime = null;
-      if(d.days() > 0){
-        diffTime = ` ${d.days()} days ${d.hours()} hours ago `;
-      }else if(d.hours() > 0){
-        diffTime = ` ${d.hours()} hours ${d.minutes()} mins ago `;
-      }else if(d.minutes() > 0){
-        diffTime = ` ${d.minutes()} mins ${d.seconds()} secs ago `;
-      }else{
-        diffTime = ` ${d.seconds()} secs ago `;
-      };
+  async componentWillReceiveProps(nextProps) {
 
-      return(
+    if (this.props !== nextProps) {
+      let height = this.props.match.params.blockId;
+
+      const response = await tweb3.getBlock({ height });
+      const response1 = await tweb3.getBlock({ height: height - 1 });
+      // console.log(response, response1);
+
+      // console.log(height);
+
+      if (response !== null) {
+        this.setState({
+          blockInfo: response.block_meta,
+          hash_id: response.block_meta.block_id.hash,
+          num_txs: response.block_meta.header.total_txs,
+          node: response.block_meta.header.chain_id,
+          parrent_hash: response1.block_meta.block_id.hash,
+          parrent_height: height - 1,
+          time: response.block_meta.header.time
+        });
+      }
+    }
+  }
+
+  render() {
+    return (
+      <Layout>
         <div className="block_info mt_50">
           <div className="container">
             <div className="block_info_header page_info_header">
               <div className="wrap">
                 Block
-                <span className="id_code">#{ blockInfo.header.height }</span>
+            <span className="id_code">#{}</span>
               </div>
               <div className="breadcrumb">
                 <ul>
@@ -43,7 +73,7 @@ class BlockInfo extends Component {
                 </ul>
               </div>
             </div>
-  
+
             <div className="block_content page_info_content">
               <div className="title">
                 <i className="fa fa-cube"></i>
@@ -53,26 +83,26 @@ class BlockInfo extends Component {
                 <div className="row_detail">
                   <span className="label">TimeStamp: </span>
                   <div className="text_wrap">
-                    { diffTime + '[ ' + moment(blockInfo.header.time).format("MMMM-DD-YYYY h:mm:ss") + ' ]' }
+                    {'[ ' + moment(this.state.time).format("MMMM-DD-YYYY h:mm:ss") + ' ]'}
                   </div>
                 </div>
                 <div className="row_detail">
                   <span className="label">Transactions:</span>
                   <div className="text_wrap">
-                    { (blockInfo && blockInfo.header.num_txs > 0) ? <Link to="">{ blockInfo.header.num_txs }</Link> : 0 } Transactions in this block
-                  </div>
+                    {(this.state.blockInfo && this.state.num_txs > 0) ? <Link to="">{this.num_txs}</Link> : 0} Transactions in this block
+              </div>
                 </div>
                 <div className="row_detail">
                   <span className="label">BlockHash:</span>
-                  <div className="text_wrap">{ blockInfo.block_id.hash}</div>
+                  <div className="text_wrap">{this.state.hash_id}</div>
                 </div>
                 <div className="row_detail">
                   <span className="label">ParentHash:</span>
-                  <div className="text_wrap">--</div>
+                  <div className="text_wrap">{(this.state.blockInfo && this.state.num_txs > 0) ? <Link to={`/block/${this.state.parrent_height}`} >{this.state.parrent_hash}</Link> : '--'}</div>
                 </div>
                 <div className="row_detail">
                   <span className="label">Node:</span>
-                  <div className="text_wrap transaction_type">--</div>
+                  <div className="text_wrap transaction_type">{this.state.node}</div>
                 </div>
                 <div className="row_detail">
                   <span className="label">Calculation Time:</span>
@@ -85,25 +115,10 @@ class BlockInfo extends Component {
               </div>
             </div>
           </div>
-          
         </div>
-      )
-    }
-  }
-
-  render() {
-    return (
-      <Layout>
-        { this.blockInfo() }
       </Layout>
     );
   }
 }
 
-const mapDispatchToProps = (state) => {
-  return{
-    blocks: state.Blocks
-  }
-}
-
-export default connect(mapDispatchToProps)(BlockInfo);
+export default connect(mapStateToProps, mapDispatchToProps)(BlockInfo);

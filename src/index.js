@@ -5,14 +5,18 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 // Provider
 import { Provider } from 'react-redux';
-import { store } from './service/service';
-import { getData } from './service/service';
+// import { createStore } from 'redux';
+import { getRealTimeData } from './service/getrealtimedata';
+import { setInterval } from 'timers';
+import { store } from "./service/init-store";
+// import { myReducer } from './redux/reducers/reducer';
 
-// store.subscribe(() => {
-//   console.log(store.getState())
-// })
-
-getData();
+/**
+ * @param setTimeout get blocks and transactions
+ */
+setInterval(() => {
+  getRealTimeData();
+}, 1000);
 
 ReactDOM.render(
   <Provider store={store}>

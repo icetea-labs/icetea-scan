@@ -1,0 +1,26 @@
+.sub-tilter {
+  position: absolute;
+  left: 400px;
+  margin-top: 20px;
+  width: 270px !important;
+  color: rgb(132, 142, 156);
+  word-break: break-all;
+  margin-left: 1.125rem;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+}
+
+h3 {
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
+  font-size: 800;
+}
+
+.name_type {
+  padding-bottom: 5px;
+}

@@ -1,53 +1,120 @@
 import React, { Component } from 'react';
-import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Layout from '../Layout';
+import tweb3 from '../../tweb3';
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import * as findTime from "../../service/findtimebyblock";
+import moment from 'moment';
+
+const mapStateToProps = (state) => {
+  return {
+    transactions: state.handleTransactions,
+    blocks: state.Blocks
+  }
+}
 
 class TransactionsInfo extends Component {
 
-  transactionInfo = () => {
-    const hashId = this.props.match.params.hashId;
-    const tsn = this.props.transactions.length > 0 && this.props.transactions.find(t => t.hash === hashId);
+  constructor() {
+    super();
+    this.state = {
+      tx_data: null,
+      blockInfo: null,
+      from: null,
+      to: null,
+      data: null,
+      mode: "null",
+      src: "null",
+      op: "null",
+      fee: "null",
+      value: "null",
+      diffTime: "",
+      time: "",
+    }
 
-    if(tsn){
-      const txStatus = (tsn.tx_result.code) ? 'Error' : 'Success';
-      var txType ='transfer';
-      if(tsn){
-        const txdata = JSON.parse(tsn.tx.data) || {}
+    this.format = null;
+    this.num_txs = 0;
+    this.hashId = '';
+    this.state.tx_data = 0;
+    this.data = null;
+  }
+
+  async componentDidMount() {
+    this.hash = this.props.match.params.hashId;
+    const response = await tweb3.getTransaction(this.props.match.params.hashId, 'hex');
+    let height = response.height;
+    let diffTime = await findTime.diffTime(height);
+    let data_block = await tweb3.getBlock({height: response.height});
+    let time = data_block.block_meta.header.time;
+
+    this.setState({
+      diffTime
+    })
+
+    if ('fee' in response.tx) {
+      this.setState({
+        fee: response.tx.fee
+      })
+    }
+
+    if ('value' in response.tx) {
+      this.setState({
+        value: response.tx.value
+      })
+    }
+
+    this.setState({
+      tx_data: response,
+      from: response.tags['tx.from'],
+      to: response.tags['tx.to'],
+      data: response.tx.data,
+      time
+    })
+
+    // console.log(blockInfo);
+    this.transactionInfo();
+  }
+
+  transactionInfo = () => {
+
+    // check data
+    if (this.state.tx_data) {
+      this.txStatus = (this.state.tx_data.tx_result === null) ? 'Error' : 'Success';
+      this.txType = 'transfer';
+      if (this.state.tx_data) {
+        const txdata = JSON.parse(this.state.tx_data.tx.data) || {}
         if (txdata.op === 0) {
-          txType = 'deploy'
+          this.txType = 'deploy'
           // t.to = fmtHex(t.tx_result.data);
         } else if (txdata.op === 1) {
-          txType = 'call'
+          this.txType = 'call'
         }
       }
-      // diffTime
-      const timeStamp = (this.props.blocks.length > 0) && this.props.blocks.find(b => b.header.height === tsn.height);
-      let currentTime  = moment(new Date()).format("DD/MM/YYYY HH:mm:ss");
-      let txnTime = moment(timeStamp.header.time).format("DD/MM/YYYY HH:mm:ss");
-      const ms = moment(currentTime,"DD/MM/YYYY HH:mm:ss").diff(moment(txnTime,"DD/MM/YYYY HH:mm:ss"));
-      const d = moment.duration(ms);
 
-      var diffTime = null;
-      if(d.days() > 0){
-        diffTime = ` ${d.days()} days ${d.hours()} hours ago `;
-      }else if(d.hours() > 0){
-        diffTime = ` ${d.hours()} hours ${d.minutes()} mins ago `;
-      }else if(d.minutes() > 0){
-        diffTime = ` ${d.minutes()} mins ${d.seconds()} secs ago `;
-      }else{
-        diffTime = ` ${d.seconds()} secs ago `;
-      };
+      if (this.state.data !== null) {
+        this.data = JSON.parse(this.state.data);
+        this.setState({
+          op: this.data.op,
+          mode: this.data.mode,
+          src: this.data.src
+        })
+      }
+    }
+  }
 
-      return(
+  render() {
+    return (
+      <Layout>
         <div className="transaction_info mt_50">
           <div className="container">
             <div className="transaction_header page_info_header">
               <div className="wrap">
                 Transactions
-                <span className="id_code">{ tsn.hash }</span>
-                <span className="copy_id fa fa-clipboard"></span>
+                <span className="id_code">{this.state.tx_data.hash}</span>
+                <CopyToClipboard text={this.state.from} onCopy={() => { alert('Copied :' + this.state.tx_data.hash) }}>
+                  <span className="copy_to_add fa fa-clipboard"></span>
+                </CopyToClipboard>
               </div>
               <div className="breadcrumb">
                 <ul>
@@ -57,7 +124,7 @@ class TransactionsInfo extends Component {
                 </ul>
               </div>
             </div>
-  
+
             <div className="transaction_content page_info_content">
               <div className="title">
                 <i className="fa fa-tasks"></i>
@@ -66,61 +133,64 @@ class TransactionsInfo extends Component {
               <div className="info_body">
                 <div className="row_detail">
                   <span className="label">TxHash: </span>
-                  <div className="text_wrap">{ tsn.hash }</div>
+                  <div className="text_wrap">{this.state.tx_data.hash}</div>
                 </div>
                 <div className="row_detail">
                   <span className="label">TxReceipt Status:</span>
-                  <div className="text_wrap"><span className={(tsn && tsn.tx_result.code) ? 'error_color': 'success_color'}>{ txStatus }</span></div>
+                  <div className="text_wrap"><span className={(this.state.tx_data && this.state.tx_data.tx_result === null) ? 'error_color' : 'success_color'}>{this.txStatus}</span></div>
                 </div>
                 <div className="row_detail">
                   <span className="label">Block Height:</span>
-                  <div className="text_wrap"><Link to={`/block/${tsn.height}`}>{ tsn.height }</Link></div>
+                  <div className="text_wrap"><Link to={`/block/${this.state.tx_data.height}`}>#{this.state.tx_data.height}</Link></div>
                 </div>
                 <div className="row_detail">
                   <span className="label">TimeStamp:</span>
-                  <div className="text_wrap">{ timeStamp && diffTime + ' [ ' + moment(timeStamp.header.time).format("MMMM-DD-YYYY h:mm:ss") + ' ]' }</div>
+                  <div className="text_wrap">{ moment(this.state.time).format("DD/MM/YYYY HH:mm:ss") +' [ ' + this.state.diffTime + ' ]'}</div>
                 </div>
                 <div className="row_detail">
                   <span className="label">Transaction Type:</span>
-                  <div className="text_wrap transaction_type">{ txType }</div>
+                  <div className="text_wrap transaction_type">{this.txType}</div>
                 </div>
                 <div className="row_detail">
                   <span className="label">Fee:</span>
-                  <div className="text_wrap">{tsn && tsn.tx.fee} BNB</div>
+                  <div className="text_wrap">{this.state.tx_data && this.state.fee} ITEA</div>
                 </div>
                 <div className="row_detail">
                   <span className="label">From:</span>
                   <div className="text_wrap">
                     {
-                      (tsn && tsn.tags['tx.from']) ? <Link to="/">{ tsn.tags['tx.from'] }</Link> : <span>--</span>
+                      (this.state.tx_data && this.state.tx_data.tags['tx.from']) ? <Link to="/">{this.state.tx_data.tags['tx.from']}</Link> : <span>--</span>
                     }
-                    {(tsn && tsn.tags['tx.from']) && <i className="copy_to_add fa fa-clipboard"></i>}
+
+                    <CopyToClipboard text={this.state.from} onCopy={() => { alert('Copied address ' + this.state.from) }}>
+                      <i className="copy_to_add fa fa-clipboard"></i>
+                    </CopyToClipboard>
                   </div>
                 </div>
                 <div className="row_detail">
                   <span className="label">To:</span>
                   <div className="text_wrap">
                     {
-                      (tsn && tsn.tags['tx.to']) ? <Link to="/">{ tsn.tags['tx.to'] }</Link> : <span>--</span>
+                      (this.state.tx_data && this.state.tx_data.tags['tx.to']) ? <Link to="/">{this.state.tx_data.tags['tx.to']}</Link> : <span>--</span>
                     }
-                    {(tsn && tsn.tags['tx.to']) && <i className="copy_to_add fa fa-clipboard"></i>}
+                    <CopyToClipboard text={this.state.to} onCopy={() => { alert('Copied address ' + this.state.to) }}>
+                      <i className="copy_to_add fa fa-clipboard"></i>
+                    </CopyToClipboard>
                   </div>
                 </div>
                 <div className="row_detail">
                   <span className="label">Value:</span>
-                  <div className="text_wrap">{ tsn && tsn.tx.value } BNB</div>
+                  <div className="text_wrap">{this.state.tx_data && this.state.value} ITEA</div>
                 </div>
                 <div className="row_detail">
                   <span className="label">Data:</span>
                   <div className="text_wrap">
                     <div className="datacode">
-                        "symbol": "XRP.B-585_BNB", <br/>
-                        "orderType": "limit",<br/>
-                        "side": "buy",<br/>
-                        "price": 0.0183527,<br/>
-                        "quantity": 2527.9,<br/>
-                        "timeInForce": "GTE",<br/>
-                        "orderId": "B83A15A103F2EFAFB4870937D59E1C6B7015A0A3-12614"<br/>
+                      <p>"fee" : {this.state.fee}</p>
+                      <p>"value": {this.state.value}</p>
+                      <p>"op": {this.state.op}</p>
+                      <p>"mode": {this.state.mode}</p>
+                      <p>"src": {this.state.src}</p>
                     </div>
                   </div>
                 </div>
@@ -128,24 +198,8 @@ class TransactionsInfo extends Component {
             </div>
           </div>
         </div>
-      )
-    }
-  }
-
-  render() {
-    return (
-      <Layout>
-        { this.transactionInfo() }
       </Layout>
     );
   }
 }
-
-const mapStateToProps = (state) => {
-  return{
-    transactions: state.Transactions,
-    blocks: state.Blocks
-  }
-}
-
 export default connect(mapStateToProps)(TransactionsInfo);

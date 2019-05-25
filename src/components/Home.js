@@ -3,6 +3,8 @@ import Layout from './Layout';
 import Banner from './Banner';
 import BlocksBox from './Blocks/BlocksBox';
 import TransactionsBox from './Transactions/TransactionsBox';
+import ChainValue from './ChainValue/ChainValue';
+import { getFirstTxsData } from '../service/init-store';
 
 class Home extends Component {
 
@@ -11,12 +13,19 @@ class Home extends Component {
     this.state={}
   }
 
+  componentDidMount(){
+    getFirstTxsData();
+  }
+
   render() {
     return (
       <Layout>
         <div className="home">
           <Banner />
           <div className="blocks_transactions_view">
+            <div className="chain-value">
+              <ChainValue />
+            </div>
             <div className="container">
               <BlocksBox />
               <TransactionsBox />

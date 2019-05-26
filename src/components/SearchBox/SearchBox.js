@@ -63,20 +63,23 @@ class SearchBox extends Component {
     this.blocks_data = this.state.result_blocks.map((item, index) => {
       return (
         <div className="result" key={index} >
-          <div className="img">
-            <i className='fa fa-photo'></i>
-          </div>
-          <div className="info">
-            <div id="block">block: <Link to={`/block/${item.block_meta.header.height}`}>{item.block_meta.header.height}</Link></div>
+          <Link to={`/block/${item.block_meta.header.height}`}>
+            <div className="img">
+              <i className='fa fa-photo'></i>
+            </div>
+            <div className="info">
+              <div id="block">block: {item.block_meta.header.height}</div>
             <span id="hash">hash:</span>
             <span>{item.block_meta.block_id.hash}</span>
           </div>
-        </div>)
-    })
+          </Link>
+        </div >)
+  })
 
     this.txs_data = this.state.result_txs.map((item, index) => {
-      return (
-        <div className="result" key={index} >
+    return (
+      <div className="result" key={index} >
+        <Link to={`/tx/${item.hash}`}>
           <div className="img">
             <i className='fa fa-photo'></i>
           </div>
@@ -84,26 +87,25 @@ class SearchBox extends Component {
             <div >transaction in block: {item.height}</div>
             <div>index: {item.index}</div>
             <span id="hash">hash:</span>
-            <span><Link to={`/tx/${item.hash}`}>{item.hash}</Link></span>
+            <span >{item.hash}</span>
           </div>
-        </div>)
-    })
+        </Link>
+      </div>)
+  })
   }
 
-  render() {
-    return (
-      <div>
-        <div className="search_box_container">
-          <input className="search_input" type="text" placeholder="Search by block, transaction, asset, address or orderid" value={this.state.value} onChange={this.handleValue} />
-          <button className="btn_search"><i className="fa fa-search"></i></button>
-        </div>
-        <div className="search-result" style={{ display: this.state.isSearching ? 'block' : 'none' }} >
-          {this.blocks_data}
-          {this.txs_data}
-        </div>
+render() {
+  return (
+    <div className="search_box_container">
+      <input className="search_input" type="text" placeholder="Search by block, transaction, asset, address or orderid" value={this.state.value} onChange={this.handleValue} />
+      <button className="btn_search"><i className="fa fa-search"></i></button>
+      <div className="search-result" style={{ display: this.state.isSearching ? 'block' : 'none' }} >
+        {this.blocks_data}
+        {this.txs_data}
       </div>
-    );
-  }
+    </div>
+  );
+}
 }
 
 export default connect(mapStateToProps)(SearchBox);

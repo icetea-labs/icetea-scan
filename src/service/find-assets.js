@@ -26,15 +26,13 @@ export const findBlocks = async (height, max_height) => {
 
             if (check > 0) {
                 result.push(await tweb3.getBlock({ height: block_height }));
+                // break;
             }
         }
         // find by height
 
-        // find by hash 
-        // not support
-
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         throw error;
     }
 
@@ -43,7 +41,8 @@ export const findBlocks = async (height, max_height) => {
 
 /**
  * 
- *@param {findTxs: string} findTxs retrun await of txs
+ *@param {findTxs: string} findTxs find tranas
+ @return {Array<Object>} return list of txs
  */
 
 export const findTxs = async (hash, pageIndex) => {
@@ -85,7 +84,7 @@ export const findTxs = async (hash, pageIndex) => {
                 result.push(tx);
             }
         }
-        console.log(result);
+        // console.log(result);
 
         if (result.length !== 0) {
             quickSort(0, result.length - 1, (result.length - 1 + 0) / 2, result);

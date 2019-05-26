@@ -4,17 +4,14 @@ import Banner from '../Layout/Banner';
 import BlocksBox from '../Blocks/BlocksBox';
 import TransactionsBox from '../Transactions/TransactionsBox';
 import ChainValue from '../ChainValue/ChainValue';
-import { getFirstTxsData } from '../../service/init-store';
 
 class Home extends Component {
 
   constructor(props){
     super(props)
-    this.state={}
-  }
-
-  componentDidMount(){
-    getFirstTxsData();
+    this.state={
+      is_loading: true
+    }
   }
 
   render() {

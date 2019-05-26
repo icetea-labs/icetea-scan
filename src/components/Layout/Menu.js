@@ -13,7 +13,7 @@ class Menu extends Component {
               <li className="sub_child_items"><Link to="/txs">View Txns</Link></li>
             </ul>
           </li>
-          <li className="nav_items"><Link to="/assets">Contracts</Link></li>
+          <li className="nav_items"><Link to="/contracts">Contracts</Link></li>
         </ul>
       </div>
     );

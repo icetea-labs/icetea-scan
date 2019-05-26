@@ -1,6 +1,12 @@
 import tweb3 from "../tweb3";
 import moment from "moment";
 
+/**
+ * 
+ * @param {number} diffTime create array that setup time 
+ * @return {Promise} if Promise.resolve have data that string like "10 h 20min 20 s"  
+ */
+
 export const diffTime = async (height) => {
 
   // console.log(height);

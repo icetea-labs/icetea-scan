@@ -8,8 +8,8 @@ export default function changePageState(state = initPageState, action) {
                 ...state,
                 total_blocks: action.total_blocks,
                 total_txs: action.total_txs,
-                pageBlockLimit: Math.ceil(action.total_blocks / 20) + 1,
-                pageTxsLimit: Math.ceil(action.total_txs / 20) + 1,
+                pageBlockLimit: Math.ceil(action.total_blocks / 20) ,
+                pageTxsLimit: Math.ceil(action.total_txs / 20) - 1,
             }
         }
 

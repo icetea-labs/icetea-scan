@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './NotFound.scss';
-import gif from '../../asset/img/loadingtrada.gif';
+import gif from '../../assets/img/loadingtrada.gif';
 
 class NotFound extends Component {
     render() {

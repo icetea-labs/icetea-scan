@@ -16,15 +16,15 @@ class Contract extends Component {
         }
     }
 
-    async componentDidMount() {
+    componentDidMount() {
         let address = this.props.match.params.address;
         // console.log(address);
-
         this.loadData(address);
     }
 
     async componentWillReceiveProps(nextProps) {
         if (this.props !== nextProps) {
+            window.location.reload();
             this.loadData();
         }
     }
@@ -32,10 +32,12 @@ class Contract extends Component {
     async loadData() {
         let address = this.props.match.params.address;
         let response = await getDataContract(address);
-        // let response = await tweb3.getAccountInfo(address);
-        console.log(response);
+        // console.log(response);
 
-        if (response !== null) {
+        if (response.code !== 200) {
+            this.props.history.push('/not-found');
+        } else {
+            console.log(response)
             this.setState({
                 balance: response.data.balance,
                 deploy_by: response.data.deployedBy,
@@ -72,10 +74,10 @@ class Contract extends Component {
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <th color='green'>{this.state.deploy_by ? this.state.deploy_by : 'null'}</th>
-                                        <th>{this.state.balance ? this.state.balance: 0}</th>
+                                        <th color='green'>{this.props.match.params.address}</th>
+                                        <th>{this.state.balance ? this.state.balance : 0}</th>
                                         <th>{this.state.has_src ? this.state.has_src : "null"}</th>
-                                        <th>{this.state.mode ? this.state.mode: 'null'}</th>
+                                        <th>{this.state.mode ? this.state.mode : 'null'}</th>
                                     </tr>
                                 </tbody>
                             </table>

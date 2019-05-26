@@ -8,6 +8,11 @@ import { getDataTransactions } from '../redux/actions/handleTransactions';
 // Store
 export const store = createStore(myReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
+/**
+ * @param {null} getFirstTxsData get data of 10 lastest block and lastest txs
+ * 
+ */
+
 
 // get first blocks and transaction
 export const getFirstTxsData= async () => {

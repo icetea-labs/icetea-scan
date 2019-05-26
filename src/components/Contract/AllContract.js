@@ -54,8 +54,8 @@ class AllContract extends Component {
                             <table>
                                 <thead>
                                     <tr>
-                                        <th width="100">Deploy By</th>
-                                        <th width="350">Balance</th>
+                                        <th width="100">Balance</th>
+                                        <th width="350">Deployed by</th>
                                         <th width="100">Has Src</th>
                                         <th width="100">Mode</th>
                                     </tr>
@@ -65,8 +65,8 @@ class AllContract extends Component {
                                         return (
                                             <tr key={index}>
                                                 <th width="100">{item.balance ? item.balance : 0}</th>
-                                                <th width="350">{item.deployedBy ? item.deployedBy : 'null'}</th>
-                                                <th width="100">{item.hasSrc ? item.hasSrc : 'null'}</th>
+                                                <th width="350">{item.deployedBy ? <Link to={`/contract/${item.deployedBy}`} >{item.deployedBy}</Link> : 'null'}</th>
+                                                <th width="100">{item.hasSrc === true ? "true" : "false"}</th>
                                                 <th width="100">{item.mode ? item.mode : 'null'}</th>
                                             </tr>
                                         )

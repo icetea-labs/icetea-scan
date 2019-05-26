@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Layout from '../Layout/Layout';
 import tweb3 from '../../tweb3';
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import * as findTime from "../../service/findtimebyblock";
+import * as findTime from "../../service/find-time-by-block";
 import moment from 'moment';
 
 const mapStateToProps = (state) => {
@@ -40,7 +40,7 @@ class TransactionsInfo extends Component {
     this.data = null;
   }
 
-  async componentDidMount() {
+  async componentWillMount() {
     this.hash = this.props.match.params.hashId;
     const response = await tweb3.getTransaction(this.props.match.params.hashId, 'hex');
     let height = response.height;

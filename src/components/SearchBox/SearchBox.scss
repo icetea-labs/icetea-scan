@@ -1,6 +1,7 @@
 .search-result {
-  position: relative;
-  bottom: -10px;
+  position: absolute;
+  top: 285px;
+  z-index: 1;
   height: auto;
   max-height: 200px;
   width: 470px;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import 'font-awesome/css/font-awesome.min.css';
 import './sass/app.scss';
+import './sass/_responsive.scss';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from './components/Home/Home';
 import TransactionsInfo from './components/Transactions/TransactionsInfo';

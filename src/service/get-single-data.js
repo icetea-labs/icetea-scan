@@ -1,5 +1,11 @@
 import tweb3 from "../tweb3";
 
+/**
+ * 
+ * @param {string || number} getDataBlock get data of a single block
+ * @return {Object}  data return a request, ex: { code_status: string, data: object || boolean, code: number  } 
+ */
+
 export const getDataBlock = async (height) => {
     try {
         let max_block = await tweb3.getBlock();
@@ -21,6 +27,11 @@ export const getDataBlock = async (height) => {
     }
 }
 
+/**
+ * 
+ * @param {string} getDataContract get data of a single contract
+ * @return {Object} data return a request, ex: { code_status: string, data: object || boolean, code: number  } 
+ */
 
 export const getDataContract = async (address) => {
 
@@ -31,6 +42,13 @@ export const getDataContract = async (address) => {
     }
     return { code_status: 'can`t get data', data: false, code: 400 };
 }
+
+/**
+ * 
+ * @param {boolean} getAllContracts get list name of contract
+ * @return {Object} data return a request, ex: { code_status: string, data: object || boolean, code: number  } 
+ */
+
 
 export const getAllContracts = async(alias) => {
     let all_contract = await tweb3.getContracts(alias);

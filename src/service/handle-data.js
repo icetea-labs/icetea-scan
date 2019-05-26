@@ -9,15 +9,13 @@ import { store } from './init-store';
  * @param {number} height height of all Blocks
  * @param {number} pageIndex index of paging
  * @param {number} paramester amount of all block
- * @returns {object} data of paging 
  */
 
 export const getBlocks = async (total_blocks, pageIndex, paramester) => {
-    let maxHeight = total_blocks - (pageIndex - 1) * paramester;
+    let maxHeight = total_blocks - (pageIndex - 1 ) * paramester;
     let minHeight = maxHeight - paramester;
 
-    if (maxHeight <= 0) {
-        maxHeight = maxHeight + 20;
+    if (minHeight < 0) {
         minHeight = 0;
     }
 

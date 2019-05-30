@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import diffTime from '../../service/find-time-by-block';
-
+import './BlocksBox.scss';
 
 // get data block
 const mapStateToProps = (state) => {

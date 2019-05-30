@@ -35,7 +35,7 @@ class Transactions extends Component {
     this.listTxs = [];
   }
 
-  async componentWillMount(){
+  async componentWillMount() {
     setPageSate();
   }
 
@@ -53,10 +53,10 @@ class Transactions extends Component {
         this.getTxsByHeight(this.state.height);
       } else {
 
-        if(this.props.handleTransactions === []){
+        if (this.props.handleTransactions === []) {
           getFirstTxsData();
         }
-  
+
         this.setState({
           show_paging: true
         })
@@ -64,7 +64,7 @@ class Transactions extends Component {
           handleData.getTransactions(1, 20, null, this.props.pageState.total_blocks, this.props.pageState.total_txs);
         }
       }
-  
+
       for (let i = 0; i < this.props.transactions.length; i++) {
         let time = await diffTime(this.props.transactions[i].height);
         this.state.list_time.push(time);
@@ -107,8 +107,9 @@ class Transactions extends Component {
       </tr>)
     } else {
       this.listTxs = this.props.transactions.map((item, index) => {
-        var txType = 'transfer';
-        const txdata = item.tx.data || {}
+        let txType = 'transfer';
+        let txdata = JSON.parse(item.tx.data) || {}
+
         if (txdata.op === 0) {
           txType = 'deploy'
         } else if (txdata.op === 1) {

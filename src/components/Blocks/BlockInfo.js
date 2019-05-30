@@ -3,6 +3,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import Layout from '../Layout/Layout';
 import { getDataBlock } from '../../service/get-single-data';
+import diffTime from '../../service/find-time-by-block';
 
 class BlockInfo extends Component {
 
@@ -16,7 +17,8 @@ class BlockInfo extends Component {
       node: '',
       parrent_hash: '',
       parrent_height: 0,
-      height: ''
+      height: '',
+      diff_time: ''
     }
   }
 
@@ -35,6 +37,7 @@ class BlockInfo extends Component {
     let height = this.props.match.params.blockId;
     let response = await getDataBlock(height);
     let parrent_response = await getDataBlock(height - 1);
+    let diff_time  = await diffTime(height);
 
     if (response.code === 200) {
       this.setState({
@@ -44,6 +47,7 @@ class BlockInfo extends Component {
         node: response.data.header.chain_id,
         time: response.data.header.time,
         height: response.data.header.height,
+        diff_time
       });
     } else {
       this.props.history.push('/not-found');
@@ -83,7 +87,7 @@ class BlockInfo extends Component {
               <div className="info_body">
                 <div className="row_detail">
                   <span className="label">TimeStamp: </span>
-                  <div className="text_wrap">
+                  <div className="text_wrap"> {this.state.diff_time}
                     {'[ ' + moment(this.state.time).format("MMMM-DD-YYYY h:mm:ss") + ' ]'}
                   </div>
                 </div>

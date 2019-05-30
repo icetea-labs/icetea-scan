@@ -58,7 +58,7 @@ class Contract extends Component {
                             <div className="breadcrumb">
                                 <ul>
                                     <li><Link to="/">Home</Link></li>
-                                    <li><Link to="/contract">Contract</Link></li>
+                                    <li><Link to="/contracts">Contract</Link></li>
                                 </ul>
                             </div>
                         </div>

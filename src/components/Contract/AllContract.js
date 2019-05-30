@@ -36,7 +36,7 @@ class AllContract extends Component {
     }
 
     render() {
-        console.log('this.state.contract_data', this.state.contract_data)
+        // console.log('this.state.contract_data', this.state.contract_data)
         return (
             <Layout>
                 <div className="block_page mt_50 mb_30">

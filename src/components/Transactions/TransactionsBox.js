@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as findTime from '../../service/find-time-by-block';
+import './TransactionsBox.scss';
 
 const mapStateToProps = (state) => {
   return {

@@ -49,7 +49,6 @@ export const getDataContract = async (address) => {
  * @return {Object} data return a request, ex: { code_status: string, data: object || boolean, code: number  } 
  */
 
-
 export const getAllContracts = async(alias) => {
     let all_contract = await tweb3.getContracts(alias);
 
@@ -59,3 +58,25 @@ export const getAllContracts = async(alias) => {
 
     return {code_status: 'can`t get data', data: false, code: 400}
 }
+
+/**
+ * @param {string} getMetadataContract
+ * @return {object} return data of contract
+ * 
+ */
+
+ export const getMetadataContract  = async (address) => {
+
+    let metadata;
+    try {
+        metadata = await tweb3.getMetadata(address);
+    } catch (err) {
+        throw err
+    }
+
+    if (metadata === null){
+        return {code_status: 'error in address', data: false, code: 404 }
+    }
+
+    return {code_status: 'success', data: metadata, code: 200}
+ }

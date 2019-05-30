@@ -1,11 +1,12 @@
 @import "./variables";
 @import "./common";
+@import "./responsive";
 
 .header {
   width: 100%;
   background: rgb(206, 206, 206);
   height: 50px;
-  padding: 0 35px;
+  padding: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -13,126 +14,40 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 100;
-}
+  z-index: 2;
 
-.main_nav {
-  .nav_hed {
-    display: flex;
-    align-items: center;
-    .nav_items {
-      padding: 0 15px;
-      font-weight: 500;
-      line-height: 50px;
-      color: $color_primary;
-      &.sub {
-        position: relative;
-        cursor: pointer;
-        &:hover {
-          .sub_child {
-            transition: all 0.3s ease;
-            visibility: visible;
-            transform: translateY(-1px);
-          }
-        }
-        .sub_child {
-          position: absolute;
-          border: 1px solid $color_grey_athens;
-          padding: 15px;
-          left: 1px;
-          background: $color_white;
-          min-width: 110px;
-          visibility: hidden;
-          transform: translateY(-15px);
-          .sub_child_items {
-            line-height: 30px;
-          }
-        }
-      }
-      a {
-        color: $color_primary;
-        &:hover {
-          transition: all 0.4s ease;
-          text-decoration: underline;
-        }
-      }
-    }
+  .search_box_container {
+    position: absolute;
+    left: 25%;
+  }
+
+  .logo {
+    position: relative;
+    top: 0px;
+    width: 40px;
+    height: 40px;
+  }
+
+  a{
+    color: black;
   }
 }
+
+
 
 // home container
 .home {
   margin-top: 50px;
 }
 
-// Banner
-.banner {
-  padding: 50px 0;
-  color: $color_white;
-  background-color: $color_blue;
-  .flex {
-    height: 200px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  h3 {
-    font-size: $font_size_large;
-    font-weight: 500;
-  }
-  .direc_link {
-    color: $color_white;
-    display: block;
-    margin: 10px 0 20px 0;
-  }
-}
-
-// search box
-.search_box_container {
-  display: flex;
-  align-items: center;
-  width: 470px;
-  height: 35px;
-  border-radius: 3px;
-  overflow: hidden;
-  background: $color_white;
-  &:hover {
-    transition: all 0.3s ease;
-    box-shadow: -2px 3px 15px 0px $color_blue_lagoon;
-  }
-  .search_input {
-    width: calc(100% - 52px);
-    height: 100%;
-    padding: 0 10px;
-    border: none;
-    font-size: $font_size_small;
-    background: $color_white;
-    &:focus {
-      outline: none;
-    }
-  }
-  .btn_search {
-    width: 52px;
-    height: 100%;
-    text-align: center;
-    border: none;
-    cursor: pointer;
-    background: none;
-    i {
-      font-size: $font_size_medium;
-      color: $color_primary;
-    }
-  }
-}
-
 .chain-value {
-  height: 300px;
+  height: 200px;
   width: 80pc;
+  margin: 20px 0px;
 }
 
 .blocks_transactions_view {
-  margin: 40px 0;
+  margin: 20px 0;
   .container {
     display: flex;
     justify-content: space-between;

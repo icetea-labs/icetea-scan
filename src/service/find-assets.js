@@ -5,8 +5,10 @@ import tweb3 from "../tweb3";
  * 
  */
 
-export const findBlocks = async (height, max_height) => {
+export const findBlocks = async (height) => {
 
+    let last_block = await tweb3.getBlock();
+    let max_height = last_block.block_meta.header.height
     let result = [];
     try {
 
@@ -24,12 +26,19 @@ export const findBlocks = async (height, max_height) => {
                 }
             }
 
-            if (check > 0) {
-                result.push(await tweb3.getBlock({ height: block_height }));
+            if (check >= 0) {
+                let data = await tweb3.getBlock({ height: block_height })
+                result.push({ ...data, check });
                 // break;
             }
+
         }
-        // find by height
+
+        if (result.length !== 0) {
+            quickSort(0, result.length - 1, (result.length - 1 + 0) / 2, result);
+        }
+
+        // console.log(result);
 
     } catch (error) {
         // console.log(error);
@@ -45,12 +54,15 @@ export const findBlocks = async (height, max_height) => {
  @return {Array<Object>} return list of txs
  */
 
-export const findTxs = async (hash, pageIndex) => {
+export const findTxs = async (hash) => {
     let result = []
     //TODO: find by hash
 
     let all_txs = [];
     // console.log(hash, pageIndex);
+
+    let last_block = await tweb3.getBlock();
+    let pageIndex = parseInt(last_block.block_meta.header.num_txs)/20;
 
     for (let i = 0; i < pageIndex; i++) {
 
@@ -86,13 +98,14 @@ export const findTxs = async (hash, pageIndex) => {
         }
         // console.log(result);
 
-        if (result.length !== 0) {
-            quickSort(0, result.length - 1, (result.length - 1 + 0) / 2, result);
-        }
+        // if (result.length !== 0) {
+        //    sort  = quickSort(0, result.length - 1, (result.length - 1 + 0) / 2, result);
+        // }
 
+        // console.log(sort);
 
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         throw error;
     }
 
@@ -103,7 +116,7 @@ export const findTxs = async (hash, pageIndex) => {
 
 function quickSort(max, min, center, result) {
     if ((max - min) === 1) {
-        return -1;
+        return result;
     } else {
         let _max = result[max].check;
         let _min = result[min].check;
@@ -111,7 +124,7 @@ function quickSort(max, min, center, result) {
         // đệ quy
         if (min + 1 === center) {
             quickSort(min, center - 1, (center - 1 - min) / 2, result);
-            quickSort(center , max - 1, (max - 1 - center) / 2, result);
+            quickSort(center, max - 1, (max - 1 - center) / 2, result);
         }
 
         // Swap

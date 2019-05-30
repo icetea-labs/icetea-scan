@@ -1,0 +1,23 @@
+.transactions_box {
+  /* width */
+  ::-webkit-scrollbar {
+    width: 5px;
+    border-radius: 2px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background: #888;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555555;
+  }
+}

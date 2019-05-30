@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Layout from '../Layout/Layout';
-import Banner from '../Layout/Banner';
+import Banner from './elements/Banner';
 import BlocksBox from '../Blocks/BlocksBox';
 import TransactionsBox from '../Transactions/TransactionsBox';
 import ChainValue from '../ChainValue/ChainValue';

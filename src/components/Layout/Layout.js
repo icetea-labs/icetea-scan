@@ -9,7 +9,9 @@ class Layout extends Component {
       <div className="layout_container">
         <SideBar />
         <Header />
+        <div className='content'>
           {this.props.children}
+        </div>
         <Footer />
       </div>
     );

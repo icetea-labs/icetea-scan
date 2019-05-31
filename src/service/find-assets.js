@@ -10,19 +10,21 @@ export const findBlocks = async (height) => {
     let last_block = await tweb3.getBlock();
     let max_height = last_block.block_meta.header.height
     let result = [];
+    let sortArray;
     try {
 
         for (let index = 0; index < max_height; index++) {
-
-            let check = 0;
             let block_height = index.toString();
             let data_height = height.toString();
+            let check = 0;
 
             for (let j = 0; j < block_height.length; j++) {
                 if (data_height[j] === block_height[j]) {
                     check += 1;
                 } else {
-                    check -= 1;
+                    if (data_height > 1) {
+                        check -= 1;
+                    }
                 }
             }
 
@@ -31,21 +33,21 @@ export const findBlocks = async (height) => {
                 result.push({ ...data, check });
                 // break;
             }
-
         }
 
-        if (result.length !== 0) {
-            quickSort(0, result.length - 1, (result.length - 1 + 0) / 2, result);
-        }
-
-        // console.log(result);
+        // sortArray = quickSort(result, 0, result.length - 1);
+        sortArray = result.sort((a, b) => {
+            return (
+                b.check - a.check
+            )
+        })
 
     } catch (error) {
         // console.log(error);
         throw error;
     }
 
-    return result;
+    return sortArray;
 }
 
 /**
@@ -56,13 +58,10 @@ export const findBlocks = async (height) => {
 
 export const findTxs = async (hash) => {
     let result = []
-    //TODO: find by hash
-
     let all_txs = [];
-    // console.log(hash, pageIndex);
-
+    let sortArray;
     let last_block = await tweb3.getBlock();
-    let pageIndex = parseInt(last_block.block_meta.header.num_txs)/20;
+    let pageIndex = parseInt(last_block.block_meta.header.num_txs) / 20;
 
     for (let i = 0; i < pageIndex; i++) {
 
@@ -74,8 +73,6 @@ export const findTxs = async (hash) => {
             all_txs.push(data[j]);
         }
     }
-
-    // console.log(all_txs);
 
     let find_hash = hash.toString();
     try {
@@ -92,52 +89,64 @@ export const findTxs = async (hash) => {
                 }
             }
 
-            if (tx.check >= 0) {
+            if (tx.check > 0) {
                 result.push(tx);
             }
         }
-        // console.log(result);
 
-        // if (result.length !== 0) {
-        //    sort  = quickSort(0, result.length - 1, (result.length - 1 + 0) / 2, result);
-        // }
-
-        // console.log(sort);
-
+        sortArray = result.sort((a, b) => {
+            return (
+                a.check - b.check
+            )
+        })
     } catch (error) {
         // console.log(error);
         throw error;
     }
-
-    // console.log(result);
-
-    return result;
+    return sortArray;
 }
 
-function quickSort(max, min, center, result) {
-    if ((max - min) === 1) {
-        return result;
-    } else {
-        let _max = result[max].check;
-        let _min = result[min].check;
 
-        // đệ quy
-        if (min + 1 === center) {
-            quickSort(min, center - 1, (center - 1 - min) / 2, result);
-            quickSort(center, max - 1, (max - 1 - center) / 2, result);
-        }
+// Swap
+// function swap(items, left_index, right_index) {
+//     let temp = items[left_index];
+//     items[left_index] = items[right_index];
+//     items[right_index] = temp;
+// }
 
-        // Swap
-        if (_min > _max) {
-            let temp = result[min];
-            result[min] = result[max];
-            result[max] = temp;
-        }
-    }
-}
+// function parition(items, left_index, right_index) {
+//     let pivot = items[Math.floor((right_index + left_index) / 2)].check;
+//     let i = left_index;
+//     let j = right_index;
 
-export const findAccount = async (value) => {
-    let result = [];
+//     while (i <= j) {
+//         while (items[i].check < pivot.check) {
+//             i++;
+//         }
 
-    return result;
-}
+//         while (items[j].check > pivot.check) {
+//             j--;
+//         }
+
+//         if (i < j) {
+//             swap(items, i, j);
+//             i++;
+//             j--;
+//         }
+//     }
+// }
+
+// function quickSort(items, left_index, right_index) {
+//     let index;
+//     if (items.length > 1) {
+//         index = parition(items, left_index, right_index);
+//         if (left_index < index - 1) {
+//             quickSort(items, left_index, index - 1);
+//         }
+
+//         if (index < right_index) {
+//             quickSort(items, index, right_index);
+//         }
+//     }
+//     return items
+// }

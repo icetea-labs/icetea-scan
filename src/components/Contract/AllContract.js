@@ -28,8 +28,11 @@ class AllContract extends Component {
         for (let i = 0; i < data.length; i++) {
             let res = await getDataContract(data[i]);
 
+            const contract = res.data
+            contract.address = data[i]
+
             if (res.code === 200) {
-                contract_data.push(res.data)
+                contract_data.push(contract)
             }
         }
         this.setState({ contract_data })
@@ -54,6 +57,7 @@ class AllContract extends Component {
                             <table>
                                 <thead>
                                     <tr>
+                                        <th width="100">Address</th>
                                         <th width="100">Balance</th>
                                         <th width="350">Deployed by</th>
                                         <th width="100">Has Src</th>
@@ -62,12 +66,26 @@ class AllContract extends Component {
                                 </thead>
                                 <tbody>
                                     {this.state.contract_data.map((item, index) => {
+                                        let address = '';
+                                        let deploy_by = '';
+                                        for (let i = 0; i < 10; i++) {
+                                            address += item.address[i];
+                                            if (item.deployedBy.length >= 10) {
+                                                deploy_by += item.deployedBy[i];
+                                            }
+                                            if (i === 9) {
+                                                address += '...';
+                                                deploy_by += '...'
+                                            }
+                                        }
+
                                         return (
                                             <tr key={index}>
-                                                <th width="100">{item.balance ? item.balance : 0}</th>
-                                                <th width="350">{item.deployedBy ? <Link to={`/contract/${item.deployedBy}`} >{item.deployedBy}</Link> : 'null'}</th>
-                                                <th width="100">{item.hasSrc === true ? "true" : "false"}</th>
-                                                <th width="100">{item.mode ? item.mode : 'null'}</th>
+                                                <td width="100">{item.address ? <Link to={`/call-contract/${item.address}`} >{address}</Link> : 'null'}</td>
+                                                <td width="100">{item.balance ? parseInt(item.balance).toPrecision(2)  : 0}</td>
+                                                <td width="350">{item.deployedBy ? <Link to={`/contract/${item.deployedBy}`} >{item.deployedBy.length >10 ? deploy_by : item.deployedBy}</Link> : 'null'}</td>
+                                                <td width="100">{item.hasSrc === true ? "true" : "false"}</td>
+                                                <td width="100">{item.mode ? item.mode : 'null'}</td>
                                             </tr>
                                         )
                                     })}

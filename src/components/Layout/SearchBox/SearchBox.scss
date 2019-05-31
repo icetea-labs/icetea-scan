@@ -98,9 +98,8 @@
 .search-result {
   position: absolute;
   bottom: -210px;
-  z-index: 3;
-  height: auto;
-  max-height: 200px;
+  z-index: 2;
+  height: 200px;
   width:390px;
   background-color: white;
   border-radius: 3px;

@@ -28,19 +28,25 @@ class SearchBox extends Component {
     this.txs_data = [];
   }
 
-  handleValue = (e) => {
+  handleValue = (event) => {
+
     this.setState({
-      value: e.target.value,
+      value: event.target.value,
       show_clear: true,
     });
 
-    if (e.target.value === ''){
+    this.setState({
+      result_blocks: [],
+      result_txs: []
+    })
+
+    if (event.target.value === '') {
       this.setState({
         show_clear: false
       })
     }
 
-    if (e.target.value !== '') {
+    if (event.target.value !== '') {
       this.setState({
         isSearching: true
       })
@@ -50,16 +56,15 @@ class SearchBox extends Component {
       })
     }
 
-    this.findAsset(e.target.value);
+    this.findAsset(event.target.value);
   }
 
   async findAsset(value) {
-    setTimeout(
-      this.setState({
-        result_blocks: await findAsset.findBlocks(value),
-        result_txs: await findAsset.findTxs(value)
-      })
-      , 100);
+
+    this.setState({
+      result_blocks: await findAsset.findBlocks(value),
+      result_txs: await findAsset.findTxs(value)
+    })
 
     this.blocks_data = this.state.result_blocks.map((item, index) => {
       let cut_hash = '';
@@ -102,6 +107,7 @@ class SearchBox extends Component {
           </Link>
         </div>)
     })
+
   }
 
   componentDidMount() {
@@ -113,7 +119,7 @@ class SearchBox extends Component {
       setInterval(() => {
         if (this.props.show_cb === 'header') {
           this.setState({
-            show_cb: !checkScroll(window.innerHeight / 5)
+            show_cb: !checkScroll(window.innerHeight / 4)
           })
         }
       }, 100);
@@ -133,19 +139,19 @@ class SearchBox extends Component {
   render() {
     return (
       <div className="search-box_out-side" style={{ display: this.state.show_cb === true ? 'block' : 'none' }}>
-        <div className="search-icon phone"><i className="fa fa-search"></i> </div>
-        <div className="search_box_container nf" >
+        <div className="search-icon phone" style={{ display: 'none' }}><i className="fa fa-search"></i> </div>
+        <div className="search_box_container" >
           <input className="search_input" type="text" placeholder="Search by block, transaction, asset, address or orderid" value={this.state.value} onChange={this.handleValue} />
           <div className="delete-value">
             <button className='btn-clear' onClick={this.clearValue} style={{ display: this.state.show_clear === true ? 'block' : 'none' }}>
               <img src={clear} alt='clear' />
             </button>
           </div>
-          <button className="btn_search" onClick={this.findAsset}>
+          <button className="btn_search" onClick={() => { this.findAsset() }}>
             <i className="fa fa-search"></i>
           </button>
         </div>
-        <div className="search-result" style={{ display: this.state.isSearching ? 'block' : 'none' }} >
+        <div className="search-result" style={{ display: this.state.value !== '' ? 'block' : 'none' }} >
           {this.blocks_data}
           {this.txs_data}
         </div>

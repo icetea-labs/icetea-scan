@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getDataContract } from '../../service/get-single-data';
+import {  getAccountInfo } from '../../service/get-single-data';
 import Layout from '../Layout/Layout';
 import { Link } from 'react-router-dom';
 // import tweb3 from '../../tweb3';
@@ -31,7 +31,7 @@ class Contract extends Component {
 
     async loadData() {
         let address = this.props.match.params.address;
-        let response = await getDataContract(address);
+        let response = await getAccountInfo(address);
         // console.log(response);
 
         if (response.code !== 200) {
@@ -76,7 +76,7 @@ class Contract extends Component {
                                     <tr>
                                         <th color='green'>{this.props.match.params.address}</th>
                                         <th>{this.state.balance ? this.state.balance : 0}</th>
-                                        <th>{this.state.has_src ? this.state.has_src : "null"}</th>
+                                        <th>{this.state.has_src ? this.state.has_src.toString() : "null"}</th>
                                         <th>{this.state.mode ? this.state.mode : 'null'}</th>
                                     </tr>
                                 </tbody>

@@ -7,7 +7,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import * as findTime from "../../service/find-time-by-block";
 import moment from 'moment';
 import './TransactionsInfo.scss';
-import { getMetadataContract } from '../../service/get-single-data';
+import { getMetadataContract, getDataTransaction, } from '../../service/get-single-data';
 import { formatData } from '../../service/format-data';
 
 const mapStateToProps = (state) => {
@@ -52,70 +52,79 @@ class TransactionsInfo extends Component {
 
   async componentWillMount() {
     this.hash = this.props.match.params.hashId;
-    const response = await tweb3.getTransaction(this.props.match.params.hashId, 'hex');
-    let height = response.height;
-    let diffTime = await findTime.diffTime(height);
-    let data_block = await tweb3.getBlock({ height: response.height });
-    let time = data_block.block_meta.header.time;
+    let response = await getDataTransaction(this.props.match.params.hashId, 'hex');
 
-    this.setState({
-      diffTime
-    })
-
-    if ('fee' in response.tx) {
-      this.setState({
-        fee: response.tx.fee
-      })
-    }
-
-    if ('value' in response.tx) {
-      this.setState({
-        value: response.tx.value
-      })
-    }
-
-    if ('result' in response){
+    if (response.code === 200) {
+      let tx_data = response.data;
+      console.log(response);
+      let height = response.height;
+      let diffTime = await findTime.diffTime(height);
+      let data_block = await tweb3.getBlock({ height: tx_data.height });
+      let time = data_block.block_meta.header.time;
 
       this.setState({
-        result: response.result
+        diffTime
       })
 
-      let metadata_result = await getMetadataContract(this.state.result);
-
-      if (metadata_result.code === 200){
+      if ('fee' in tx_data.tx) {
         this.setState({
-          metadata: metadata_result.data
+          fee: tx_data.tx.fee
         })
       }
-    }
 
-    if ('events' in response){
+      if ('value' in tx_data.tx) {
+        this.setState({
+          value: tx_data.tx.value
+        })
+      }
+
+      if ('events' in response) {
+        this.setState({
+          events: response.events
+        })
+      }
+
+
+      if ('result' in tx_data) {
+
+        this.setState({
+          result: tx_data.result
+        })
+
+        try {
+          let metadata_result = await getMetadataContract(tx_data.tags['tx.to']);
+
+          if (metadata_result.code === 200) {
+            this.setState({
+              metadata: metadata_result.data
+            })
+          }
+        } catch (err) {
+          throw err
+        }
+      }
+      
       this.setState({
-        events: response.events
+        tx_data,
+        from: tx_data.tags['tx.from'],
+        to: tx_data.tags['tx.to'],
+        data: tx_data.tx.data,
+        time,
+        tx_tags: tx_data.tags,
       })
+
+      // console.log(blockInfo);
+      this.transactionInfo();
     }
-
-    this.setState({
-      tx_data: response,
-      from: response.tags['tx.from'],
-      to: response.tags['tx.to'],
-      data: response.tx.data,
-      time,
-      tx_tags: response.tags,
-    })
-
-    // console.log(blockInfo);
-    this.transactionInfo();
   }
 
   transactionInfo = () => {
-
     // check data
     if (this.state.tx_data) {
       this.txStatus = (this.state.tx_data.tx_result === null) ? 'Error' : 'Success';
       this.txType = 'transfer';
       if (this.state.tx_data) {
-        
+
         const txdata = JSON.parse(this.state.tx_data.tx.data) || {};
         let contractInfo = formatData(txdata, this.state.tx_data.hash);
 
@@ -225,7 +234,7 @@ class TransactionsInfo extends Component {
                   <span className="label">Metadata:</span>
                   <div className="text_wrap">
                     <pre className="result_data">
-                      {JSON.stringify(this.state.metadata, null , 2)}
+                      {JSON.stringify(this.state.metadata, null, 2)}
                     </pre>
                   </div>
                 </div>

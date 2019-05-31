@@ -14,7 +14,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 2;
+  z-index: 3;
 
   .search_box_container {
     position: absolute;
@@ -31,6 +31,10 @@
   a{
     color: black;
   }
+}
+
+.content{
+  min-height: 50pc;
 }
 
 
@@ -185,8 +189,8 @@
   border-top: 1px solid rgba(132, 132, 0, 0.442);
 
   // border-top: 1px solid $color_grey_athens;
-  position: fixed;
-  bottom: 0;
+  position: relative;
+  bottom: -100px;
   // left: 0;
   .container {
     display: flex;

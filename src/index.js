@@ -7,9 +7,16 @@ import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import { store } from "./service/init-store";
 import { getRealTimeData } from './service/get-realtime-data';
+import { env } from './evironment/env';
 
 
-setInterval(() => { getRealTimeData(); }, 1000);
+if (env === "testing") {
+  setTimeout(() => {
+    getRealTimeData();
+  }, 1000);
+} else {
+  setInterval(() => { getRealTimeData(); }, 1000);
+}
 
 ReactDOM.render(
   <Provider store={store}>

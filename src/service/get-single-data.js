@@ -49,14 +49,14 @@ export const getDataContract = async (address) => {
  * @return {Object} data return a request, ex: { code_status: string, data: object || boolean, code: number  } 
  */
 
-export const getAllContracts = async(alias) => {
+export const getAllContracts = async (alias) => {
     let all_contract = await tweb3.getContracts(alias);
 
     if (all_contract !== null) {
-        return { code_status: 'ok', data: all_contract, code: 200}
+        return { code_status: 'ok', data: all_contract, code: 200 }
     }
 
-    return {code_status: 'can`t get data', data: false, code: 400}
+    return { code_status: 'can`t get data', data: false, code: 400 }
 }
 
 /**
@@ -65,18 +65,58 @@ export const getAllContracts = async(alias) => {
  * 
  */
 
- export const getMetadataContract  = async (address) => {
+export const getMetadataContract = async (address) => {
 
-    let metadata;
+    let metadata = null;
     try {
         metadata = await tweb3.getMetadata(address);
     } catch (err) {
         throw err
     }
 
-    if (metadata === null){
-        return {code_status: 'error in address', data: false, code: 404 }
+    if (metadata === null) {
+        return { code_status: 'error in address', data: false, code: 404 }
     }
 
-    return {code_status: 'success', data: metadata, code: 200}
- }
+    return { code_status: 'success', data: metadata, code: 200 }
+}
+
+/**
+ * @param {string} getAddressInfo 
+ * @return {object} return data of address
+ */
+
+export const getAccountInfo = async (address) => {
+
+    let info = null;
+
+    try {
+        info = await tweb3.getAccountInfo('teat1t766tnnlcd3937rrlxjld9vzhcpxr5qwh8sqhq');
+        if (info !== null) {
+            return { code_status: 'ok', data: info, code: 200 }
+        }
+    } catch (err) {
+        throw err;
+    }
+    return { code_status: 'can`t get data', data: false, code: 404 }
+}
+
+/**
+ *  @param {string} getTransaction 
+ * @return {object } return re  uest of data 
+ */
+export const getDataTransaction = async (hash) => {
+    let info = null;
+
+    try {
+        info = await tweb3.getTransaction(hash, 'hex');
+
+        if (info !== null) {
+            return {code_status: 'ok', data: info, code: 200}
+        }
+    } catch (err){
+        throw err;
+    }
+
+    return {code_status: 'can`t get data', data: false, code: 404}
+}

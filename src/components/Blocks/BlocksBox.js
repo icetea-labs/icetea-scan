@@ -23,7 +23,7 @@ class BlocksBox extends Component {
     }
   }
 
-  componentWillReceiveProps() {
+  async componentWillReceiveProps() {
     this.loadBlocksData();
   }
 

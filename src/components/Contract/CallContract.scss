@@ -1,0 +1,106 @@
+// *{
+//     border: solid gray 1px;
+// }
+
+.side-bar_left{
+    position: fixed;
+    left: 1px;
+    top: 50px;
+    width: 14pc;
+    height: calc(100% - 100px);
+    padding: 10px;
+    border: solid rgba(26, 26, 26, 0.272) 1px;
+    z-index: 2;
+    background-color: whitesmoke;
+
+    ul {
+        padding: 5px;
+        li{
+            margin: 5px;
+            padding: 2px;
+            text-align: center;
+            border: solid rgba(66, 66, 66, 0.639) 1px;
+
+            &:hover {
+                color: white;
+                background-color: rgba(243, 64, 64, 0.517);
+            }
+        }
+    }
+    
+    .choose-button{
+        padding: 5px;
+        
+        button{
+            margin: 3px;
+            padding: 2px;
+        }
+
+        .btn-choose {   
+            color: black;
+            background-color: whitesmoke;
+        }
+
+        .btn-n-choose{
+            color: white;
+            background-color: green;
+        }
+    }
+}
+
+.call-contract{
+    position: relative;
+    top: 50px;
+    width: 80%;
+    left: 15pc;
+    padding: 20px;
+    p{
+        margin: 15px 0;
+        font-weight: 600
+    }
+
+    .wallet{
+        margin: 10px;
+
+        input{
+            min-width: 400px !important;
+            width: 40%;
+            border: solid gray 1px;
+            height: 30px;
+            &::placeholder{
+                padding-right: 10px !important;
+            }
+        }
+
+        button{
+            width: 50px;
+            height: 30px;
+            margin: 10px 5px;
+        }
+    }
+
+    .btn-exec {
+        padding: 5px;
+        margin: 10px 0;
+        &:hover {
+            color: white;
+            background-color: rgba(124, 47, 124, 0.503);
+        }
+    }
+}
+
+#type-data{
+    color: rgb(64, 64, 192),
+}
+
+#name-func{
+    color: rgb(212, 65, 65)
+}
+
+#type-func{
+    color: rgb(21, 100, 21)
+}
+
+textarea {
+    width: 500px;
+}

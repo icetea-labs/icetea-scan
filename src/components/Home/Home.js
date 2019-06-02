@@ -1,20 +1,17 @@
 import React, { Component } from 'react';
-import Layout from './Layout';
-import Banner from './Banner';
-import BlocksBox from './Blocks/BlocksBox';
-import TransactionsBox from './Transactions/TransactionsBox';
-import ChainValue from './ChainValue/ChainValue';
-import { getFirstTxsData } from '../service/init-store';
+import Layout from '../Layout/Layout';
+import Banner from './elements/Banner';
+import BlocksBox from '../Blocks/BlocksBox';
+import TransactionsBox from '../Transactions/TransactionsBox';
+import ChainValue from '../ChainValue/ChainValue';
 
 class Home extends Component {
 
   constructor(props){
     super(props)
-    this.state={}
-  }
-
-  componentDidMount(){
-    getFirstTxsData();
+    this.state={
+      is_loading: true
+    }
   }
 
   render() {

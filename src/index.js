@@ -5,18 +5,18 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 // Provider
 import { Provider } from 'react-redux';
-// import { createStore } from 'redux';
-import { getRealTimeData } from './service/getrealtimedata';
-import { setInterval } from 'timers';
 import { store } from "./service/init-store";
-// import { myReducer } from './redux/reducers/reducer';
+import { getRealTimeData } from './service/get-realtime-data';
+import { env } from './evironment/env';
 
-/**
- * @param setTimeout get blocks and transactions
- */
-setInterval(() => {
-  getRealTimeData();
-}, 1000);
+
+if (env === "testing") {
+  setTimeout(() => {
+    getRealTimeData();
+  }, 1000);
+} else {
+  setInterval(() => { getRealTimeData(); }, 1000);
+}
 
 ReactDOM.render(
   <Provider store={store}>

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Layout from '../Layout';
+import Layout from '../Layout/Layout';
 import moment from 'moment';
-import * as handledata from '../../service/handledata';
+import * as handledata from '../../service/handle-data';
 import MaterialIcon from 'material-icons-react';
 import './Blocks.scss';
-// import { diffTime } from "../../service/findtimebyblock";
+import { setPageSate } from '../../service/get-realtime-data';
+import diffTime from '../../service/find-time-by-block';
 
 const mapStateToProps = (state) => {
   return {
@@ -23,68 +24,66 @@ const mapDispatchToProps = (dispatch) => {
 
 class Blocks extends Component {
 
-  constructor(){
+  constructor() {
     super();
     this.state = {
-      pageIndex: 1
+      pageIndex: 1,
+      blocks: [],
+      list_time: []
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillMount() {
+    setPageSate();
+  }
+
+  async componentWillReceiveProps(nextProps) {
     if (this.props !== nextProps) {
-      this.getBlocksByPageIndex(this.state.pageIndex);
+      for (let i = 0; i < this.props.blocks.length; i ++) {
+        let item = this.props.blocks[i].header.height;
+        let time = await diffTime(item);
+        
+        this.state.list_time.push(time);
+      }
+
+      if (this.state.pageIndex === 1) {
+        handledata.getBlocks( this.props.pageState.total_blocks ,1 , 20);
+      }
     }
   }
 
   // Set Time For Block
-  loadBlocks = () => {
-    const blocks = this.props.blocks && this.props.blocks.map((item, index) => {
-      let currentTime = moment(new Date()).format("DD/MM/YYYY HH:mm:ss");
-      let blockTime = moment(item.header.time).format("DD/MM/YYYY HH:mm:ss");
-      const ms = moment(currentTime, "DD/MM/YYYY HH:mm:ss").diff(moment(blockTime, "DD/MM/YYYY HH:mm:ss"));
-      const d = moment.duration(ms);
-
-      // diffTime
-      var diffTime = null;
-      if (d.days() > 0) {
-        diffTime = `${d.days()} days ${d.hours()} hours ago`;
-      } else if (d.hours() > 0) {
-        diffTime = `${d.hours()} hours ${d.minutes()} mins ago`;
-      } else if (d.minutes() > 0) {
-        diffTime = `${d.minutes()} mins ${d.seconds()} secs ago`;
-      } else {
-        diffTime = `${d.seconds()} secs ago`;
-      }
-
+  loadBlocks() {
+    let blocks = this.props.blocks && this.props.blocks.map((item, index) => {
       return (
         <tr key={index}>
           <td><Link to={`/block/${item.header.height}`}>{item.header.height}</Link></td>
           <td>{moment(item.header.time).format("MMMM-DD-YYYY h:mm:ss")}</td>
-          <td>{diffTime}</td>
+          <td>{this.state.list_time[index]}</td>
           <td>
             {(item.header.num_txs > 0) ? <Link to={`/txs?block=${item.header.height}`}>{item.header.num_txs}</Link> : 0}
           </td>
           <td>VN</td>
-          <td>0 BNB</td>
+          <td>0 ITEA</td>
         </tr>
       )
     })
 
-    return blocks;
+    return blocks
   }
 
   // Set Data By Page Index
   getBlocksByPageIndex(pageIndex) {
     let maxheight = this.props.pageState.total_blocks;
 
-    if(pageIndex <= 0){
+    if (pageIndex <= 0) {
       pageIndex = 1;
     }
 
-    if(pageIndex >=this.props.pageState.pageBlockLimit){
-      pageIndex = this.props.pageState.pageBlockLimit 
+    if (pageIndex >= this.props.pageState.pageBlockLimit) {
+      pageIndex = this.props.pageState.pageBlockLimit
     }
-    
+
     this.setState({
       pageIndex
     })
@@ -102,7 +101,7 @@ class Blocks extends Component {
               <div className="breadcrumb">
                 <ul>
                   <li><Link to="/">Home</Link></li>
-                  <li><Link to="/">Blocks</Link></li>
+                  <li><Link to="/blocks">Blocks</Link></li>
                 </ul>
               </div>
             </div>
@@ -122,7 +121,6 @@ class Blocks extends Component {
                   {this.loadBlocks()}
                 </tbody>
               </table>
-
             </div>
             <div className="pagination">
               <ul>
@@ -131,15 +129,15 @@ class Blocks extends Component {
             </div>
             <div className="page-index">
               <div className="paging">
-                <button className="btn-common" onClick={() => { this.getBlocksByPageIndex(1)}}>First</button>
-                <button className="btn-cusor" onClick={() => { this.getBlocksByPageIndex(this.state.pageIndex - 1)}} >
+                <button className="btn-common" onClick={() => { this.getBlocksByPageIndex(1) }}>First</button>
+                <button className="btn-cusor" onClick={() => { this.getBlocksByPageIndex(this.state.pageIndex - 1) }} >
                   <MaterialIcon icon="keyboard_arrow_left" />
                 </button>
                 <span className="state">Page {this.state.pageIndex} of {this.props.pageState.pageBlockLimit} </span>
-                <button className="btn-cusor" onClick={() => { this.getBlocksByPageIndex(this.state.pageIndex + 1)}}>
+                <button className="btn-cusor" onClick={() => { this.getBlocksByPageIndex(this.state.pageIndex + 1) }}>
                   <MaterialIcon icon="keyboard_arrow_right" />
                 </button>
-                <button className="btn-common" onClick={() => { this.getBlocksByPageIndex(this.props.pageState.pageBlockLimit)}}>
+                <button className="btn-common" onClick={() => { this.getBlocksByPageIndex(this.props.pageState.pageBlockLimit) }}>
                   Last
                 </button>
               </div>

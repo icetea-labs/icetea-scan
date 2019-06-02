@@ -1,43 +1,50 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700&subset=vietnamese');
-@import './variables';
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,500,700&subset=vietnamese");
+@import "./variables";
 
-*{ margin: 0; padding: 0; box-sizing: border-box }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-html, body{
+html,
+body {
   font-family: $font_root;
   font-size: $font_size_base;
   font-weight: normal;
   background: $color_white_rgb;
 }
 
-a{
+a {
   text-decoration: none;
   color: $color_blue_link;
-  &:hover{
+  &:hover {
     text-decoration: underline;
   }
 }
 
-ul, li{
+ul,
+li {
   list-style: none;
 }
 
-input, button {
-  &:focus{
+input,
+button {
+  &:focus {
     outline: none;
   }
 }
 
-.container{
+.container {
   width: 1200px;
   margin: 0 auto;
 }
 
-.mt_50{
+.mt_50 {
   margin-top: 50px;
 }
 
-.mb_30{
+.mb_30 {
   margin-bottom: 30px;
 }
 
@@ -46,7 +53,7 @@ input, button {
   height: 40px;
 }
 
-.circle-span{
+.circle-span {
   border-radius: 50%;
   position: relative;
   left: -10px;
@@ -57,15 +64,26 @@ input, button {
   margin: 0px 0px 0px 0px !important;
 }
 
-.no_data{
+.no_data {
   width: 100pc;
   float: center;
   padding: 20px;
 
-  span{
+  span {
     float: center !important;
     position: absolute;
     left: 50%;
     font-size: 16px;
   }
+}
+
+li {
+  cursor: pointer;
+}
+
+pre {
+  border: solid rgba(139, 69, 19, 0.258) 1px;
+  background-color: rgba(251, 237, 227, 0.36);
+  padding: 10px;
+  min-width: 600px;
 }

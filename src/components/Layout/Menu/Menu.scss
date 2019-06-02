@@ -1,0 +1,65 @@
+@import '../../../sass/variables';
+
+.main_nav {
+    position: absolute;
+    right: 0px;
+    .nav_hed {
+      display: flex;
+      align-items: center;
+      .nav_items {
+        padding: 0 15px;
+        font-weight: 500;
+        line-height: 50px;
+        color: $color_primary;
+  
+        &:hover {
+          background-color: rgba(128, 128, 128, 0.578);
+        }
+        &.sub {
+          position: relative;
+          cursor: pointer;
+          &:hover {
+            .sub_child {
+              transition: all 0.5s ease;
+              visibility: visible;
+              transform: translateY(-1px);
+              height: 90px;
+            }
+          }
+  
+          :not(:hover) {
+            .sub_child {
+              transition: 0.5s;
+            }
+          }
+  
+          .sub_child {
+            position: absolute;
+            border: 1px solid $color_grey_athens;
+            padding: 15px;
+            left: 1px;
+            background: $color_white;
+            width: 110px;
+            visibility: hidden;
+            height: 0px;
+            // transform: translateY(-15px);
+            .sub_child_items {
+              line-height: 30px;
+              :hover {
+                background-color: gray;
+                color: white;
+              }
+            }
+          }
+        }
+  
+        a {
+          color: $color_primary;
+          &:hover {
+            transition: all 0.4s ease;
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }

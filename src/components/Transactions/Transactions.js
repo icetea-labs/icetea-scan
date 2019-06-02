@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Layout from '../Layout';
+import Layout from '../Layout/Layout';
 import MaterialIcon from 'material-icons-react';
 import './Transactions.scss';
-import * as handleData from '../../service/handledata'
-import diffTime from '../../service/findtimebyblock';
-import { getData, getFirstTxsData } from '../../service/init-store';
+import * as handleData from '../../service/handle-data'
+import diffTime from '../../service/find-time-by-block';
+import { getFirstTxsData } from '../../service/init-store';
+import { setPageSate } from '../../service/get-realtime-data';
 
 const mapStateToProps = (state) => {
   return {
@@ -34,9 +35,14 @@ class Transactions extends Component {
     this.listTxs = [];
   }
 
-  async componentWillReceiveProps(nextProps) {
+  async componentWillMount() {
+    setPageSate();
+  }
 
+  async componentWillReceiveProps(nextProps) {
     let search = this.props.location.search;
+
+    // Check is searching txs
     if (this.props !== nextProps) {
       if (this.props.location.search !== "") {
         let data = search.split("?block=");
@@ -46,6 +52,10 @@ class Transactions extends Component {
         });
         this.getTxsByHeight(this.state.height);
       } else {
+
+        if (this.props.handleTransactions === []) {
+          getFirstTxsData();
+        }
 
         this.setState({
           show_paging: true
@@ -64,7 +74,7 @@ class Transactions extends Component {
 
   getTransactionByBlock(pageIndex) {
     // console.log(this.props.pageState);
-    if (pageIndex <= 0) {
+    if (pageIndex <= 1) {
       pageIndex = 1;
     }
 
@@ -84,12 +94,22 @@ class Transactions extends Component {
   }
 
   loadTransactions() {
+    // window.location.reload();
     if (this.props.transactions.length === 0) {
-      return (<tr className="no_data"><span>No Data</span></tr>)
+      return (<tr className="no_data">
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>No Data</th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>)
     } else {
       this.listTxs = this.props.transactions.map((item, index) => {
-        var txType = 'transfer';
-        const txdata = item.tx.data || {}
+        let txType = 'transfer';
+        let txdata = JSON.parse(item.tx.data) || {}
+
         if (txdata.op === 0) {
           txType = 'deploy'
         } else if (txdata.op === 1) {
@@ -110,15 +130,15 @@ class Transactions extends Component {
             </td>
             <td className="text_overflow">
               {
-                (item.tags['tx.from']) ? <Link to="/">{item.tags['tx.from']}</Link> : <span>--</span>
+                (item.tags['tx.from']) ? <Link to={`/contract/${item.tags['tx.from']}`}>{item.tags['tx.from']}</Link> : <span>--</span>
               }
             </td>
             <td className="text_overflow">
               {
-                (item.tags['tx.to']) ? <Link to="/">{item.tags['tx.to']}</Link> : <span>--</span>
+                (item.tags['tx.to']) ? <Link to={`/contract/${item.tags['tx.to']}`}>{item.tags['tx.to']}</Link> : <span>--</span>
               }
             </td>
-            <td>{(item.tx.value) ? item.tx.value : 0}</td>
+            <td>{(item.tx.value) ? item.tx.value : 0} ITEA</td>
           </tr>
         )
       })
@@ -137,7 +157,7 @@ class Transactions extends Component {
               <div className="breadcrumb">
                 <ul>
                   <li><Link to="/">Home</Link></li>
-                  <li><Link to="/">Transactions</Link></li>
+                  <li><Link to="/txs">Transactions</Link></li>
                 </ul>
               </div>
             </div>

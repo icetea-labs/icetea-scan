@@ -4,6 +4,11 @@ import { setIndex } from "../redux/actions/handlePageState";
 import { utils } from 'icetea-web3';
 import { store } from './init-store';
 
+/**
+ * @param {null} getRealTimeData get data of 10 first block and txs to redux
+ * 
+ */
+
 export const getRealTimeData = async () => {
     // number to get values
     const limit_blocks_txs = 10
@@ -53,17 +58,20 @@ export const getRealTimeData = async () => {
         }
     }
     
-    // console.log(transactions);
-    /**
-     * @param getRealTimeBlocksAndTxs set value for realtime data 10 lastest block and 10 lastest transaction
-     * @param setPageSize update value from max height of all blocks tendermint node have
-     */
-
     store.dispatch(
         getRealTimeBlocksAndTxs(blockchain.block_metas, transactions)
     );
+}
 
+/**
+ * @param {null} setPageSate set page state for block and txs when find them
+ */
+
+export const setPageSate = async () => {
+    let last_block = await tweb3.getBlock();
+    let maxHeight = parseInt(last_block.block_meta.header.height);
+    let total_txs = parseInt(last_block.block_meta.header.total_txs);
     store.dispatch(
-        setIndex(parseInt(maxHeight), parseInt(last_block.block_meta.header.total_txs))
+        setIndex(maxHeight, total_txs)
     );
 }

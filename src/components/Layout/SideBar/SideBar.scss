@@ -1,0 +1,85 @@
+// icon menu
+.menu-icon {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  width: 50px;
+  height: 50px;
+  font-size: 30px;
+  color: rgb(90, 90, 90);
+}
+//background-sidebar
+.background-sidebar {
+  position: fixed;
+  z-index: 4;
+  width: 100pc;
+  height: 1000px;
+  background-color: rgba(20, 20, 20, 0.496);
+  overflow: none;
+  // display: none;
+}
+//side-bar
+.sidebar {
+  width: 0px;
+  height: 0px;
+  position: fixed;
+  top: 0px;
+  z-index: 5;
+}
+
+// side-bar_right
+.side-bar_right {
+  z-index: 100;
+  position: fixed;
+  right: 0px;
+  top: 0px;
+  height: 100%;
+  background-color: rgb(27, 27, 27);
+  transition: 300ms;
+
+  .btn-close {
+    position: absolute;
+    top: 0px;
+    height: 8%;
+    padding: 10px;
+    width: 100%;
+    font-size: 30px;
+    color: rgb(95, 95, 128);
+    cursor: pointer;
+
+    i {
+      position: absolute;
+      right: 10%;
+      font-weight: 200;
+    }
+  }
+
+  .content-sidebar {
+    width: 100%;
+    height: 92%;
+    position: absolute;
+    top: 8%;
+    color: whitesmoke;
+    color: white;
+    padding: 10px;
+
+    ul {
+      li {
+        font-weight: 600;
+        padding: 20px;
+        font-size: 16px;
+        font-family: sans-serif;
+
+        i{
+            width: 20px;
+            height: 20px;
+        }
+
+        a{
+            color: whitesmoke;
+        }
+      }
+    }
+  }
+}

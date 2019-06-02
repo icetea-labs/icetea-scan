@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as findTime from '../../service/findtimebyblock';
+import * as findTime from '../../service/find-time-by-block';
+import './TransactionsBox.scss';
 
 const mapStateToProps = (state) => {
   return {
@@ -25,7 +26,7 @@ class TransactionsBox extends Component {
 
   async componentWillReceiveProps() {
     if (this.props.allTransactions !== null) {
-      for (let i = 0; i < this.props.allTransactions.length - 1; i++) {
+      for (let i = 0; i < this.props.allTransactions.length ; i++) {
         let item = this.props.allTransactions[i];
         let txType = 'transfer';
         const txdata = JSON.parse(item.tx.data) || {};
@@ -55,15 +56,15 @@ class TransactionsBox extends Component {
                 TX#:
               <Link to={`/tx/${item.hash}`} >{item.hash}</Link>
               </div>
-              <div className="seconds_time">{diffTime} ago</div>
+              <div className="seconds_time">{diffTime}</div>
             </div>
             <div className="transactions flex">
               <div className="from_to">
                 <div className="from">
-                  From: <Link to="/address/">{item.tags['tx.from'] ? item.tags['tx.from'] : '--'}</Link>
+                  From: <Link to={`/contract/${item.tags['tx.from'] }`}>{item.tags['tx.from'] ? item.tags['tx.from'] : '--'}</Link>
                 </div>
                 <div className="to">
-                  To: <Link to="/address/">{item.tags['tx.to'] ? item.tags['tx.to'] : '--'}</Link>
+                  To: <Link to={`/contract/${item.tags['tx.to'] }`}>{item.tags['tx.to'] ? item.tags['tx.to'] : '--'}</Link>
                 </div>
               </div>
               <div className="status_order">

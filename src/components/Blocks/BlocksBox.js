@@ -1,81 +1,83 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
 import { connect } from 'react-redux';
-
+import diffTime from '../../service/find-time-by-block';
+import './BlocksBox.scss';
 
 // get data block
 const mapStateToProps = (state) => {
   // console.log(state)
-  return{
+  return {
     allBlocks: state.getRealTimeData.blocks
   }
 }
 
 class BlocksBox extends Component {
 
-  constructor(){
+  constructor() {
     super();
-    this.currentTime = null;
-    this.diffTime = null;
-    this.blockTime = null;
-    this.ms = null;
-    this.d = null;
+
+    this.state = {
+      list_time: [],
+      list_blocks: []
+    }
   }
 
-  loadBlocksData = () => {
-    return(
-      this.props.allBlocks && this.props.allBlocks.map((item, index) => {
-        // diffTime
-        this.currentTime  = moment(new Date()).format("DD/MM/YYYY HH:mm:ss");
-        this.blockTime = moment(item.header.time).format("DD/MM/YYYY HH:mm:ss");
-        this.ms = moment(this.currentTime,"DD/MM/YYYY HH:mm:ss").diff(moment(this.blockTime,"DD/MM/YYYY HH:mm:ss"));
-        this.d = moment.duration(this.ms);
+  async componentWillReceiveProps() {
+    this.loadBlocksData();
+  }
 
-        this.diffTime = null;
-        if(this.d.days() > 0){
-          this.diffTime = ` ${this.d.days()} days ${this.d.hours()} hr ago `;
-        }else if(this.d.hours() > 0){
-          this.diffTime = ` ${this.d.hours()} hr ${this.d.minutes()} mins ago `;
-        }else if(this.d.minutes() > 0){
-          this.diffTime = ` ${this.d.minutes()} mins ${this.d.seconds()} secs ago `;
-        }else{
-          this.diffTime = ` ${this.d.seconds()} secs ago `;
-        };
-        
-        return(
-          <div className="row_blocks" key={index}>
-            <div className="title flex">
-              <div className="block_count">
-                Blocks
+  async loadBlocksData() {
+    let list_time = [];
+    for (let i = 0; i < this.props.allBlocks.length; i++) {
+      let item = this.props.allBlocks[i];
+      let time = await diffTime(item.header.height);
+      list_time.push(time);
+    }
+
+    this.setState({
+      list_time
+    })
+
+    let list_blocks = this.props.allBlocks.map((item, index) => {
+      // diffTime
+      return (
+        <div className="row_blocks" key={index}>
+          <div className="title flex">
+            <div className="block_count">
+              Blocks
                 <Link to={`/block/${item.header.height}`}>{item.header.height}</Link>
-              </div>
-              <div className="seconds_time">{this.diffTime}</div>
             </div>
-            <div className="includes flex">
-              <div className="in_detail">
-                Includes
-                <Link to={`/txs?block=${item.header.height}` } > {item.header.num_txs} Txns, </Link>
-              </div>
-              <div className="node">
-                Node: <span>{item.header.chain_id}</span>
-              </div>
+            <div className="seconds_time">{this.state.list_time[index]}</div>
+          </div>
+          <div className="includes flex">
+            <div className="in_detail">
+              Includes
+                <Link to={`/txs?block=${item.header.height}`} > {item.header.num_txs} Txns, </Link>
+            </div>
+            <div className="node">
+              Node: <span>{item.header.chain_id}</span>
             </div>
           </div>
-        )
-      })
-    )
+        </div>
+      )
+    })
+
+    this.setState({
+      list_blocks
+    })
+
   }
 
   render() {
     return (
-      <div className="blocks_box">
+      <div className="blocks_box col-3">
         <div className="header_top">
           <h3 className="title"><i className="fa fa-cube"></i>Blocks</h3>
           <Link to="/blocks/">View All →</Link>
         </div>
         <div className="box_wrap">
-          { this.loadBlocksData() }
+          {this.state.list_blocks}
         </div>
 
       </div>

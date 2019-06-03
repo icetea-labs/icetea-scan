@@ -54,7 +54,7 @@ export const getRealTimeData = async () => {
         // console.log(data);
 
         for (let j = 0; j < data.length; j++) {
-            transactions.push(utils.decode(data[j]));
+            transactions.push(utils.decodeTxResult(data[j]));
         }
     }
     

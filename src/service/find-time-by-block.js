@@ -9,7 +9,7 @@ import moment from "moment";
 
 export const diffTime = async (height) => {
 
-  console.log('check Height in diffTime',height);
+  // console.log('check Height in diffTime',height);
 
   let diffTime = "";
   let blockInfo = await tweb3.getBlock({ height });

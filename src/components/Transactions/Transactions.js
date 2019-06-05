@@ -16,11 +16,6 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-  }
-}
-
 class Transactions extends Component {
 
   constructor() {
@@ -207,4 +202,4 @@ class Transactions extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Transactions);
+export default connect(mapStateToProps, null)(Transactions);

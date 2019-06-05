@@ -56,14 +56,22 @@ class TransactionsInfo extends Component {
 
     if (response.code === 200) {
       let tx_data = response.data;
-      console.log(response);
-      let height = response.height;
+      // console.log(response);
+
+      let height = tx_data.height;
+      // console.log('Block Height CK', height);
+
       let diffTime = await findTime.diffTime(height);
-      let data_block = await tweb3.getBlock({ height: tx_data.height });
-      let time = data_block.block_meta.header.time;
+
+      let data_block = await tweb3.getBlock({ height });
+      // console.log('DTBlock CK', data_block);
+
+      let time = moment(data_block.block_meta.header.time).format("DD/MM/YYYY HH:mm:ss");
+
+      // console.log('TxInfo', time)
 
       this.setState({
-        diffTime
+        diffTime: diffTime
       })
 
       if ('fee' in tx_data.tx) {
@@ -105,11 +113,11 @@ class TransactionsInfo extends Component {
       }
       
       this.setState({
-        tx_data,
+        tx_data: tx_data,
         from: tx_data.tags['tx.from'],
         to: tx_data.tags['tx.to'],
         data: tx_data.tx.data,
-        time,
+        time: time,
         tx_tags: tx_data.tags,
       })
 
@@ -193,7 +201,7 @@ class TransactionsInfo extends Component {
                 </div>
                 <div className="row_detail">
                   <span className="label">TimeStamp:</span>
-                  <div className="text_wrap">{moment(this.state.time).format("DD/MM/YYYY HH:mm:ss") + ' [ ' + this.state.diffTime + ' ]'}</div>
+                  <div className="text_wrap">{(this.state.time) + ' [ ' + this.state.diffTime + ' ]'}</div>
                 </div>
                 <div className="row_detail">
                   <span className="label">Transaction Type:</span>

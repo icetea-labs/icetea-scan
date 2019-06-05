@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@iceteachain/web3": "github:TradaTech/icetea-web3",
     "font-awesome": "^4.7.0",
     "gulp-sass": "^3.1.1",
     "icetea-common": "github:TradaTech/icetea-common",

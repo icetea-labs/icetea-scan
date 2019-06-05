@@ -65,10 +65,15 @@ class Transactions extends Component {
         }
       }
 
+      let listTime = [];
       for (let i = 0; i < this.props.transactions.length; i++) {
         let time = await diffTime(this.props.transactions[i].height);
-        this.state.list_time.push(time);
+        listTime.push(time);
+        // this.state.list_time.push(time);
       }
+      this.setState({
+        list_time: listTime
+      })
     }
   }
 

@@ -12,7 +12,7 @@ import {
   getDataTransaction
 } from "../../service/get-single-data";
 import { formatData } from "../../service/format-data";
-import notifi from '../elements/Notification';
+import notifi from "../elements/Notification";
 
 const mapStateToProps = state => {
   return {
@@ -35,14 +35,14 @@ class TransactionsInfo extends Component {
       op: 0,
       fee: 0,
       value: 0,
-      diffTime: '',
-      time: '',
-      tx_from: '',
-      tx_to: '',
-      result: '',
+      diffTime: "",
+      time: "",
+      tx_from: "",
+      tx_to: "",
+      result: "",
       events: null,
       tags: null,
-      metadata: '',
+      metadata: "",
       contractInfo: null
     };
 
@@ -125,12 +125,12 @@ class TransactionsInfo extends Component {
 
       this.setState({
         tx_data: tx_data,
-        from: tx_data.tags["tx.from"],
-        to: tx_data.tags["tx.to"],
+        tx_from: tx_data.tags["tx.from"],
+        tx_to: tx_data.tags["tx.to"],
         data: tx_data.tx.data,
         time: time,
         tx_tags: tx_data.tags,
-        events: dataEvents,
+        events: dataEvents
       });
 
       // console.log(blockInfo);
@@ -172,8 +172,21 @@ class TransactionsInfo extends Component {
   };
 
   render() {
-    const { tx_data, from, time, diffTime, fee, tx_tags, to, value, result, events, contractInfo, metadata } = this.state;
-    // console.log('state CK', this.state)
+    const {
+      tx_data,
+      time,
+      diffTime,
+      fee,
+      tx_tags,
+      tx_from,
+      tx_to,
+      value,
+      result,
+      events,
+      contractInfo,
+      metadata
+    } = this.state;
+    console.log("state CK", this.state);
     return (
       <Layout>
         <div className="transaction_info mt_50">
@@ -185,7 +198,7 @@ class TransactionsInfo extends Component {
                 <CopyToClipboard
                   text={tx_data.hash}
                   onCopy={() => {
-                    notifi.info('Copy Succesful!')
+                    notifi.info("Copy Succesful!");
                   }}
                 >
                   <span className="copy_to_add fa fa-clipboard" />
@@ -221,8 +234,7 @@ class TransactionsInfo extends Component {
                   <div className="text_wrap">
                     <span
                       className={
-                        tx_data &&
-                        tx_data.tx_result === null
+                        tx_data && tx_data.tx_result === null
                           ? "error_color"
                           : "success_color"
                       }
@@ -253,24 +265,21 @@ class TransactionsInfo extends Component {
                 </div>
                 <div className="row_detail">
                   <span className="label">Fee:</span>
-                  <div className="text_wrap">
-                    {tx_data && fee} ITEA
-                  </div>
+                  <div className="text_wrap">{tx_data && fee} ITEA</div>
                 </div>
                 <div className="row_detail">
                   <span className="label">From:</span>
                   <div className="text_wrap">
-                    {tx_data &&
-                    tx_tags["tx.from"] ? (
-                      <Link to="/">{tx_tags["tx.from"]}</Link>
+                    {tx_data && tx_from ? (
+                      <Link to={`/contract/${tx_from}`}>{tx_from}</Link>
                     ) : (
                       <span>--</span>
                     )}
 
                     <CopyToClipboard
-                      text={from}
+                      text={tx_from}
                       onCopy={() => {
-                        notifi.info('Copy Succesful!')
+                        notifi.info("Copy Succesful!");
                       }}
                     >
                       <i className="copy_to_add fa fa-clipboard" />
@@ -280,15 +289,15 @@ class TransactionsInfo extends Component {
                 <div className="row_detail">
                   <span className="label">To:</span>
                   <div className="text_wrap">
-                    {tx_data && tx_tags["tx.to"] ? (
-                      <Link to="/">{tx_tags["tx.to"]}</Link>
+                    {tx_data && tx_to ? (
+                      <Link to={`/contract/${tx_to}`}>{tx_to}</Link>
                     ) : (
                       <span>--</span>
                     )}
                     <CopyToClipboard
-                      text={to}
+                      text={tx_to}
                       onCopy={() => {
-                        notifi.info('Copy Succesful!')
+                        notifi.info("Copy Succesful!");
                       }}
                     >
                       <i className="copy_to_add fa fa-clipboard" />
@@ -297,9 +306,7 @@ class TransactionsInfo extends Component {
                 </div>
                 <div className="row_detail">
                   <span className="label">Value:</span>
-                  <div className="text_wrap">
-                    {tx_data && value} ITEA
-                  </div>
+                  <div className="text_wrap">{tx_data && value} ITEA</div>
                 </div>
                 <div className="row_detail">
                   <span className="label">Metadata:</span>
@@ -317,9 +324,7 @@ class TransactionsInfo extends Component {
                 </div>
                 <div className="row_detail">
                   <span className="label">Result:</span>
-                  <pre className="result_data">
-                    {JSON.stringify(result)}
-                  </pre>
+                  <pre className="result_data">{JSON.stringify(result)}</pre>
                 </div>
                 <div className="row_detail">
                   <span className="label">Events:</span>

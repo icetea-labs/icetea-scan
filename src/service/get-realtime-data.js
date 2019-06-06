@@ -1,7 +1,7 @@
 import tweb3 from "../tweb3";
 import { getRealTimeBlocksAndTxs } from "../redux/actions/handleRealTimeData";
 import { setIndex } from "../redux/actions/handlePageState";
-import { utils } from 'icetea-web3';
+import { utils } from '@iceteachain/web3';
 import { store } from './init-store';
 
 /**

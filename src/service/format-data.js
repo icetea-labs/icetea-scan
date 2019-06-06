@@ -1,4 +1,4 @@
-import { switchEncoding, tryParseJson } from "icetea-web3/src/utils";
+import { switchEncoding, tryParseJson } from "@iceteachain/web3/src/utils";
 
 // const switchEncoding = utils.switchEncoding;
 // const tryParseJson = utils.tryParseJson

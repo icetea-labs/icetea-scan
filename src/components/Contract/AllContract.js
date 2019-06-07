@@ -29,6 +29,7 @@ class AllContract extends Component {
 
   async loadData(data) {
     let contract_data = [];
+    this._isMounted = true;
     for (let i = 0; i < data.length; i++) {
       let res = await getDataContract(data[i]);
 

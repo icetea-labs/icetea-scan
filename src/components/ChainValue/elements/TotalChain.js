@@ -12,6 +12,8 @@ const mapStateToProps = (state) => {
 
 class TotalChain extends Component {
 
+    _isMounted = false;
+
     constructor() {
         super();
         this.state = {
@@ -26,6 +28,7 @@ class TotalChain extends Component {
     }
 
     async componentWillReceiveProps() {
+        this._isMounted = true;
 
         let res = await getAllContracts();
         let total_accounts;
@@ -33,7 +36,7 @@ class TotalChain extends Component {
         if (res.code === 200){
             total_accounts = res.data.length;
         }
-        if (this.props.blocks.length !== 0) {
+        if (this.props.blocks.length !== 0 && this._isMounted) {
             this.setState({
                 time: this.props.blocks[0].header.time,
                 height: this.props.blocks[0].header.height,
@@ -41,6 +44,10 @@ class TotalChain extends Component {
                 total_accounts 
             })
         }
+    }
+    
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     render() {

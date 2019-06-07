@@ -1,6 +1,6 @@
 import tweb3 from "../tweb3";
 import { getListBlocks } from '../redux/actions/handleListBlocks';
-import { utils } from 'icetea-web3';
+import { utils } from '@iceteachain/web3';
 import { getDataTransactions } from '../redux/actions/handleTransactions';
 import { store } from './init-store';
 

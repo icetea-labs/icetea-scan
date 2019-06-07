@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Layout from '../Layout/Layout';
 import './CallContract.scss';
 import { getAccountInfo, getMetadataContract } from '../../service/get-single-data';
-import { ContractMode } from 'icetea-common';
+import { ContractMode } from '@iceteachain/common';
 import { execContract } from '../../service/exec-contract';
 import tweb3 from '../../tweb3';
 

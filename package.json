@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@iceteachain/common": "github:TradaTech/icetea-common",
     "@iceteachain/web3": "github:TradaTech/icetea-web3",
     "font-awesome": "^4.7.0",
     "gulp-sass": "^3.1.1",
-    "@iceteachain/common": "github:TradaTech/icetea-common",
     "material-icons-react": "^1.0.4",
     "moment": "^2.24.0",
     "node-sass": "^4.12.0",

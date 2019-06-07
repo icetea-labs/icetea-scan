@@ -11,7 +11,6 @@ class Banner extends Component {
             <div className="type-search">
               <div>
                 <h3>ICETEA CHAIN EXPLORER</h3>
-                <a className="direc_link" href="http://trada.tech" rel="noopener noreferrer" target="_blank">Check out Icetea DEX →</a>
               </div>
               <SearchBox show_cb='banner' />
             </div>

@@ -1,8 +1,5 @@
 import { switchEncoding, tryParseJson } from "@iceteachain/web3/src/utils";
 
-// const switchEncoding = utils.switchEncoding;
-// const tryParseJson = utils.tryParseJson
-
 export const formatData = (data, hash) => {
   return (data = formatContractData(data, hash));
 };

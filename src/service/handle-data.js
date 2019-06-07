@@ -42,7 +42,7 @@ export const getTransactions = async (pageIndex, paramester, height, total_block
         data = data_txs.txs;
 
         for(let i = 0 ;i < data.length; i ++){
-            transactions.push(utils.decode(data[i]));
+            transactions.push(utils.decodeTxResult(data[i]));
         }
 
     } else {
@@ -92,7 +92,7 @@ export const getTransactions = async (pageIndex, paramester, height, total_block
             // console.log(data);
             for (let j = 0; j < data.length; j++) {
                 let x = data[j];
-                transactions.push(utils.decode(x));
+                transactions.push(utils.decodeTxResult(x));
             }
         }
     }

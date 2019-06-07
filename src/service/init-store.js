@@ -51,7 +51,7 @@ export const getFirstTxsData= async () => {
             let tx = myTxs.txs[i];
 
             if (tx !== null) {
-                tsn.push(utils.decode(tx));
+                tsn.push(utils.decodeTxResult(tx));
             }
         }
 

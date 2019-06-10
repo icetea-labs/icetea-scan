@@ -88,7 +88,7 @@ class BlocksBox extends Component {
           <h3 className="title">
             <i className="fa fa-cube" />Blocks
           </h3>
-          <Link to="/blocks/">View All →</Link>
+          <Link className='view-all' to="/blocks/">View All→</Link>
         </div>
         <div className="box_wrap">{this.state.list_blocks}</div>
       </div>

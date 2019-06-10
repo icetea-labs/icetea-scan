@@ -8,8 +8,8 @@ class Menu extends Component {
       <div className="main_nav nf">
         <ul className="nav_hed">
           <Link to="/"><li className="nav_items">Home</li></Link>
-          <Link to="/blocks"><li className="nav_items">View Blocks</li></Link>
-          <Link to="/txs"><li className="nav_items">View Txns</li></Link>
+          <Link to="/blocks"><li className="nav_items">Blocks</li></Link>
+          <Link to="/txs"><li className="nav_items">Txns</li></Link>
           <Link to="/contracts"><li className="nav_items">Contracts</li></Link>
         </ul>
       </div>

@@ -19,9 +19,9 @@ class TotalChain extends Component {
         this.state = {
             data: null,
             time: null,
-            height: null,
-            total_txs: null,
-            total_accounts: null,
+            height: 100000,
+            total_txs: 100000,
+            total_accounts: 10000,
         }
 
         this.time = null;
@@ -32,8 +32,8 @@ class TotalChain extends Component {
 
         let res = await getAllContracts();
         let total_accounts;
-        
-        if (res.code === 200){
+
+        if (res.code === 200) {
             total_accounts = res.data.length;
         }
         if (this.props.blocks.length !== 0 && this._isMounted) {
@@ -41,11 +41,11 @@ class TotalChain extends Component {
                 time: this.props.blocks[0].header.time,
                 height: this.props.blocks[0].header.height,
                 total_txs: this.props.blocks[0].header.total_txs,
-                total_accounts 
+                total_accounts
             })
         }
     }
-    
+
     componentWillUnmount() {
         this._isMounted = false;
     }
@@ -53,24 +53,22 @@ class TotalChain extends Component {
     render() {
         return (
             <div className="total-chain">
-                <ul>
-                    <li>
-                        <p className="info-stamp">{moment(this.state.time).format("DD/MM/YYYY HH:mm:ss")}</p>
-                        <p>Time of last block</p>
-                    </li>
-                    <li>
-                        <p className="info-stamp"># {this.state.height}</p>
-                        <p>Height Block</p>
-                    </li>
-                    <li>
-                        <p className="info-stamp">{this.state.total_txs}</p>
-                        <p>Total Transactions Counter</p>
-                    </li>
-                    <li>
-                        <p className="info-stamp">{this.state.total_accounts}</p>
-                        <p>Total Accounts</p>
-                    </li>
-                </ul>
+                <div className='properties'>
+                    <span>Time of last block:</span>
+                    <span className="info-stamp">{moment(this.state.time).format("DD/MM/YYYY HH:mm:ss")}</span>
+                </div>
+                <div className='properties'>
+                    <span>Height Block:</span>
+                    <span className="info-stamp"># {this.state.height}</span>
+                </div>
+                <div className='properties'>
+                    <span>Total Transactions Counter:</span>
+                    <span className="info-stamp">{this.state.total_txs}</span>
+                </div>
+                <div className='properties'>
+                    <span>Total Contracts:</span>
+                    <span className="info-stamp">{this.state.total_accounts}</span>
+                </div>
             </div>
         );
     }

@@ -42,7 +42,6 @@ class TransactionsInfo extends Component {
       result: "",
       events: null,
       tags: null,
-      metadata: "",
       contractInfo: null
     };
 
@@ -184,7 +183,6 @@ class TransactionsInfo extends Component {
       result,
       events,
       contractInfo,
-      metadata
     } = this.state;
     console.log("state CK", this.state);
     return (
@@ -265,7 +263,7 @@ class TransactionsInfo extends Component {
                 </div>
                 <div className="row_detail">
                   <span className="label">Fee:</span>
-                  <div className="text_wrap">{tx_data && fee} ITEA</div>
+                  <div className="text_wrap">{tx_data && fee} TEA</div>
                 </div>
                 <div className="row_detail">
                   <span className="label">From:</span>
@@ -306,16 +304,9 @@ class TransactionsInfo extends Component {
                 </div>
                 <div className="row_detail">
                   <span className="label">Value:</span>
-                  <div className="text_wrap">{tx_data && value} ITEA</div>
+                  <div className="text_wrap">{tx_data && value} TEA</div>
                 </div>
-                <div className="row_detail">
-                  <span className="label">Metadata:</span>
-                  <div className="text_wrap">
-                    <pre className="result_data">
-                      {JSON.stringify(metadata, null, 2)}
-                    </pre>
-                  </div>
-                </div>
+             
                 <div className="row_detail">
                   <span className="label">Tags:</span>
                   <pre className="result_data">

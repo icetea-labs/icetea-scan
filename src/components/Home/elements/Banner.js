@@ -11,6 +11,7 @@ class Banner extends Component {
             <div className="type-search">
               <div>
                 <h3>ICETEA CHAIN EXPLORER</h3>
+                <a className='direc_link' href='https://studio.icetea.io' color='white'>Check out IceTeaStudio <i className="fa fa-arrow-right "></i></a>
               </div>
               <SearchBox show_cb='banner' />
             </div>

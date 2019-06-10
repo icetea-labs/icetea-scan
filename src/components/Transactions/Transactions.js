@@ -181,7 +181,7 @@ class Transactions extends Component {
                 <span>--</span>
               )}
             </td>
-            <td>{item.tx.value ? item.tx.value : 0} ITEA</td>
+            <td>{item.tx.value ? item.tx.value : 0} TEA</td>
           </tr>
         );
       });

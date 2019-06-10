@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {  getAccountInfo } from '../../service/get-single-data';
+import { getAccountInfo } from '../../service/get-single-data';
 import Layout from '../Layout/Layout';
 import { Link } from 'react-router-dom';
 // import tweb3 from '../../tweb3';
@@ -86,6 +86,17 @@ class Contract extends Component {
                             <ul>
                                 <li></li>
                             </ul>
+                        </div>
+                        <div>
+                            <div className="text_wrap">
+                                <div className="row_detail">
+                                    <span className="label">Metadata:</span>
+                                    <pre className="result_data">
+                                        {/* {JSON.stringify(metadata, null, 2)} */}
+                                    </pre>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>

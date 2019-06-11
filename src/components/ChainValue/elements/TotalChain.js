@@ -55,19 +55,19 @@ class TotalChain extends Component {
             <div className="total-chain">
                 <div className='properties'>
                     <span>Time of last block:</span>
-                    <span className="info-stamp">{moment(this.state.time).format("DD/MM/YYYY HH:mm:ss")}</span>
+                    <span className="info-stamp">&nbsp;{moment(this.state.time).format("DD/MM/YYYY HH:mm:ss")}</span>
                 </div>
                 <div className='properties'>
                     <span>Height Block:</span>
-                    <span className="info-stamp"># {this.state.height}</span>
+                    <span className="info-stamp">&nbsp;#{this.state.height}</span>
                 </div>
                 <div className='properties'>
                     <span>Total Transactions Counter:</span>
-                    <span className="info-stamp">{this.state.total_txs}</span>
+                    <span className="info-stamp">&nbsp;{this.state.total_txs}</span>
                 </div>
                 <div className='properties'>
                     <span>Total Contracts:</span>
-                    <span className="info-stamp">{this.state.total_accounts}</span>
+                    <span className="info-stamp">&nbsp;{this.state.total_accounts}</span>
                 </div>
             </div>
         );

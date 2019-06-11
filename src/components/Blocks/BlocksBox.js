@@ -37,12 +37,6 @@ class BlocksBox extends Component {
       list_time.push(time);
     }
 
-    if (this._isMounted) {
-      this.setState({
-        list_time
-      });
-    }
-
     let list_blocks = this.props.allBlocks.map((item, index) => {
       // diffTime
       return (
@@ -72,9 +66,12 @@ class BlocksBox extends Component {
       );
     });
 
-    this.setState({
-      list_blocks
-    });
+    if (this._isMounted) {
+      this.setState({
+        list_time,
+        list_blocks
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -86,9 +83,12 @@ class BlocksBox extends Component {
       <div className="blocks_box col-3">
         <div className="header_top">
           <h3 className="title">
-            <i className="fa fa-cube" />Blocks
+            <i className="fa fa-cube" />
+            Blocks
           </h3>
-          <Link className='view-all' to="/blocks/">View All >></Link>
+          <Link className="view-all" to="/blocks/">
+            View All >>
+          </Link>
         </div>
         <div className="box_wrap">{this.state.list_blocks}</div>
       </div>

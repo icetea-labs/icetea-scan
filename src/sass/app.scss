@@ -51,7 +51,11 @@
 }
 
 .blocks_transactions_view {
-  margin: 20px 0;
+  // margin: 20px 0;
+  max-width: 95rem;
+  margin: 0px auto;
+  padding: 1.875rem 1rem;
+  display: block;
   .container {
     display: flex;
     justify-content: space-between;

@@ -64,7 +64,7 @@ class Blocks extends Component {
             {(item.header.num_txs > 0) ? <Link to={`/txs?block=${item.header.height}`}>{item.header.num_txs}</Link> : 0}
           </td>
           <td>VN</td>
-          <td>0 ITEA</td>
+          <td>0 TEA</td>
         </tr>
       )
     })

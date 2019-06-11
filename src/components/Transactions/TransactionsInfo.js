@@ -184,7 +184,7 @@ class TransactionsInfo extends Component {
       events,
       contractInfo,
     } = this.state;
-    console.log("state CK", this.state);
+    // console.log("state CK", this.state);
     return (
       <Layout>
         <div className="transaction_info mt_50">

@@ -71,14 +71,14 @@ class CallContract extends Component {
                 balance
             });
         }
-        console.log(this.state.address);
+        // console.log(this.state.address);
 
         let response_m = await getMetadataContract(this.state.address);
         if (response_m.code === 200) {
             let list_func = Object.entries(response_m.data);
             let pure_func = [], view_func = [], write_func = [];
 
-            console.log(list_func);
+            // console.log(list_func);
 
             list_func.forEach((item) => {
                 // eslint-disable-next-line

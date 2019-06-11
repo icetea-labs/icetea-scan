@@ -2,7 +2,7 @@ import tweb3 from "../tweb3";
 export const decimal = 6;
 export const execContract = async (params, name_func, address, method, fee, value) => {
 
-    console.log(name_func, method);
+    // console.log(name_func, method);
     let data = null;
     try {
 

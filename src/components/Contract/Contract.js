@@ -37,7 +37,7 @@ class Contract extends Component {
         if (response.code !== 200) {
             this.props.history.push('/not-found');
         } else {
-            console.log(response)
+            // console.log(response)
             this.setState({
                 balance: response.data.balance,
                 deploy_by: response.data.deployedBy,

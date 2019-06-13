@@ -3,7 +3,7 @@
 // }
 
 .side-bar_left{
-    position: fixed;
+    position: absolute;
     left: 1px;
     top: 50px;
     width: 14pc;
@@ -51,9 +51,10 @@
 .call-contract{
     position: relative;
     top: 50px;
-    width: 80%;
+    width: 100%;
     left: 15pc;
     padding: 20px;
+    margin-bottom: 50px;
     p{
         margin: 15px 0;
         font-weight: 600

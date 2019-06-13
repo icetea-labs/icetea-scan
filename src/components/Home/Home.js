@@ -7,9 +7,9 @@ import ChainValue from '../ChainValue/ChainValue';
 
 class Home extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props)
-    this.state={
+    this.state = {
       is_loading: true
     }
   }
@@ -20,9 +20,7 @@ class Home extends Component {
         <div className="home">
           <Banner />
           <div className="blocks_transactions_view">
-            <div className="chain-value">
-              <ChainValue />
-            </div>
+            <ChainValue />
             <div className="container">
               <BlocksBox />
               <TransactionsBox />

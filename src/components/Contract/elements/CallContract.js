@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import Layout from '../Layout/Layout';
 import './CallContract.scss';
-import { getAccountInfo, getMetadataContract } from '../../service/get-single-data';
+import { getAccountInfo, getMetadataContract } from '../../../service/get-single-data';
 import { ContractMode } from '@iceteachain/common';
-import { execContract } from '../../service/exec-contract';
-import tweb3 from '../../tweb3';
+import { execContract } from '../../../service/exec-contract';
+import tweb3 from '../../../tweb3';
 
 class CallContract extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             address: null,
             balance: null,
@@ -38,7 +37,7 @@ class CallContract extends Component {
     }
 
     async componentWillMount() {
-        let address = this.props.match.params.address;
+        let address = this.props.address;
         let response_a_i = await getAccountInfo(address);
 
         if (response_a_i.code === 200) {
@@ -281,8 +280,7 @@ class CallContract extends Component {
 
     render() {
         return (
-            <Layout>
-
+            <div className='tab-contract'>
                 {/* Left SideBar */}
                 <div className="side-bar_left">
                     {/* Button choose function  */}
@@ -362,7 +360,7 @@ class CallContract extends Component {
                         </pre>
                     </div>
                 </div>
-            </Layout>
+            </div>
         );
     }
 }

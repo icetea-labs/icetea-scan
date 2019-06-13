@@ -98,7 +98,7 @@ class AllContract extends Component {
                       <tr key={index}>
                         <td width="100">
                           {item.address ? (
-                            <Link to={`/call-contract/${item.address}`}>
+                            <Link to={`/contract/${item.address}`}>
                               {address}
                             </Link>
                           ) : (
@@ -112,7 +112,7 @@ class AllContract extends Component {
                         </td>
                         <td width="350">
                           {item.deployedBy ? (
-                            <Link to={`/contract/${item.deployedBy}`}>
+                            <Link to={`/contract/${item.address}`}>
                               {item.deployedBy.length > 10
                                 ? deploy_by
                                 : item.deployedBy}

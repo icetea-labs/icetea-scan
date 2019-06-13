@@ -10,7 +10,6 @@ import Blocks from './components/Blocks/Blocks';
 import Transactions from './components/Transactions/Transactions';
 import NotFound from './components/NotFound/NotFound';
 import Contract from './components/Contract/Contract';
-import CallContract from './components/Contract/CallContract';
 import AllContract from './components/Contract/AllContract';
 import Address from './components/Address/Address';
 
@@ -27,9 +26,8 @@ class App extends Component {
             <Route exact path={`/txs`} component={Transactions} />;
             <Route exact path={`/contract/:address`} component={Contract} />;
             <Route exact path={`/contracts`} component={AllContract} />
-            <Route exact path={`/call-contract/:address`} component={CallContract} />
-            <Route component={NotFound} />
             <Route exact path={'/address/:address'} component={Address} />
+            <Route component={NotFound} />
           </Switch>
         </Router>
       </div>

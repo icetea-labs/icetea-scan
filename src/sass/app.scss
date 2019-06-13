@@ -35,6 +35,7 @@
 
 .content{
   min-height: 50pc;
+  margin-bottom: 50px;
 }
 
 
@@ -190,7 +191,7 @@
   width: 100%;
   line-height: 50px;
   background: rgb(228, 228, 228);
-
+  z-index: 10;
   position: fixed;
   bottom: 0;
   // left: 0;
@@ -252,6 +253,8 @@
   }
   .info_body {
     padding: 20px;
+    margin-bottom: 50px;
+    height: 80pc;
     .row_detail {
       padding: 8px 0;
       margin-bottom: 12px;

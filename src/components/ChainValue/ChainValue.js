@@ -5,8 +5,7 @@ import TotalChain from './elements/TotalChain';
 class ChainValue extends Component {
     render() {
         return (
-            <div>
-                {/* <Note /> */}
+            <div className='chain-value'>
                 <TotalChain />
             </div>
         );

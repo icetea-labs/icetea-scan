@@ -1,0 +1,19 @@
+.tab-contract{
+    width: auto;
+    height: auto;
+    position: absolute;
+}
+
+span {
+    padding: 10px;
+    margin: 5px;
+}
+
+.button-contract{
+    &:hover{
+        color: red;
+        
+    }
+
+    decoration: blue;
+}

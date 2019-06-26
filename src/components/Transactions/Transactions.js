@@ -27,10 +27,9 @@ class Transactions extends Component {
       pageIndex: 1,
       height: null,
       show_paging: false,
+      to: '',
+      from: '',
     };
-
-    this.listTxs = [];
-    this.pageIndex = 1;
   }
 
   async componentWillMount() {
@@ -85,7 +84,7 @@ class Transactions extends Component {
       pageIndex
     });
 
-    getListTxApi({page_index: this.state.pageIndex, page_size: this.props.pageState.page_size})
+    getListTxApi({ page_index: this.state.pageIndex, page_size: this.props.pageState.page_size })
   }
 
   getTxsByHeight() {
@@ -122,6 +121,20 @@ class Transactions extends Component {
           txType = "call";
         }
 
+        let to = item.to;
+        let head_to = "";
+        let end_to ="";
+        let from = item.from;
+        let head_from = "";
+        let end_from = "";
+
+        for ( let i = 0 ; i < 10; i ++){
+          head_to += to[i];
+          head_from += from[i];
+          end_to += to[to.length - 10 + i];
+          end_from += from[from.length - 10 + i];
+        }
+
         // diffTime
         return (
           <tr key={index}>
@@ -137,29 +150,22 @@ class Transactions extends Component {
             <td>{moment(item.time).format("MMMM-DD-YYYY h:mm:ss")}</td>
             <td className="tx_type">
               <div className="name_type">
-                <div className="circle-span" style={{background: item.data_op === 0 ? "green" : "blue"}} />
+                <div className="circle-span" style={{ background: item.data_op === 0 ? "green" : "blue" }} />
                 {txType}
               </div>
             </td>
 
             {/* from */}
             <td className="text_overflow">
-              {item.from ? (
-                <Link to={`/adress/${item.from}`}>
-                  {item.from}
-                </Link>
-              ) : (
-                <span>--</span>
-              )}
+              {item.from ? (<Link to={`/adress/${item.from}`}>{head_from + "..." + end_from}</Link>) : (<span>--</span>)}
             </td>
 
             {/* to */}
             <td className="text_overflow">
-              {item.to ? ( <Link href={`/address/${item.to}`}>{item.to}\</Link>
-              ) : (
-                <span>--</span>
-              )}
+              {item.to ? (<Link to={`/address/${item.to}`}>{head_to + "..." + end_to}</Link>) : (<span>--</span>)}
             </td>
+
+            {/* Gas */}
             <td>{item.gasused ? item.gasused : 0} TEA</td>
           </tr>
         );
@@ -198,12 +204,12 @@ class Transactions extends Component {
                 <thead>
                   <tr>
                     <th>TxHash</th>
-                    <th>Height</th>
+                    <th width="90">Height</th>
                     <th>Age</th>
-                    <th>Type</th>
-                    <th>From</th>
-                    <th>To</th>
-                    <th>Value</th>
+                    <th width="70">Type</th>
+                    <th width="220">From</th>
+                    <th width="220">To</th>
+                    <th width="140">Value</th>
                   </tr>
                 </thead>
                 <tbody>{this.loadTransactions()}</tbody>
@@ -212,23 +218,20 @@ class Transactions extends Component {
 
             <div
               className="page-index"
-              style={{ display: this.state.show_paging ? "block" : "none" }}
-            >
+              style={{ display: this.state.show_paging ? "block" : "none" }}>
               <div className="paging">
                 <button
                   className="btn-common"
                   onClick={() => {
                     this.getTransaction(1);
-                  }}
-                >
+                  }}>
                   First
                 </button>
                 <button
                   className="btn-cusor"
                   onClick={() => {
                     this.getTransaction(this.state.pageIndex - 1);
-                  }}
-                >
+                  }}>
                   <MaterialIcon icon="keyboard_arrow_left" />
                 </button>
                 <span className="state">
@@ -239,8 +242,7 @@ class Transactions extends Component {
                   className="btn-cusor"
                   onClick={() => {
                     this.getTransaction(this.state.pageIndex + 1);
-                  }}
-                >
+                  }}>
                   <MaterialIcon icon="keyboard_arrow_right" />
                 </button>
                 <button
@@ -249,8 +251,7 @@ class Transactions extends Component {
                     this.getTransaction(
                       this.props.pageState.pageTxsLimit
                     );
-                  }}
-                >
+                  }}>
                   Last
                 </button>
               </div>

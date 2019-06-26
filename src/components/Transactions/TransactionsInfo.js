@@ -34,11 +34,9 @@ class TransactionsInfo extends Component {
       list_src: [],
       time: null,
       diffTime: null,
+      txStatus: '',
+      txType: ''
     };
-
-    this.tx_data = {};
-    this.txStatus = '';
-    this.txType = '';
   }
 
   async componentWillMount() {
@@ -50,6 +48,8 @@ class TransactionsInfo extends Component {
     let time;
     let height;
     let list_src = [];
+    let txStatus;
+    let txType;
     // let src = "";
 
     if (res_tx.status === 200) {
@@ -59,20 +59,18 @@ class TransactionsInfo extends Component {
       time = moment(tx_data.time).format("DD/MM/YYYY HH:mm:ss");;
       // src = tx_data.data_src;
       diffTime = await findTime.diffTime(tx_data.time);
+      if (tx_data) {
+        txStatus = tx_data.result_code === null ? "Error" : "Success";
+        txType = "transfer";
+        if (tx_data) {
+          if (tx_data.data_op === 0) {
+            txType = "deploy";
+          } else if (tx_data.data_op === 1) {
+            txType = "call";
+          }
+        }
+      }
     }
-
-    // let len_list = src.length/30;
-    // for (let i = 0 ;i < len_list; i++){
-    //   for(let j = 0 ;j < 20 ; j++){
-    //     let temp = src[j +30*i];
-    //     if (temp === null){
-    //       break;
-    //     } else {
-    //       list_src[i] += temp;
-    //     }
-    //   }
-    // }
-    // console.log(list_src)
 
     this.setState({
       hashId,
@@ -80,27 +78,11 @@ class TransactionsInfo extends Component {
       diffTime,
       time,
       list_src,
-      height
+      height,
+      txType,
+      txStatus
     });
-
-    this.transactionInfo();
-
   }
-  transactionInfo = () => {
-    // check data
-    if (this.state.tx_data) {
-      this.txStatus = this.state.tx_data.tx_result === null ? "Error" : "Success";
-      this.txType = "transfer";
-      if (this.state.tx_data) {
-        if (this.state.tx_data.data_op === 0) {
-          this.txType = "deploy";
-          // t.to = fmtHex(t.tx_result.data);
-        } else if (this.state.tx_data.data_op === 1) {
-          this.txType = "call";
-        }
-      }
-    }
-  };
 
   render() {
     return (
@@ -149,15 +131,12 @@ class TransactionsInfo extends Component {
                 <div className="row_detail">
                   <span className="label">TxReceipt Status:</span>
                   <div className="text_wrap">
-                    <span
-                      className={
-                        this.state.tx_data && this.state.tx_data.result_code === null
+                    <label className={
+                        this.state.tx_data && this.state.tx_data.result_code !== 0
                           ? "error_color"
-                          : "success_color"
-                      }
-                    >
-                      {this.txStatus}
-                    </span>
+                          : "success_color"}>
+                      {this.state.txStatus}
+                    </label>
                   </div>
                 </div>
                 <div className="row_detail">
@@ -179,11 +158,11 @@ class TransactionsInfo extends Component {
                 <div className="row_detail">
                   <span className="label">Transaction Type:</span>
                   <div className="text_wrap transaction_type">
-                    {this.txType}
+                    {this.state.txType}
                   </div>
                 </div>
                 <div className="row_detail">
-                  <span className="label">GasUsed:</span>
+                  <span className="label">Gas Used:</span>
                   <div className="text_wrap">{this.state.tx_data && this.state.tx_data.gasused} TEA</div>
                 </div>
 
@@ -250,14 +229,14 @@ class TransactionsInfo extends Component {
 
                 {/* GasLimit */}
                 <div className="row_detail">
-                  <span className="label">GasLimits:</span>
+                  <span className="label">Gas Limit:</span>
                   <div className="text_wrap">{this.state.tx_data && this.state.tx_data.gaslimit} TEA</div>
                 </div>
 
                 {/* Nonce */}
                 <div className="row_detail">
                   <span className="label">Nonce:</span>
-                  <div className="text_wrap">{this.state.tx_data && this.state.tx_data.nonce} TEA</div>
+                  <div className="text_wrap">{this.state.tx_data && this.state.tx_data.nonce} </div>
                 </div>
 
                 {/* Result */}

@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import Layout from '../Layout/Layout';
-import { getDataBlock } from '../../service/get-single-data';
-import diffTime from '../../service/find-time-by-block';
+// import { getDataBlock } from '../../service/get-single-data';
+import diffTime from '../../service/find-time-return';
+import { _get } from '../../service/api/base-api';
+import { singleBlock } from '../../service/api/list-api';
 
 class BlockInfo extends Component {
 
@@ -15,7 +17,6 @@ class BlockInfo extends Component {
       time: '',
       num_txs: 0,
       node: '',
-      parrent_hash: '',
       parrent_height: 0,
       height: '',
       diff_time: ''
@@ -35,28 +36,24 @@ class BlockInfo extends Component {
 
   async loadData() {
     let height = this.props.match.params.blockId;
-    let response = await getDataBlock(height);
-    let parrent_response = await getDataBlock(height - 1);
-    let diff_time  = await diffTime(height);
+    let response = await _get(null, singleBlock + '/' + height);
+    let diff_time = await diffTime(height);
 
-    if (response.code === 200) {
+    if (response.status === 200) {
+      let data =  response.data;
+      let data_block = data[0];
+
       this.setState({
-        blockInfo: response.data,
-        hash_id: response.data.block_id.hash,
-        num_txs: response.data.header.num_txs,
-        node: response.data.header.chain_id,
-        time: response.data.header.time,
-        height: response.data.header.height,
+        blockInfo: data_block,
+        hash_id: data_block.hash,
+        num_txs: data_block.num_txs,
+        node: data_block.chain_id,
+        time: data_block.time,
+        height: data_block.height,
         diff_time
       });
     } else {
       this.props.history.push('/not-found');
-    }
-
-    if (parrent_response.code === 200) {
-      this.setState({
-        parrent_hash: parrent_response.data.block_id.hash
-      })
     }
   }
 
@@ -68,7 +65,7 @@ class BlockInfo extends Component {
             <div className="block_info_header page_info_header">
               <div className="wrap">
                 Block
-            <span className="id_code">#{this.state.height}</span>
+            <span className="id_status">#{this.state.height}</span>
               </div>
               <div className="breadcrumb">
                 <ul>
@@ -100,10 +97,6 @@ class BlockInfo extends Component {
                 <div className="row_detail">
                   <span className="label">BlockHash:</span>
                   <div className="text_wrap">{this.state.hash_id}</div>
-                </div>
-                <div className="row_detail">
-                  <span className="label">ParentHash:</span>
-                  <div className="text_wrap">{(this.state.blockInfo && this.state.num_txs > 0) ? <Link to={`/block/${this.state.height - 1}`}>{this.state.parrent_hash}</Link> : '--'}</div>
                 </div>
                 <div className="row_detail">
                   <span className="label">Node:</span>

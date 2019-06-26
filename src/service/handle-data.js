@@ -1,7 +1,7 @@
 import tweb3 from "../tweb3";
 import { getListBlocks } from '../redux/actions/handleListBlocks';
 import { utils } from '@iceteachain/web3';
-import { getDataTransactions } from '../redux/actions/handleTransactions';
+import { getListTxs } from '../redux/actions/handleTransactions';
 import { store } from './init-store';
 
 /**
@@ -97,5 +97,5 @@ export const getTransactions = async (pageIndex, paramester, height, total_block
         }
     }
 
-    store.dispatch(getDataTransactions(transactions));
+    store.dispatch(getListTxs(transactions));
 }

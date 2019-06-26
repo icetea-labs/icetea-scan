@@ -3,6 +3,8 @@ import { getRealTimeBlocksAndTxs } from "../redux/actions/handleRealTimeData";
 import { setIndex } from "../redux/actions/handlePageState";
 import { utils } from '@iceteachain/web3';
 import { store } from './init-store';
+import { _get } from "./api/base-api";
+import { countBlock } from "./api/list-api";
 
 /**
  * @param {null} getRealTimeData get data of 10 first block and txs to redux
@@ -68,10 +70,14 @@ export const getRealTimeData = async () => {
  */
 
 export const setPageSate = async () => {
-    let last_block = await tweb3.getBlock();
-    let maxHeight = parseInt(last_block.block_meta.header.height);
-    let total_txs = parseInt(last_block.block_meta.header.total_txs);
+    let res_block_count = await _get({}, countBlock );
+    let total_block = res_block_count.data[0].count;
+
+    let res_txs_count = await _get({}, countBlock );
+    let total_txs = res_txs_count.data[0].count;
+
+
     store.dispatch(
-        setIndex(maxHeight, total_txs)
+        setIndex(total_block, total_txs)
     );
 }

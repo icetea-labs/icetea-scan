@@ -15,6 +15,7 @@ if (env === "testing") {
     getRealTimeData();
   }, 1000);
 } else {
+  setTimeout(()=>{getRealTimeData(); }, 1);
   setInterval(() => { getRealTimeData(); }, 1000);
 }
 

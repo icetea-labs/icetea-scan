@@ -5,9 +5,11 @@ import Layout from "../Layout/Layout";
 import MaterialIcon from "material-icons-react";
 import "./Transactions.scss";
 import * as handleData from "../../service/handle-data";
-import diffTime from "../../service/find-time-by-block";
+// import diffTime from "../../service/find-time-return";
 import { getFirstTxsData } from "../../service/init-store";
 import { setPageSate } from "../../service/get-realtime-data";
+import { getListTxApi } from "../../service/api/get-list-data";
+import moment from 'moment';
 
 const mapStateToProps = state => {
   return {
@@ -25,10 +27,10 @@ class Transactions extends Component {
       pageIndex: 1,
       height: null,
       show_paging: false,
-      list_time: []
     };
 
     this.listTxs = [];
+    this.pageIndex = 1;
   }
 
   async componentWillMount() {
@@ -45,7 +47,7 @@ class Transactions extends Component {
       if (this.props.location.search !== "") {
         let data = search.split("?block=");
         this.setState({
-          height: Number(data[1]),
+          height: Number(data[1].height),
           show_paging: false
         });
         this.getTxsByHeight(this.state.height);
@@ -57,27 +59,10 @@ class Transactions extends Component {
         this.setState({
           show_paging: true
         });
-        if (this.state.pageIndex === 1) {
-          handleData.getTransactions(
-            1,
-            20,
-            null,
-            this.props.pageState.total_blocks,
-            this.props.pageState.total_txs
-          );
-        }
-      }
 
-      let listTime = [];
-      for (let i = 0; i < this.props.transactions.length; i++) {
-        let time = await diffTime(this.props.transactions[i].height);
-        listTime.push(time);
-        // this.state.list_time.push(time);
-      }
-      if (this._isMounted) {
-        this.setState({
-          list_time: listTime
-        });
+        if (this.state.pageIndex === 1) {
+          this.getTransaction(1);
+        }
       }
     }
   }
@@ -86,8 +71,8 @@ class Transactions extends Component {
     this._isMounted = false;
   }
 
-  getTransactionByBlock(pageIndex) {
-    // console.log(this.props.pageState);
+  getTransaction(pageIndex) {
+
     if (pageIndex <= 1) {
       pageIndex = 1;
     }
@@ -100,13 +85,7 @@ class Transactions extends Component {
       pageIndex
     });
 
-    handleData.getTransactions(
-      pageIndex,
-      20,
-      null,
-      this.props.pageState.total_blocks,
-      this.props.pageState.total_txs
-    );
+    getListTxApi({page_index: this.state.pageIndex, page_size: this.props.pageState.page_size})
   }
 
   getTxsByHeight() {
@@ -136,11 +115,10 @@ class Transactions extends Component {
     } else {
       this.listTxs = this.props.transactions.map((item, index) => {
         let txType = "transfer";
-        let txdata = JSON.parse(item.tx.data) || {};
 
-        if (txdata.op === 0) {
+        if (item.data_op === 0) {
           txType = "deploy";
-        } else if (txdata.op === 1) {
+        } else if (item.data_op === 1) {
           txType = "call";
         }
 
@@ -156,32 +134,32 @@ class Transactions extends Component {
                 {item.height}
               </Link>
             </td>
-            <td>{this.state.list_time[index]}</td>
+            <td>{moment(item.time).format("MMMM-DD-YYYY h:mm:ss")}</td>
             <td className="tx_type">
               <div className="name_type">
-                <div className="circle-span" />
+                <div className="circle-span" style={{background: item.dat}} />
                 {txType}
               </div>
             </td>
             <td className="text_overflow">
-              {item.tags["tx.from"] ? (
-                <Link to={`/contract/${item.tags["tx.from"]}`}>
-                  {item.tags["tx.from"]}
+              {item.from ? (
+                <Link to={`/contract/${item.from}`}>
+                  {item.from}
                 </Link>
               ) : (
                 <span>--</span>
               )}
             </td>
             <td className="text_overflow">
-              {item.tags["tx.to"] ? (
-                <Link to={`/contract/${item.tags["tx.to"]}`}>
-                  {item.tags["tx.to"]}
+              {item.to} ? (
+                <Link to={`/contract/${item.to}`}>
+                  {item.t0}
                 </Link>
               ) : (
                 <span>--</span>
               )}
             </td>
-            <td>{item.tx.value ? item.tx.value : 0} TEA</td>
+            <td>{item.gasused ? item.gasused : 0} TEA</td>
           </tr>
         );
       });
@@ -239,7 +217,7 @@ class Transactions extends Component {
                 <button
                   className="btn-common"
                   onClick={() => {
-                    this.getTransactionByBlock(1);
+                    this.getTransaction(1);
                   }}
                 >
                   First
@@ -247,7 +225,7 @@ class Transactions extends Component {
                 <button
                   className="btn-cusor"
                   onClick={() => {
-                    this.getTransactionByBlock(this.state.pageIndex - 1);
+                    this.getTransaction(this.state.pageIndex - 1);
                   }}
                 >
                   <MaterialIcon icon="keyboard_arrow_left" />
@@ -259,7 +237,7 @@ class Transactions extends Component {
                 <button
                   className="btn-cusor"
                   onClick={() => {
-                    this.getTransactionByBlock(this.state.pageIndex + 1);
+                    this.getTransaction(this.state.pageIndex + 1);
                   }}
                 >
                   <MaterialIcon icon="keyboard_arrow_right" />
@@ -267,7 +245,7 @@ class Transactions extends Component {
                 <button
                   className="btn-common"
                   onClick={() => {
-                    this.getTransactionByBlock(
+                    this.getTransaction(
                       this.props.pageState.pageTxsLimit
                     );
                   }}

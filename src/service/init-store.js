@@ -3,7 +3,7 @@ import { utils } from '@iceteachain/web3';
 import { createStore } from 'redux';
 import myReducer from '../redux/reducers/reducer';
 import { getListBlocks } from '../redux/actions/handleListBlocks';
-import { getDataTransactions } from '../redux/actions/handleTransactions';
+import { getListTxs } from '../redux/actions/handleTransactions';
 
 // Store
 export const store = createStore(myReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
@@ -55,6 +55,6 @@ export const getFirstTxsData= async () => {
             }
         }
 
-        store.dispatch(getDataTransactions(tsn));
+        store.dispatch(getListTxs(tsn));
     }
 }

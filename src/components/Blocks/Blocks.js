@@ -3,11 +3,14 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Layout from '../Layout/Layout';
 import moment from 'moment';
-import * as handledata from '../../service/handle-data';
+// import * as handledata from '../../service/handle-data';
 import MaterialIcon from 'material-icons-react';
 import './Blocks.scss';
 import { setPageSate } from '../../service/get-realtime-data';
-import diffTime from '../../service/find-time-by-block';
+import diffTime from '../../service/find-time-return';
+// import { _get } from '../../service/api/base-api';
+// import { listBlocks } from '../../service/api/list-api';
+import { getListBlockApi } from '../../service/api/get-list-data';
 
 const mapStateToProps = (state) => {
   return {
@@ -39,15 +42,14 @@ class Blocks extends Component {
 
   async componentWillReceiveProps(nextProps) {
     if (this.props !== nextProps) {
-      for (let i = 0; i < this.props.blocks.length; i ++) {
-        let item = this.props.blocks[i].header.height;
+      for (let i = 0; i < this.props.blocks.length; i++) {
+        let item = this.props.blocks[i].height;
         let time = await diffTime(item);
-        
         this.state.list_time.push(time);
       }
 
       if (this.state.pageIndex === 1) {
-        handledata.getBlocks( this.props.pageState.total_blocks ,1 , 20);
+        this.getBlocksByPageIndex(1);
       }
     }
   }
@@ -57,13 +59,13 @@ class Blocks extends Component {
     let blocks = this.props.blocks && this.props.blocks.map((item, index) => {
       return (
         <tr key={index}>
-          <td><Link to={`/block/${item.header.height}`}>{item.header.height}</Link></td>
-          <td>{moment(item.header.time).format("MMMM-DD-YYYY h:mm:ss")}</td>
+          <td><Link to={`/block/${item.height}`}>{item.height}</Link></td>
+          <td>{moment(item.time).format("MMMM-DD-YYYY h:mm:ss")}</td>
           <td>{this.state.list_time[index]}</td>
           <td>
-            {(item.header.num_txs > 0) ? <Link to={`/txs?block=${item.header.height}`}>{item.header.num_txs}</Link> : 0}
+            {(item.num_txs > 0) ? <Link to={`/txs?block=${item.height}`}>{item.num_txs}</Link> : 0}
           </td>
-          <td>VN</td>
+          <td>{item.chain_id}</td>
           <td>0 TEA</td>
         </tr>
       )
@@ -73,12 +75,12 @@ class Blocks extends Component {
   }
 
   // Set Data By Page Index
-  getBlocksByPageIndex(pageIndex) {
-    let maxheight = this.props.pageState.total_blocks;
+  async getBlocksByPageIndex(pageIndex) {
 
     if (pageIndex <= 0) {
       pageIndex = 1;
     }
+    console.log(pageIndex)
 
     if (pageIndex >= this.props.pageState.pageBlockLimit) {
       pageIndex = this.props.pageState.pageBlockLimit
@@ -88,7 +90,9 @@ class Blocks extends Component {
       pageIndex
     })
 
-    return handledata.getBlocks(maxheight, pageIndex, 20);
+    // return handledata.getBlocks(maxheight, pageIndex, 20);
+    getListBlockApi({ page_index: this.state.pageIndex, page_size: this.props.pageState.pageSize });
+
   }
 
   render() {

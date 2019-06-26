@@ -137,24 +137,25 @@ class Transactions extends Component {
             <td>{moment(item.time).format("MMMM-DD-YYYY h:mm:ss")}</td>
             <td className="tx_type">
               <div className="name_type">
-                <div className="circle-span" style={{background: item.dat}} />
+                <div className="circle-span" style={{background: item.data_op === 0 ? "green" : "blue"}} />
                 {txType}
               </div>
             </td>
+
+            {/* from */}
             <td className="text_overflow">
               {item.from ? (
-                <Link to={`/contract/${item.from}`}>
+                <Link to={`/adress/${item.from}`}>
                   {item.from}
                 </Link>
               ) : (
                 <span>--</span>
               )}
             </td>
+
+            {/* to */}
             <td className="text_overflow">
-              {item.to} ? (
-                <Link to={`/contract/${item.to}`}>
-                  {item.t0}
-                </Link>
+              {item.to ? ( <Link href={`/address/${item.to}`}>{item.to}\</Link>
               ) : (
                 <span>--</span>
               )}

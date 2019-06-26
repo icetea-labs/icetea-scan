@@ -38,6 +38,7 @@ class TransactionsInfo extends Component {
 
     this.tx_data = {};
     this.txStatus = '';
+    this.txType = '';
   }
 
   async componentWillMount() {
@@ -150,7 +151,7 @@ class TransactionsInfo extends Component {
                   <div className="text_wrap">
                     <span
                       className={
-                        this.state.tx_data && this.state.tx_data.tx_result === null
+                        this.state.tx_data && this.state.tx_data.result_code === null
                           ? "error_color"
                           : "success_color"
                       }

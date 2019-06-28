@@ -162,7 +162,7 @@ class Transactions extends Component {
 
             {/* from */}
             <td className="text_overflow">
-              {item.from ? (<Link to={`/adress/${item.from}`}>{head_from + "..." + end_from}</Link>) : (<span>--</span>)}
+              {item.from ? (<Link to={`/address/${item.from}`}>{head_from + "..." + end_from}</Link>) : (<span>--</span>)}
             </td>
 
             {/* to */}

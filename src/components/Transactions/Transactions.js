@@ -127,12 +127,17 @@ class Transactions extends Component {
         let from = item.from;
         let head_from = "";
         let end_from = "";
+        let hash = item.hash;
+        let head_hash = "";
+        let end_hash= "";
 
         for ( let i = 0 ; i < 10; i ++){
           head_to += to[i];
           head_from += from[i];
+          head_hash += hash[i];
           end_to += to[to.length - 10 + i];
           end_from += from[from.length - 10 + i];
+          end_hash += hash[hash.length - 10 + i];
         }
 
         // diffTime
@@ -140,7 +145,7 @@ class Transactions extends Component {
           <tr key={index}>
             <td className="text_overflow">
               {" "}
-              <Link to={`/tx/${item.hash}`}>{item.hash}</Link>
+              <Link to={`/tx/${item.hash}`}>{head_hash +  "..." + end_hash}</Link>
             </td>
             <td>
               <Link to={`/block/${item.height}`} title={item.height}>

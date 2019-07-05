@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './TotalChain.scss';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { getAllContracts } from '../../../service/get-single-data';
+import { getAllContracts } from '../../../service/blockchain/get-single-data';
 
 const mapStateToProps = (state) => {
     return {

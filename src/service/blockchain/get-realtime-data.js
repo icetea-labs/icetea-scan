@@ -1,10 +1,10 @@
-import tweb3 from "../tweb3";
-import { getRealTimeBlocksAndTxs } from "../redux/actions/handleRealTimeData";
-import { setIndex } from "../redux/actions/handlePageState";
+import tweb3 from "../../tweb3";
+import { getRealTimeBlocksAndTxs } from "../../redux/actions/handleRealTimeData";
+import { setIndex } from "../../redux/actions/handlePageState";
 import { utils } from '@iceteachain/web3';
 import { store } from './init-store';
-import { _get } from "./api/base-api";
-import { countBlock } from "./api/list-api";
+import { _get } from "../api/base-api";
+import { countBlock } from "../api/list-api";
 
 /**
  * @param {null} getRealTimeData get data of 10 first block and txs to redux

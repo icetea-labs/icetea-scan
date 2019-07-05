@@ -24,7 +24,7 @@ class App extends Component {
             <Route exact path={`/block/:blockId`} component={BlockInfo} />;
             <Route exact path={`/blocks`} component={Blocks} />;
             <Route exact path={`/txs`} component={Transactions} />;
-            <Route exact path={`/contract/:address`} component={Contract} />;
+            <Route exact path={'/contract/:address'} component={Contract} />;
             <Route exact path={`/contracts`} component={AllContract} />
             <Route exact path={'/address/:address'} component={Address} />
             <Route component={NotFound} />

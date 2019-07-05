@@ -1,4 +1,4 @@
-import tweb3 from "../tweb3";
+import tweb3 from "../../tweb3";
 
 /**
  * 
@@ -51,6 +51,8 @@ export const getDataContract = async (address) => {
 
 export const getAllContracts = async (alias) => {
     let all_contract = await tweb3.getContracts(alias);
+
+    console.log(all_contract)
 
     if (all_contract !== null) {
         return { msg: 'ok', data: all_contract, status: 200 }

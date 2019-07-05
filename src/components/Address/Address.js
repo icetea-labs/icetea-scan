@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { getAccountInfo } from '../../service/get-single-data';
+import { getAccountInfo } from '../../service/blockchain/get-single-data';
 import Layout from '../Layout/Layout';
 
 class Address extends Component {

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "./SearchBox.scss";
 import clear from "../../../assets/img/clear-icon.png";
 
-import * as findAsset from "../../../service/find-assets";
+import * as findAsset from "../../../service/blockchain/find-assets";
 import { checkScroll } from "../../../assets/js/hover";
 
 let show_cb = null;

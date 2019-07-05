@@ -3,7 +3,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import Layout from '../Layout/Layout';
 // import { getDataBlock } from '../../service/get-single-data';
-import diffTime from '../../service/find-time-return';
+import diffTime from '../../service/blockchain/find-time-return';
 import { _get } from '../../service/api/base-api';
 import { singleBlock } from '../../service/api/list-api';
 

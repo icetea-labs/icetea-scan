@@ -1,6 +1,6 @@
 import { _get } from "./base-api";
 import { listBlocks, listTxs } from "./list-api";
-import { store } from "../init-store";
+import { store } from "../blockchain/init-store";
 import { getListBlocks } from "../../redux/actions/handleListBlocks";
 import { getListTxs } from "../../redux/actions/handleTransactions";
 

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Layout from "../Layout/Layout";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import * as findTime from "../../service/find-time-return";
+import * as findTime from "../../service/blockchain/find-time-return";
 import "./TransactionsInfo.scss";
 // import moment from "moment";
 // import tweb3 from "../../tweb3";

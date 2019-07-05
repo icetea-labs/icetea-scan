@@ -4,16 +4,7 @@
     position: absolute;
 }
 
-span {
-    padding: 10px;
-    margin: 5px;
+.contract-content{
+    border-top: solid rgb(202, 202, 202) 1px;
 }
 
-.button-contract{
-    &:hover{
-        color: red;
-        
-    }
-
-    decoration: blue;
-}

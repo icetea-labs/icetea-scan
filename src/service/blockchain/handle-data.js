@@ -1,7 +1,7 @@
-import tweb3 from "../tweb3";
-import { getListBlocks } from '../redux/actions/handleListBlocks';
+import tweb3 from "../../tweb3";
+import { getListBlocks } from '../../redux/actions/handleListBlocks';
 import { utils } from '@iceteachain/web3';
-import { getListTxs } from '../redux/actions/handleTransactions';
+import { getListTxs } from '../../redux/actions/handleTransactions';
 import { store } from './init-store';
 
 /**

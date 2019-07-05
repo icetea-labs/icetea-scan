@@ -4,10 +4,10 @@ import { connect } from "react-redux";
 import Layout from "../Layout/Layout";
 import MaterialIcon from "material-icons-react";
 import "./Transactions.scss";
-import * as handleData from "../../service/handle-data";
+import * as handleData from "../../service/blockchain/handle-data";
 // import diffTime from "../../service/find-time-return";
-import { getFirstTxsData } from "../../service/init-store";
-import { setPageSate } from "../../service/get-realtime-data";
+import { getFirstTxsData } from "../../service/blockchain/init-store";
+import { setPageSate } from "../../service/blockchain/get-realtime-data";
 import { getListTxApi } from "../../service/api/get-list-data";
 import moment from 'moment';
 

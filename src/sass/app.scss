@@ -28,17 +28,15 @@
     height: 40px;
   }
 
-  a{
+  a {
     color: black;
   }
 }
 
-.content{
+.content {
   min-height: 50pc;
   margin-bottom: 50px;
 }
-
-
 
 // home container
 .home {
@@ -239,14 +237,40 @@
 .page_info_content {
   margin-bottom: 30px;
   background: $color_white;
-  box-shadow: rgba(90, 102, 124, 0.1) 0px 2px 10px 0px;
+  box-shadow: #5a667c1a 0px 2px 10px 0px;
   border-radius: 3px;
+
   .title {
     line-height: 60px;
     padding: 0 20px;
     color: $color_grey_river;
     font-size: $font_size_medium;
     border-bottom: 1px solid rgba($color_grey_athens, 0.5);
+
+    .button-contract {
+      padding: 20px 30px;
+      font-weight: 500;
+      margin: 0px 10px;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+      border-bottom: 0px;
+      border: solid rgb(218, 217, 217) 1px !important;
+      border-bottom: none !important;
+
+      &:hover {
+        background-color: khaki;
+      }
+    }
+
+    #choose {
+      color: white;
+      background-color: rgb(107, 167, 226);
+    }
+
+    #detail {
+      margin-right: 40px;
+    }
+
     i {
       margin-right: 10px;
     }

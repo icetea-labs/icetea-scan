@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getAccountInfo, getMetadataContract } from '../../../service/get-single-data';
+import { getAccountInfo, getMetadataContract } from '../../../service/blockchain/get-single-data';
 // import tweb3 from '../../tweb3';
 
 class Contract extends Component {
@@ -33,7 +33,7 @@ class Contract extends Component {
         let response = await getAccountInfo(address);
         let res_metadata = await getMetadataContract(address);
 
-        if (response.code !== 200) {
+        if (response.status !== 200) {
             this.props.history.push('/not-found');
         } else {
 

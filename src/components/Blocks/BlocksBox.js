@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import diffTime from "../../service/find-time-return";
+import diffTime from "../../service/blockchain/find-time-return";
 import "./BlocksBox.scss";
 
 // get data block

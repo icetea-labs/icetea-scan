@@ -1,7 +1,7 @@
 @import "../../../sass/common";
 
 .banner {
-  padding: 30px 0;
+  // padding: 30px 0;
   color: $color_white;
   // background-color: $color_blue;
   background: linear-gradient(
@@ -11,13 +11,14 @@
     $color_blue_lagoon 100%
   );
   width: 100%;
-  height: 15pc;
+  height: 200px;
 
   .flex {
-    position: absolute;
-    left: 0px;
+    // position: absolute;
+    // left: 0px;
+    padding: 10px 0;
     width: 100%;
-    height: 150px;
+    // height: 150px;
     text-align: center;
     display: flex;
     justify-content: center;

@@ -1,24 +1,23 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import * as findTime from '../../service/find-time-by-block';
-import './TransactionsBox.scss';
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import * as findTime from "../../service/find-time-by-block";
+import "./TransactionsBox.scss";
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     allTransactions: state.getRealTimeData.transactions,
-    hashId: state.HashIdChange,
-  }
-}
+    hashId: state.HashIdChange
+  };
+};
 
 class TransactionsBox extends Component {
-
   constructor() {
     super();
 
     this.state = {
-      blockInfo: null,
-    }
+      blockInfo: null
+    };
 
     this.listDiffTime = [];
     this.listType = [];
@@ -26,17 +25,17 @@ class TransactionsBox extends Component {
 
   async componentWillReceiveProps() {
     if (this.props.allTransactions !== null) {
-      for (let i = 0; i < this.props.allTransactions.length ; i++) {
+      for (let i = 0; i < this.props.allTransactions.length; i++) {
         let item = this.props.allTransactions[i];
-        let txType = 'transfer';
+        let txType = "transfer";
         const txdata = JSON.parse(item.tx.data) || {};
         let diffTime = await findTime.diffTime(item.height);
 
         if (txdata.op === 0) {
-          txType = 'deploy'
+          txType = "deploy";
           // t.to = fmtHex(t.tx_result.data);
         } else if (txdata.op === 1) {
-          txType = 'call'
+          txType = "call";
         }
         // console.log(diffTime);
         this.listDiffTime.push(diffTime);
@@ -54,17 +53,23 @@ class TransactionsBox extends Component {
             <div className="info_tx flex">
               <div className="tx">
                 TX#:
-              <Link to={`/tx/${item.hash}`} >{item.hash}</Link>
+                <Link to={`/tx/${item.hash}`}>{item.hash}</Link>
               </div>
               <div className="seconds_time">{diffTime}</div>
             </div>
             <div className="transactions flex">
               <div className="from_to">
                 <div className="from">
-                  From: <Link to={`/contract/${item.tags['tx.from'] }`}>{item.tags['tx.from'] ? item.tags['tx.from'] : '--'}</Link>
+                  From:{" "}
+                  <Link to={`/contract/${item.tags["tx.from"]}`}>
+                    {item.tags["tx.from"] ? item.tags["tx.from"] : "--"}
+                  </Link>
                 </div>
                 <div className="to">
-                  To: <Link to={`/contract/${item.tags['tx.to'] }`}>{item.tags['tx.to'] ? item.tags['tx.to'] : '--'}</Link>
+                  To:{" "}
+                  <Link to={`/contract/${item.tags["tx.to"]}`}>
+                    {item.tags["tx.to"] ? item.tags["tx.to"] : "--"}
+                  </Link>
                 </div>
               </div>
               <div className="status_order">
@@ -72,26 +77,27 @@ class TransactionsBox extends Component {
               </div>
             </div>
           </div>
-        )
-      })
+        );
+      });
     }
 
     this.listDiffTime = [];
     this.listType = [];
 
     return this.listTxs;
-  }
+  };
 
   render() {
     return (
       <div className="transactions_box">
         <div className="header_top">
-          <h3 className="title"><i className="fa fa-tasks"></i>Transactions</h3>
+          <div className="title">
+            <i className="fa fa-tasks" />
+            <span>Transactions</span>
+          </div>
           <Link to="/txs">View All →</Link>
         </div>
-        <div className="box_wrap">
-          {this.loadTransactionsData()}
-        </div>
+        <div className="box_wrap">{this.loadTransactionsData()}</div>
       </div>
     );
   }

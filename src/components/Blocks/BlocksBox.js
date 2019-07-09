@@ -85,9 +85,10 @@ class BlocksBox extends Component {
     return (
       <div className="blocks_box col-3">
         <div className="header_top">
-          <h3 className="title">
-            <i className="fa fa-cube" />Blocks
-          </h3>
+          <div className="title">
+            <i className="fa fa-cube" />
+            <span>Blocks</span>
+          </div>
           <Link to="/blocks/">View All →</Link>
         </div>
         <div className="box_wrap">{this.state.list_blocks}</div>

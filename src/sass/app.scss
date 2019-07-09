@@ -4,18 +4,23 @@
 
 .header {
   width: 100%;
-  background: rgb(206, 206, 206);
+  // background: rgb(206, 206, 206);
   height: 50px;
   padding: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(132, 132, 0, 0.442);
+  // border-bottom: 1px solid rgba(132, 132, 0, 0.442);
   position: fixed;
   top: 0;
   left: 0;
   z-index: 3;
-
+  background: linear-gradient(
+    to right,
+    $color_blue_lagoon 0%,
+    $color_blue 50%,
+    $color_blue_lagoon 100%
+  );
   .search_box_container {
     position: absolute;
     left: 25%;
@@ -29,7 +34,12 @@
   }
 
   a {
-    color: black;
+    color: #ffffff;
+    transition: color 0.5s;
+  }
+  a:hover {
+    color: #ccc7c7;
+    text-decoration-color: #ccc7c7;
   }
 }
 
@@ -72,7 +82,7 @@
     width: 40%;
     .row_blocks {
       margin: 0 15px;
-      padding: 10px 0;
+      padding: 11px 0;
       box-sizing: border-box;
       border-bottom: 1px solid rgba($color_grey_athens, 0.5);
       .title {
@@ -105,7 +115,7 @@
     margin-left: 20px;
     .row_transactions {
       margin: 0 15px;
-      padding: 10px 0;
+      padding: 11px 0;
       box-sizing: border-box;
       border-bottom: 1px solid rgba($color_grey_athens, 0.5);
       .info_tx {

@@ -57,7 +57,7 @@ class BlocksBox extends Component {
         <div className="row_blocks" key={index}>
           <div className="title flex">
             <div className="block_count">
-              Blocks
+              <span>Blocks</span>
               <Link to={`/block/${item.header.height}`}>
                 {item.header.height}
               </Link>
@@ -66,14 +66,15 @@ class BlocksBox extends Component {
           </div>
           <div className="includes flex">
             <div className="in_detail">
-              Includes
+              <span>Includes</span>
               <Link to={`/txs?block=${item.header.height}`}>
-                {" "}
-                {item.header.num_txs} Txns,{" "}
+                <span> {item.header.num_txs} Txns</span>
               </Link>
             </div>
             <div className="node">
-              Node: <span>{item.header.chain_id}</span>
+              <span>
+                Node: <span>{item.header.chain_id}</span>
+              </span>
             </div>
           </div>
         </div>

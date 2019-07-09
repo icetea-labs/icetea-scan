@@ -43,11 +43,21 @@
 }
 
 .chain-value {
-  // height: 200px;
-  // width: 80pc;
-  margin: 20px;
+  margin-bottom: 40px;
 }
-
+.bi-spin {
+  display: inline-block;
+  animation: spin-animation 1s linear infinite;
+  line-height: 1;
+}
+@keyframes spin-animation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 .blocks_transactions_view {
   margin: 20px 0;
   // .container {
@@ -142,10 +152,11 @@
         .status_order {
           color: $color_primary;
           text-transform: capitalize;
-          span.fa-circle {
+          & i {
+            color: green;
             font-size: 7px;
-            vertical-align: middle;
             margin-right: 5px;
+            vertical-align: middle;
           }
         }
         a {

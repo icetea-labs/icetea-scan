@@ -81,7 +81,7 @@ class BlockInfo extends Component {
 
             <div className="block_content page_info_content">
               <div className="title">
-                <i className="fa fa-cube"></i>
+                <i className="fa fa-cubes"></i>
                 <span>Block Information</span>
               </div>
               <div className="info_body">

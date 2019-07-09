@@ -14,16 +14,22 @@ const mapStateToProps = state => {
 class TransactionsBox extends Component {
   constructor() {
     super();
-
     this.state = {
-      blockInfo: null
+      blockInfo: null,
+      cssIcon: "fa bi-spin fa-list-alt"
     };
-
     this.listDiffTime = [];
     this.listType = [];
   }
 
   async componentWillReceiveProps() {
+    const { cssIcon } = this.state;
+    if (cssIcon.indexOf("bi-spin") === -1) {
+      this.setState({ cssIcon: "fa bi-spin fa-list-alt" });
+    } else {
+      this.setState({ cssIcon: "fa fa-list-alt" });
+    }
+
     if (this.props.allTransactions !== null) {
       for (let i = 0; i < this.props.allTransactions.length; i++) {
         let item = this.props.allTransactions[i];
@@ -45,8 +51,10 @@ class TransactionsBox extends Component {
   }
 
   loadTransactionsData = () => {
-    if (this.props.allTransactions !== null) {
-      this.listTxs = this.props.allTransactions.map((item, index) => {
+    const { allTransactions } = this.props;
+
+    if (allTransactions) {
+      this.listTxs = allTransactions.map((item, index) => {
         let diffTime = this.listDiffTime[index];
         return (
           <div className="row_transactions" key={index}>
@@ -73,7 +81,8 @@ class TransactionsBox extends Component {
                 </div>
               </div>
               <div className="status_order">
-                <span className="fa fa-circle">{this.listType[index]}</span>
+                <i className="fa fa-circle" />
+                <span>{this.listType[index]}</span>
               </div>
             </div>
           </div>
@@ -88,11 +97,13 @@ class TransactionsBox extends Component {
   };
 
   render() {
+    const { cssIcon } = this.state;
+
     return (
       <div className="transactions_box">
         <div className="header_top">
           <div className="title">
-            <i className="fa fa-tasks" />
+            <i className={cssIcon} />
             <span>Transactions</span>
           </div>
           <Link to="/txs">View All →</Link>

@@ -81,9 +81,11 @@ class BlocksBox extends Component {
       );
     });
 
-    this.setState({
-      list_blocks
-    });
+    if (this._isMounted) {
+      this.setState({
+        list_blocks
+      });
+    }
   }
 
   componentWillUnmount() {

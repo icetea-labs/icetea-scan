@@ -9,7 +9,7 @@ class Banner extends Component {
         <div className="flex">
           <div className="type-search">
             <div>
-              <h3>ICETEA CHAIN EXPLORER</h3>
+              <h3>ICETEA CHAIN EXPLORER (TESTNET)</h3>
             </div>
             <SearchBox show_cb="banner" />
           </div>

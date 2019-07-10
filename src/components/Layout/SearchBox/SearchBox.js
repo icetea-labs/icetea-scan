@@ -1,10 +1,16 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import "antd/lib/input/style/index.css";
+import "antd/lib/button/style/index.css";
+import "antd/lib/icon/style/index.css";
+// import "antd/dist/antd.css";
 import "./SearchBox.scss";
 import clear from "../../../assets/img/clear-icon.png";
 
 import * as findAsset from "../../../service/find-assets";
 import { checkScroll } from "../../../assets/js/hover";
+import { Input } from "antd";
+const { Search } = Input;
 
 let show_cb = null;
 class SearchBox extends Component {
@@ -143,12 +149,21 @@ class SearchBox extends Component {
   };
 
   render() {
+    const { show_cb } = this.state;
+
     return (
       <div
         className="search-box_out-side"
         style={{ display: this.state.show_cb === true ? "block" : "none" }}
       >
-        <div className="search-icon phone" style={{ display: "none" }}>
+        <Search
+          placeholder="Search by block, transaction or address"
+          onSearch={value => console.log(value)}
+          style={{ width: "100%" }}
+          allowClear={true}
+        />
+
+        {/* <div className="search-icon phone" style={{ display: "none" }}>
           <i className="fa fa-search" />{" "}
         </div>
         <div className="search_box_container">
@@ -185,7 +200,7 @@ class SearchBox extends Component {
         >
           {this.blocks_data}
           {this.txs_data}
-        </div>
+        </div> */}
       </div>
     );
   }

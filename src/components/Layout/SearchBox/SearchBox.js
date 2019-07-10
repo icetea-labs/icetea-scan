@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import "antd/lib/input/style/index.css";
 import "antd/lib/button/style/index.css";
 import "antd/lib/icon/style/index.css";
@@ -147,6 +147,24 @@ class SearchBox extends Component {
     this.txs_data = [];
   };
 
+  searchAssets = value => {
+    // console.log(value);
+    const { history } = this.props;
+    if (!isNaN(value)) {
+      history.push("/block/" + value);
+    } else {
+      if (value.substring(0, 3) === "tea") {
+        history.push("/contract/" + value);
+      } else {
+        if (value.length === 64 && value === value.toUpperCase()) {
+          history.push("/tx/" + value);
+        } else {
+          history.push("/not-found");
+        }
+      }
+    }
+  };
+
   render() {
     const { show_cb } = this.state;
 
@@ -157,8 +175,12 @@ class SearchBox extends Component {
       >
         <Search
           placeholder="Search by block, transaction or address"
-          onSearch={value => console.log(value)}
-          onPressEnter={value => console.log(value.currentTarget.value)}
+          onSearch={value => {
+            this.searchAssets(value);
+          }}
+          onPressEnter={value => {
+            this.searchAssets(value.currentTarget.value);
+          }}
           style={{ width: "100%" }}
           allowClear={true}
         />
@@ -206,4 +228,5 @@ class SearchBox extends Component {
   }
 }
 
-export default SearchBox;
+// export default SearchBox;
+export default withRouter(SearchBox);

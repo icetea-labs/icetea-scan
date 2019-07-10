@@ -1,17 +1,16 @@
-import React, { Component } from 'react';
-import Layout from '../Layout/Layout';
-import Banner from './elements/Banner';
-import BlocksBox from '../Blocks/BlocksBox';
-import TransactionsBox from '../Transactions/TransactionsBox';
-import ChainValue from '../ChainValue/ChainValue';
+import React, { Component } from "react";
+import Layout from "../Layout/Layout";
+import Banner from "./elements/Banner";
+import BlocksBox from "../Blocks/BlocksBox";
+import TransactionsBox from "../Transactions/TransactionsBox";
+import ChainValue from "../ChainValue/ChainValue";
 
 class Home extends Component {
-
-  constructor(props){
-    super(props)
-    this.state={
+  constructor(props) {
+    super(props);
+    this.state = {
       is_loading: true
-    }
+    };
   }
 
   render() {
@@ -20,12 +19,14 @@ class Home extends Component {
         <div className="home">
           <Banner />
           <div className="blocks_transactions_view">
-            <div className="chain-value">
-              <ChainValue />
-            </div>
             <div className="container">
-              <BlocksBox />
-              <TransactionsBox />
+              <div className="chain-value">
+                <ChainValue />
+              </div>
+              <div className="flex">
+                <BlocksBox />
+                <TransactionsBox />
+              </div>
             </div>
           </div>
         </div>

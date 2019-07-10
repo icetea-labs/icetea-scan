@@ -221,7 +221,7 @@ class TransactionsInfo extends Component {
 
             <div className="transaction_content page_info_content">
               <div className="title">
-                <i className="fa fa-tasks" />
+                <i className="fa fa-list-alt" />
                 <span>Transaction Information</span>
               </div>
               <div className="info_body">

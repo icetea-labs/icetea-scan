@@ -1,21 +1,29 @@
-.total-chain{
-    position: absolute;
-    right: 100px;
-    width: 20pc;
-    height: 100%;
+.total-chain {
+  // position: absolute;
+  // right: 100px;
+  // width: 20pc;
+  // height: 100%;
+  // height: auto;
+  display: flex;
+  background-color: rgb(255, 255, 255);
+  box-shadow: rgba(90, 102, 124, 0.1) 0px 2px 10px 0px;
+  box-sizing: border-box;
+  ul {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+  li {
+    font-size: 12px;
     height: auto;
-    background-color: rgb(255, 255, 255);
-    box-shadow: rgba(90, 102, 124, 0.1) 0px 2px 10px 0px;
-    box-sizing: border-box;
+    // border-bottom: solid rgba(128, 128, 128, 0.129) 1px;
+    padding: 10px 15px 10px 15px;
+  }
 
-    li{
-        font-size: 12px;
-        height: auto;
-        border-bottom: solid rgba(128, 128, 128, 0.129) 1px;
-        padding: 10px 15px 10px 15px;
-    }
-
-    .info-stamp{
-        font-weight: 800;
-    }
+  .info-stamp {
+    font-weight: 800;
+    color: rgb(33, 40, 51);
+    font-size: 14px;
+  }
 }

@@ -4,18 +4,23 @@
 
 .header {
   width: 100%;
-  background: rgb(206, 206, 206);
+  // background: rgb(206, 206, 206);
   height: 50px;
   padding: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(132, 132, 0, 0.442);
+  // border-bottom: 1px solid rgba(132, 132, 0, 0.442);
   position: fixed;
   top: 0;
   left: 0;
   z-index: 3;
-
+  background: linear-gradient(
+    to right,
+    $color_blue_lagoon 0%,
+    $color_blue 50%,
+    $color_blue_lagoon 100%
+  );
   .search_box_container {
     position: absolute;
     left: 25%;
@@ -24,20 +29,25 @@
   .logo {
     position: relative;
     top: 0px;
-    width: 40px;
-    height: 40px;
+    & img {
+      // width: 40px;
+      height: 40px;
+    }
   }
 
-  a{
-    color: black;
+  a {
+    color: #ffffff;
+    transition: color 0.5s;
+  }
+  a:hover {
+    color: #ccc7c7;
+    text-decoration-color: #ccc7c7;
   }
 }
 
-.content{
+.content {
   min-height: 50pc;
 }
-
-
 
 // home container
 .home {
@@ -45,17 +55,27 @@
 }
 
 .chain-value {
-  height: 200px;
-  width: 80pc;
-  margin: 20px 0px;
+  margin-bottom: 40px;
 }
-
+.bi-spin {
+  display: inline-block;
+  animation: spin-animation 1s linear infinite;
+  line-height: 1;
+}
+@keyframes spin-animation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 .blocks_transactions_view {
   margin: 20px 0;
-  .container {
-    display: flex;
-    justify-content: space-between;
-  }
+  // .container {
+  //   display: flex;
+  //   justify-content: space-between;
+  // }
   .flex {
     display: flex;
     justify-content: space-between;
@@ -64,7 +84,7 @@
     width: 40%;
     .row_blocks {
       margin: 0 15px;
-      padding: 10px 0;
+      padding: 11px 0;
       box-sizing: border-box;
       border-bottom: 1px solid rgba($color_grey_athens, 0.5);
       .title {
@@ -97,7 +117,7 @@
     margin-left: 20px;
     .row_transactions {
       margin: 0 15px;
-      padding: 10px 0;
+      padding: 11px 0;
       box-sizing: border-box;
       border-bottom: 1px solid rgba($color_grey_athens, 0.5);
       .info_tx {
@@ -144,10 +164,11 @@
         .status_order {
           color: $color_primary;
           text-transform: capitalize;
-          span.fa-circle {
+          & i {
+            color: green;
             font-size: 7px;
-            vertical-align: middle;
             margin-right: 5px;
+            vertical-align: middle;
           }
         }
         a {
@@ -170,6 +191,7 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 15px;
+    line-height: 25px;
     .title {
       font-size: $font_size_above_medium;
       font-weight: normal;
@@ -177,6 +199,10 @@
         font-size: $font_size_medium;
         margin-right: 10px;
       }
+    }
+    a {
+      color: rgb(132, 142, 156);
+      padding: 0 5px;
     }
   }
 }

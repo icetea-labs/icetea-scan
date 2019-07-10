@@ -20,11 +20,19 @@ class BlocksBox extends Component {
 
     this.state = {
       list_time: [],
-      list_blocks: []
+      list_blocks: [],
+      cssIcon: "fa bi-spin fa-cubes"
     };
   }
 
   async componentWillReceiveProps() {
+    const { cssIcon } = this.state;
+    if (cssIcon.indexOf("bi-spin") === -1) {
+      this.setState({ cssIcon: "fa bi-spin fa-cubes" });
+    } else {
+      this.setState({ cssIcon: "fa fa-cubes" });
+    }
+
     this.loadBlocksData();
   }
 
@@ -49,7 +57,7 @@ class BlocksBox extends Component {
         <div className="row_blocks" key={index}>
           <div className="title flex">
             <div className="block_count">
-              Blocks
+              <span>Blocks</span>
               <Link to={`/block/${item.header.height}`}>
                 {item.header.height}
               </Link>
@@ -58,14 +66,15 @@ class BlocksBox extends Component {
           </div>
           <div className="includes flex">
             <div className="in_detail">
-              Includes
+              <span>Includes</span>
               <Link to={`/txs?block=${item.header.height}`}>
-                {" "}
-                {item.header.num_txs} Txns,{" "}
+                <span> {item.header.num_txs} Txns</span>
               </Link>
             </div>
             <div className="node">
-              Node: <span>{item.header.chain_id}</span>
+              <span>
+                Node: <span>{item.header.chain_id}</span>
+              </span>
             </div>
           </div>
         </div>
@@ -82,12 +91,15 @@ class BlocksBox extends Component {
   }
 
   render() {
+    const { cssIcon } = this.state;
+
     return (
       <div className="blocks_box col-3">
         <div className="header_top">
-          <h3 className="title">
-            <i className="fa fa-cube" />Blocks
-          </h3>
+          <div className="title">
+            <i className={cssIcon} />
+            <span>Blocks</span>
+          </div>
           <Link to="/blocks/">View All →</Link>
         </div>
         <div className="box_wrap">{this.state.list_blocks}</div>

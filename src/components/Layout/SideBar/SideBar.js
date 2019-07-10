@@ -38,8 +38,8 @@ class SideBar extends Component {
                             <li><i className='fa fa-home'></i><a href='/'>Home</a></li>
                             <li><i className='fa fa-btc'></i><span>BlockChain</span></li>
                             <hr></hr>
-                            <li><i className='fa fa-cube'></i><a href='/blocks'>Blocks</a></li>
-                            <li><i className='fa fa-tasks'></i><a href='/txs'>Transactions</a></li>
+                            <li><i className='fa fa-cubes'></i><a href='/blocks'>Blocks</a></li>
+                            <li><i className='fa fa-list-alt'></i><a href='/txs'>Transactions</a></li>
                             <li><i className='fa fa-file'></i><a href='/contracts'>Contracts</a></li>
                         </ul>
                     </div>

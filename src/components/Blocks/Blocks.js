@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Layout from "../Layout/Layout";
 import moment from "moment";
-import * as handledata from "../../service/handle-data";
 import MaterialIcon from "material-icons-react";
 import "./Blocks.scss";
-import { setPageSate } from "../../service/get-realtime-data";
-import diffTime from "../../service/find-time-by-block";
+import { setPageSate } from '../../service/blockchain/get-realtime-data';
+import diffTime from '../../service/blockchain/find-time-return';
+import { getListBlockApi } from "../../service/api/get-list-data";
 
 const mapStateToProps = state => {
   return {
@@ -45,7 +45,7 @@ class Blocks extends Component {
       }
 
       if (this.state.pageIndex === 1) {
-        handledata.getBlocks(this.props.pageState.total_blocks, 1, 20);
+        this.getBlocksByPageIndex(1);
       }
     }
   }
@@ -81,12 +81,11 @@ class Blocks extends Component {
   }
 
   // Set Data By Page Index
-  getBlocksByPageIndex(pageIndex) {
-    let maxheight = this.props.pageState.total_blocks;
-
+  async getBlocksByPageIndex(pageIndex) {
     if (pageIndex <= 0) {
       pageIndex = 1;
     }
+    console.log(pageIndex);
 
     if (pageIndex >= this.props.pageState.pageBlockLimit) {
       pageIndex = this.props.pageState.pageBlockLimit;
@@ -96,7 +95,11 @@ class Blocks extends Component {
       pageIndex
     });
 
-    return handledata.getBlocks(maxheight, pageIndex, 20);
+    // return handledata.getBlocks(maxheight, pageIndex, 20);
+    getListBlockApi({
+      page_index: this.state.pageIndex,
+      page_size: this.props.pageState.pageSize
+    });
   }
 
   render() {

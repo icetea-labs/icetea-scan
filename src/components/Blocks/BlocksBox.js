@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import diffTime from "../../service/find-time-by-block";
+import diffTime from "../../service/blockchain/find-time-return";
 import "./BlocksBox.scss";
 
 // get data block
@@ -45,12 +45,6 @@ class BlocksBox extends Component {
       list_time.push(time);
     }
 
-    if (this._isMounted) {
-      this.setState({
-        list_time
-      });
-    }
-
     let list_blocks = this.props.allBlocks.map((item, index) => {
       // diffTime
       return (
@@ -81,9 +75,12 @@ class BlocksBox extends Component {
       );
     });
 
-    this.setState({
-      list_blocks
-    });
+    if (this._isMounted) {
+      this.setState({
+        list_time,
+        list_blocks
+      });
+    }
   }
 
   componentWillUnmount() {

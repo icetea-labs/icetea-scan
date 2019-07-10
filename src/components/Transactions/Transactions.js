@@ -8,6 +8,7 @@ import * as handleData from "../../service/handle-data";
 import diffTime from "../../service/find-time-by-block";
 import { getFirstTxsData } from "../../service/init-store";
 import { setPageSate } from "../../service/get-realtime-data";
+import { toTEA } from "../../utils";
 
 const mapStateToProps = state => {
   return {
@@ -121,7 +122,9 @@ class Transactions extends Component {
 
   loadTransactions() {
     // window.location.reload();
-    if (this.props.transactions.length === 0) {
+    const { transactions } = this.props;
+
+    if (transactions.length === 0) {
       return (
         <tr className="no_data">
           <th />
@@ -134,7 +137,7 @@ class Transactions extends Component {
         </tr>
       );
     } else {
-      this.listTxs = this.props.transactions.map((item, index) => {
+      return transactions.map((item, index) => {
         let txType = "transfer";
         let txdata = JSON.parse(item.tx.data) || {};
 
@@ -148,7 +151,6 @@ class Transactions extends Component {
         return (
           <tr key={index}>
             <td className="text_overflow">
-              {" "}
               <Link to={`/tx/${item.hash}`}>{item.hash}</Link>
             </td>
             <td>
@@ -181,12 +183,13 @@ class Transactions extends Component {
                 <span>--</span>
               )}
             </td>
-            <td>{item.tx.value ? item.tx.value : 0} ITEA</td>
+            <td>
+              <span>{toTEA(item.tx.value)} TEA</span>
+            </td>
           </tr>
         );
       });
     }
-    return this.listTxs;
   }
 
   render() {
@@ -218,13 +221,13 @@ class Transactions extends Component {
               <table>
                 <thead>
                   <tr>
-                    <th>TxHash</th>
-                    <th>Height</th>
-                    <th>Age</th>
-                    <th>Type</th>
-                    <th>From</th>
-                    <th>To</th>
-                    <th>Value</th>
+                    <th width="20%">TxHash</th>
+                    <th width="7%">Height</th>
+                    <th width="15%">Age</th>
+                    <th width="8%">Type</th>
+                    <th width="20%">From</th>
+                    <th width="20%">To</th>
+                    <th width="10%">Value</th>
                   </tr>
                 </thead>
                 <tbody>{this.loadTransactions()}</tbody>

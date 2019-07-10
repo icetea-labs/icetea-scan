@@ -1,6 +1,8 @@
 /* eslint-disable no-undef */
 import React, { Component } from "react";
+import { ContractMode } from "@iceteachain/common";
 import { Link } from "react-router-dom";
+import { toTEA } from "../../utils";
 import Layout from "../Layout/Layout";
 import {
   getAllContracts,
@@ -49,8 +51,27 @@ class AllContract extends Component {
     this._isMounted = false;
   }
 
+  renderTbody() {
+    const { contract_data } = this.state;
+
+    return contract_data.map((item, index) => {
+      return (
+        <tr key={index}>
+          <td>
+            <Link to={`/call-contract/${item.address}`}>{item.address}</Link>
+          </td>
+          <td>{toTEA(item.balance)}</td>
+          <td>
+            <Link to={`/contract/${item.deployedBy}`}>{item.deployedBy}</Link>
+          </td>
+          <td>{item.mode === ContractMode.WASM ? "WebAssembly" : "JavaScript"}</td>
+        </tr>
+      );
+    });
+  }
+
   render() {
-    // console.log('this.state.contract_data', this.state.contract_data)
+    // console.log("this.state.contract_data", this.state.contract_data);
     return (
       <Layout>
         <div className="block_page mt_50 mb_30">
@@ -72,63 +93,13 @@ class AllContract extends Component {
               <table>
                 <thead>
                   <tr>
-                    <th width="100">Address</th>
-                    <th width="100">Balance</th>
-                    <th width="350">Deployed by</th>
-                    <th width="100">Has Src</th>
-                    <th width="100">Mode</th>
+                    <th width="35%">Address</th>
+                    <th width="15%">Balance</th>
+                    <th width="35%">Deployed by</th>
+                    <th width="15%">Type</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {this.state.contract_data.map((item, index) => {
-                    let address = "";
-                    let deploy_by = "";
-                    for (let i = 0; i < 10; i++) {
-                      address += item.address[i];
-                      if (item.deployedBy.length >= 10) {
-                        deploy_by += item.deployedBy[i];
-                      }
-                      if (i === 9) {
-                        address += "...";
-                        deploy_by += "...";
-                      }
-                    }
-
-                    return (
-                      <tr key={index}>
-                        <td width="100">
-                          {item.address ? (
-                            <Link to={`/call-contract/${item.address}`}>
-                              {address}
-                            </Link>
-                          ) : (
-                            "null"
-                          )}
-                        </td>
-                        <td width="100">
-                          {item.balance
-                            ? parseInt(item.balance).toPrecision(2)
-                            : 0}
-                        </td>
-                        <td width="350">
-                          {item.deployedBy ? (
-                            <Link to={`/contract/${item.deployedBy}`}>
-                              {item.deployedBy.length > 10
-                                ? deploy_by
-                                : item.deployedBy}
-                            </Link>
-                          ) : (
-                            "null"
-                          )}
-                        </td>
-                        <td width="100">
-                          {item.hasSrc === true ? "true" : "false"}
-                        </td>
-                        <td width="100">{item.mode ? item.mode : "null"}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
+                <tbody>{this.renderTbody()}</tbody>
               </table>
             </div>
             <div className="pagination">

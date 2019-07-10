@@ -5,7 +5,6 @@ import "antd/lib/button/style/index.css";
 import "antd/lib/icon/style/index.css";
 // import "antd/dist/antd.css";
 import "./SearchBox.scss";
-import clear from "../../../assets/img/clear-icon.png";
 
 import * as findAsset from "../../../service/find-assets";
 import { checkScroll } from "../../../assets/js/hover";
@@ -159,6 +158,7 @@ class SearchBox extends Component {
         <Search
           placeholder="Search by block, transaction or address"
           onSearch={value => console.log(value)}
+          onPressEnter={value => console.log(value.currentTarget.value)}
           style={{ width: "100%" }}
           allowClear={true}
         />

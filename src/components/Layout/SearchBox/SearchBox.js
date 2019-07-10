@@ -6,7 +6,7 @@ import "antd/lib/icon/style/index.css";
 // import "antd/dist/antd.css";
 import "./SearchBox.scss";
 
-import * as findAsset from "../../../service/find-assets";
+import * as findAsset from "../../../service/blockchain/find-assets";
 import { checkScroll } from "../../../assets/js/hover";
 import { Input } from "antd";
 const { Search } = Input;

@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import * as findTime from "../../service/find-time-by-block";
+import * as findTime from '../../service/blockchain/find-time-return';
+import "./TransactionsBox.scss";
 import "./TransactionsBox.scss";
 
 const mapStateToProps = state => {
@@ -69,13 +70,13 @@ class TransactionsBox extends Component {
               <div className="from_to">
                 <div className="from">
                   From:{" "}
-                  <Link to={`/contract/${item.tags["tx.from"]}`}>
+                  <Link to={`/address/${item.tags["tx.from"]}`}>
                     {item.tags["tx.from"] ? item.tags["tx.from"] : "--"}
                   </Link>
                 </div>
                 <div className="to">
                   To:{" "}
-                  <Link to={`/contract/${item.tags["tx.to"]}`}>
+                  <Link to={`/address/${item.tags["tx.to"]}`}>
                     {item.tags["tx.to"] ? item.tags["tx.to"] : "--"}
                   </Link>
                 </div>

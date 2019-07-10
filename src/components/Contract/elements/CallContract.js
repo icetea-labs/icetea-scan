@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
-import Layout from '../Layout/Layout';
+// import { Link } from 'react-router-dom';
 import './CallContract.scss';
-import { getAccountInfo, getMetadataContract } from '../../service/get-single-data';
+
+import { getAccountInfo, getMetadataContract } from '../../../service/blockchain/get-single-data';
 import { ContractMode } from '@iceteachain/common';
-import { execContract } from '../../service/exec-contract';
-import tweb3 from '../../tweb3';
+import { execContract, callWithWallet } from '../../../service/blockchain/exec-contract';
+// import tweb3 from '../../../tweb3';
+import { createBankKey, createRegularKey } from '../../../service/wallet/create';
 
 class CallContract extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            address: null,
+            address: '',
+            private_key: '',
             balance: null,
             list_func: [],
             write_func: [],
@@ -20,7 +23,7 @@ class CallContract extends Component {
             is_choose: 'all',
             type: '',
             info_modename: '',
-            type_func: 'view',
+            type_func: [],
             name_func: 'exampleFunction',
             return_type: 'any',
             params: [],
@@ -28,9 +31,17 @@ class CallContract extends Component {
             fee: 0,
             params_value: [],
             data: '',
-            method: 'callReadonlyContractMethod',
+            method: '',
             is_hidden: true,
             wallet: '',
+            show_option: false,
+            option: "Create random, throw-away account",
+            show_create: true,
+            private_key_wallet: '',
+            have_wallet: false,
+            show_method_wallet: true,
+            option_button: 'Hidden',
+            param_url: '',
         }
 
         this.params = [];
@@ -38,10 +49,11 @@ class CallContract extends Component {
     }
 
     async componentWillMount() {
-        let address = this.props.match.params.address;
+        let address = this.props.address;
         let response_a_i = await getAccountInfo(address);
+        this._checkKey();
 
-        if (response_a_i.code === 200) {
+        if (response_a_i.status === 200) {
             let info = response_a_i.data;
             let balance = info.balance;
             let isSystemContract = !!info.system;
@@ -71,14 +83,14 @@ class CallContract extends Component {
                 balance
             });
         }
-        console.log(this.state.address);
+        // console.log(this.state.address);
 
         let response_m = await getMetadataContract(this.state.address);
-        if (response_m.code === 200) {
+        if (response_m.status === 200) {
             let list_func = Object.entries(response_m.data);
             let pure_func = [], view_func = [], write_func = [];
 
-            console.log(list_func);
+            // console.log(list_func);
 
             list_func.forEach((item) => {
                 // eslint-disable-next-line
@@ -120,7 +132,7 @@ class CallContract extends Component {
         })
     }
 
-    _hiddenWallet = () =>{
+    _hiddenWallet = () => {
         this.setState({
             is_hidden: !this.state.is_hidden
         })
@@ -132,11 +144,61 @@ class CallContract extends Component {
         })
     }
 
-    _checkWallet = () => {
-        let response_wallet = tweb3.wallet.loadFromStorage(this.state.wallet);
-        if (response_wallet === 0) {
-            alert('wallet is underfind');
+    // Submit private key
+    _submitKey = () => {
+        let { private_key } = this.state;
+        localStorage.setItem('private_key_wallet', private_key);
+        this._checkKey();
+    }
+
+
+    // Check key
+    _checkKey = () => {
+        let { have_wallet, private_key, show_method_wallet, option_button } = this.state;
+        let private_key_wallet = localStorage.getItem('private_key_wallet');
+
+        if (private_key_wallet !== null) {
+            have_wallet = true;
+            private_key = private_key_wallet;
+            show_method_wallet = false;
+            option_button = 'Hidden';
         }
+
+        this.setState({
+            have_wallet,
+            private_key_wallet,
+            private_key,
+            show_method_wallet,
+            option_button
+        })
+    }
+
+    // Set option for create wallet
+    _setOption = (event) => {
+
+        let { show_create } = false;
+        switch (event.target.id) {
+            case 'create':
+                show_create = true;
+
+                this.setState({
+                    option: "Create random, throw-away account"
+                })
+                break;
+
+            case 'signin':
+                show_create = false;
+
+                this.setState({
+                    option: "Sign with Icetea Wallet"
+                });
+                break;
+
+            default:
+                break;
+        }
+
+        this.setState({ show_create })
     }
 
     _setChoose = (is_choose) => {
@@ -159,12 +221,13 @@ class CallContract extends Component {
                 break;
         }
 
-        return this.setState({
+        this.setState({
             data_func
         });
 
     }
 
+    // Set function for using wallet
     _setFunction = (event) => {
         let name_func = event.target.id;
         let choose_func;
@@ -194,6 +257,7 @@ class CallContract extends Component {
         this._setParam();
     }
 
+    // Set params for function
     _setParam = () => {
         this.params = this.state.params.map((item, index) => {
             let i = index;
@@ -230,37 +294,70 @@ class CallContract extends Component {
         })
     }
 
-    async _execFunc(e) {
-
-        let type_func = this.state.type_func;
-        // eslint-disable-next-line default-case 
-        switch (type_func[0]) {
-            case 'read':
-                this.setState({
-                    method: 'callReadonlyContractMethod'
-                })
+    // Create account for test
+    _generateAccount = (event) => {
+        let { account, private_key } = this.state;
+        let data = {};
+        switch (event.target.id) {
+            case 'regular':
+                data = createRegularKey();
                 break;
-            case 'pure':
-                this.setState({
-                    method: 'callPureContractMethod'
-                })
+            case 'bank':
+                data = createBankKey();
                 break;
 
-            case 'trasaction':
-                this.setState({
-                    method: this.state.name_func
-                })
+            default:
                 break;
         }
 
-        let response_c_f = await execContract(
-            this.params_value,
-            this.state.name_func,
-            this.state.address,
-            this.state.method,
-            this.state.fee,
-            this.state.value
-        );
+        account = data.account;
+        private_key = data.privateKey;
+        this.setState({ account, private_key });
+    }
+    // Run  function
+    _runFunc = (event) => {
+        let name = event.target.id;
+
+        console.log(name)
+        this._execFunc(name);
+    }
+
+    // Chose type for function
+    async _execFunc(name) {
+        let type_func = this.state.type_func[0];
+        let { name_func, address, method, fee, value } = this.state;
+
+        switch (type_func) {
+            case 'read':
+                method = 'callReadonlyContractMethod'
+                break;
+            case 'pure':
+                method = 'callPureContractMethod'
+                break;
+            case 'transaction':
+                method = this.state.name_func
+                break;
+            default:
+                break;
+        }
+
+        console.log(method);
+
+        let response_c_f;
+        console.log(name);
+        if (name === 'normal') {
+            response_c_f = await execContract(
+                this.params_value,
+                name_func,
+                address,
+                method,
+                fee,
+                value
+            )
+        } else {
+            response_c_f = await callWithWallet(address, null, value, fee, null );
+        };
+
         let data = response_c_f.data;
         let code_status = response_c_f.code_status;
 
@@ -279,18 +376,31 @@ class CallContract extends Component {
         this.params_value[parseInt(event.target.id)] = event.target.value;
     }
 
-    render() {
-        return (
-            <Layout>
+    _handleMethodWallet = () => {
+        let { show_method_wallet, option_button } = this.state;
+        show_method_wallet = !show_method_wallet;
+        if (show_method_wallet === true) {
+            option_button = 'Hidden';
+        } else {
+            option_button = 'Open'
+        }
 
+        this.setState({ show_method_wallet, option_button })
+
+    }
+
+    render() {
+        let { address, is_choose, show_create, have_wallet, show_method_wallet, option_button, data } = this.state
+        return (
+            <div className='tab-contract'>
                 {/* Left SideBar */}
                 <div className="side-bar_left">
                     {/* Button choose function  */}
                     <div className='choose-button'>
-                        <button onClick={() => { this._setChoose('view') }} className={this.state.is_choose === 'view' ? 'btn-n-choose' : 'btn-choose'} >View</button>
-                        <button onClick={() => { this._setChoose('pure') }} className={this.state.is_choose === 'pure' ? 'btn-n-choose' : 'btn-choose'}>Pure</button>
-                        <button onClick={() => { this._setChoose('transaction') }} className={this.state.is_choose === 'transaction' ? 'btn-n-choose' : 'btn-choose'}>Write</button>
-                        <button onClick={() => { this._setChoose('all') }} className={this.state.is_choose === 'all' ? 'btn-n-choose' : 'btn-choose'}>All</button>
+                        <button onClick={() => { this._setChoose('view') }} className={is_choose === 'view' ? 'btn-n-choose' : 'btn-choose'} >View</button>
+                        <button onClick={() => { this._setChoose('pure') }} className={is_choose === 'pure' ? 'btn-n-choose' : 'btn-choose'}>Pure</button>
+                        <button onClick={() => { this._setChoose('transaction') }} className={is_choose === 'transaction' ? 'btn-n-choose' : 'btn-choose'}>Write</button>
+                        <button onClick={() => { this._setChoose('all') }} className={is_choose === 'all' ? 'btn-n-choose' : 'btn-choose'}>All</button>
                     </div>
 
                     {/* List Function */}
@@ -305,19 +415,47 @@ class CallContract extends Component {
                         </ul>
                     </div>
                 </div>
-                {/* Content  */}
 
+                {/* Content  */}
                 <div className="call-contract">
                     {/* Import Wallet */}
-                    <div className='wallet'>
-                        <p>Import your wallet</p>
-                        <label>
-                            <input value={this.state.wallet} placeholder='Type your wallet' type={this.state.is_hidden === true ? 'password' : 'autocomplete'} onChange={this._handleWallet} />
-                            <button onClick={this._hiddenWallet} > {this.state.is_hidden === true ? 'Show' : 'Hidden'}</button>
-                        </label>
-                        <br></br>
-                        <button onClick={this._checkWallet}>Submit</button>
-                        <br></br>
+                    {have_wallet === false ? (<p style={{ color: 'red' }}>you are not login now</p>) : (<p style={{ color: 'green' }}>wallet is exactly</p>)}
+                    <button className='btn-option' onClick={this._handleMethodWallet}>{option_button} method for wallet </button>
+                    <div className='wallet' style={{ display: show_method_wallet === true ? 'block' : 'none' }}>
+                        <h3>Chose options to exec contract</h3>
+                        <div className='option'>
+                            <span onClick={() => { this.setState({ show_option: !this.state.show_option }) }}>
+                                {this.state.option}
+                                <i className={this.state.show_option === true ? 'fa fa-caret-up' : 'fa fa-caret-down'} aria-hidden="true"></i>
+                            </span>
+                            <ul style={{ display: this.state.show_option === true ? "block" : "none" }} onClick={() => { this.setState({ show_option: !this.state.show_option }) }}>
+                                <li id="create" onClick={this._setOption}>Create random, throw-away account</li>
+                                <li id="signin" onClick={this._setOption}> Sign with Icetea Wallet</li>
+                            </ul>
+                        </div>
+                        {/* Input option */}
+                        {
+                            show_create === true ?
+                                (<div className='create-account'>
+                                    <p>
+                                        <span id='bank' onClick={this._generateAccount}>Generate Bank Count</span>
+                                        <span id='regular' onClick={this._generateAccount}>Generate Regular Account</span>
+                                    </p>
+                                    <p>
+                                        <input defaultValue={address} placeholder='Address' type='text' />
+                                    </p>
+                                    <p>
+                                        <input value={this.state.private_key} placeholder='Private Key' type={this.state.is_hidden === true ? 'password' : 'autocomplete'} onChange={this._handleWallet} />
+                                        <button onClick={this._hiddenWallet} > {this.state.is_hidden === true ? 'Show' : 'Hidden'}</button>
+                                    </p>
+                                    <br></br>
+                                    {/* Sumit private key */}
+                                    <button onClick={this._submitKey}>Submit</button>
+                                    <br></br>
+                                </div>) : null
+                        }
+
+
                     </div>
                     {/* Data of contract */}
                     <div className='content-call'>
@@ -337,7 +475,7 @@ class CallContract extends Component {
                         </pre>
                     </div>
                     {/* fee? value ? */}
-                    <div className='fee-value'>
+                    <div className='fee-value' style={{ display: this.state.type_func[0] === "transaction" ? "block" : "none" }}>
                         <p>Fee: <input value={this.state.fee} onChange={this._handleFee} /></p>
                         <p>Value: <input value={this.state.value} onChange={this._handleValue} /></p>
                     </div>
@@ -353,16 +491,17 @@ class CallContract extends Component {
                         })}
                     </div>
                     {/* Button Call + ddata*/}
-                    <button onClick={() => { this._execFunc() }} className='btn-exec'>Exec</button>
+                    <button id="normal" onClick={this._runFunc} className='btn-exec'>Exec by your created account</button>
+                    <button id="wallet" onClick={this._runFunc} className='btn-exec'>Send Txs by your wallet</button>
                     {/* Result */}
                     <div>
                         <p>Result</p>
-                        <pre color='blue'>
+                        <pre style={{ color: data === 'fail' ? 'red' : 'green' }}>
                             {this.state.data}
                         </pre>
                     </div>
                 </div>
-            </Layout>
+            </div>
         );
     }
 }

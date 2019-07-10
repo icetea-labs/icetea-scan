@@ -5,8 +5,8 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 // Provider
 import { Provider } from 'react-redux';
-import { store } from "./service/init-store";
-import { getRealTimeData } from './service/get-realtime-data';
+import { store } from "./service/blockchain/init-store";
+import { getRealTimeData } from './service/blockchain/get-realtime-data';
 import { env } from './evironment/env';
 
 
@@ -15,6 +15,7 @@ if (env === "testing") {
     getRealTimeData();
   }, 1000);
 } else {
+  setTimeout(()=>{getRealTimeData(); }, 1);
   setInterval(() => { getRealTimeData(); }, 1000);
 }
 

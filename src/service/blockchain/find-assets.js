@@ -1,4 +1,4 @@
-import tweb3 from "../tweb3";
+import tweb3 from "../../tweb3";
 
 /**
  * @param {height: number, max_height: number} findBlock -return await of block

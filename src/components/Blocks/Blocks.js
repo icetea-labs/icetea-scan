@@ -1,36 +1,34 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import Layout from '../Layout/Layout';
-import moment from 'moment';
-import * as handledata from '../../service/handle-data';
-import MaterialIcon from 'material-icons-react';
-import './Blocks.scss';
-import { setPageSate } from '../../service/get-realtime-data';
-import diffTime from '../../service/find-time-by-block';
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import Layout from "../Layout/Layout";
+import moment from "moment";
+import MaterialIcon from "material-icons-react";
+import "./Blocks.scss";
+import { setPageSate } from '../../service/blockchain/get-realtime-data';
+import diffTime from '../../service/blockchain/find-time-return';
+import { getListBlockApi } from "../../service/api/get-list-data";
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     blocks: state.handleListBlocks,
-    pageState: state.changePageState,
-  }
-}
+    pageState: state.changePageState
+  };
+};
 
-// Paging 
-const mapDispatchToProps = (dispatch) => {
-  return {
-  }
-}
+// Paging
+const mapDispatchToProps = dispatch => {
+  return {};
+};
 
 class Blocks extends Component {
-
   constructor() {
     super();
     this.state = {
       pageIndex: 1,
       blocks: [],
       list_time: []
-    }
+    };
   }
 
   componentWillMount() {
@@ -39,56 +37,69 @@ class Blocks extends Component {
 
   async componentWillReceiveProps(nextProps) {
     if (this.props !== nextProps) {
-      for (let i = 0; i < this.props.blocks.length; i ++) {
+      for (let i = 0; i < this.props.blocks.length; i++) {
         let item = this.props.blocks[i].header.height;
         let time = await diffTime(item);
-        
+
         this.state.list_time.push(time);
       }
 
       if (this.state.pageIndex === 1) {
-        handledata.getBlocks( this.props.pageState.total_blocks ,1 , 20);
+        this.getBlocksByPageIndex(1);
       }
     }
   }
 
   // Set Time For Block
   loadBlocks() {
-    let blocks = this.props.blocks && this.props.blocks.map((item, index) => {
+    const { blocks } = this.props;
+
+    return blocks.map((item, index) => {
       return (
         <tr key={index}>
-          <td><Link to={`/block/${item.header.height}`}>{item.header.height}</Link></td>
+          <td>
+            <Link to={`/block/${item.header.height}`}>
+              {item.header.height}
+            </Link>
+          </td>
           <td>{moment(item.header.time).format("MMMM-DD-YYYY h:mm:ss")}</td>
           <td>{this.state.list_time[index]}</td>
           <td>
-            {(item.header.num_txs > 0) ? <Link to={`/txs?block=${item.header.height}`}>{item.header.num_txs}</Link> : 0}
+            <Link to={`/txs?block=${item.header.height}`}>
+              {item.header.num_txs}
+            </Link>
           </td>
-          <td>VN</td>
-          <td>0 ITEA</td>
+          <td>
+            <span>{item.header.chain_id}</span>
+          </td>
+          <td>
+            <span>0 TEA</span>
+          </td>
         </tr>
-      )
-    })
-
-    return blocks
+      );
+    });
   }
 
   // Set Data By Page Index
-  getBlocksByPageIndex(pageIndex) {
-    let maxheight = this.props.pageState.total_blocks;
-
+  async getBlocksByPageIndex(pageIndex) {
     if (pageIndex <= 0) {
       pageIndex = 1;
     }
+    console.log(pageIndex);
 
     if (pageIndex >= this.props.pageState.pageBlockLimit) {
-      pageIndex = this.props.pageState.pageBlockLimit
+      pageIndex = this.props.pageState.pageBlockLimit;
     }
 
     this.setState({
       pageIndex
-    })
+    });
 
-    return handledata.getBlocks(maxheight, pageIndex, 20);
+    // return handledata.getBlocks(maxheight, pageIndex, 20);
+    getListBlockApi({
+      page_index: this.state.pageIndex,
+      page_size: this.props.pageState.pageSize
+    });
   }
 
   render() {
@@ -100,8 +111,12 @@ class Blocks extends Component {
               <h3>Blocks</h3>
               <div className="breadcrumb">
                 <ul>
-                  <li><Link to="/">Home</Link></li>
-                  <li><Link to="/blocks">Blocks</Link></li>
+                  <li>
+                    <Link to="/">Home</Link>
+                  </li>
+                  <li>
+                    <Link to="/blocks">Blocks</Link>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -117,37 +132,64 @@ class Blocks extends Component {
                     <th>Fees</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {this.loadBlocks()}
-                </tbody>
+                <tbody>{this.loadBlocks()}</tbody>
               </table>
             </div>
             <div className="pagination">
               <ul>
-                <li></li>
+                <li />
               </ul>
             </div>
             <div className="page-index">
               <div className="paging">
-                <button className="btn-common" onClick={() => { this.getBlocksByPageIndex(1) }}>First</button>
-                <button className="btn-cusor" onClick={() => { this.getBlocksByPageIndex(this.state.pageIndex - 1) }} >
+                <button
+                  className="btn-common"
+                  onClick={() => {
+                    this.getBlocksByPageIndex(1);
+                  }}
+                >
+                  First
+                </button>
+                <button
+                  className="btn-cusor"
+                  onClick={() => {
+                    this.getBlocksByPageIndex(this.state.pageIndex - 1);
+                  }}
+                >
                   <MaterialIcon icon="keyboard_arrow_left" />
                 </button>
-                <span className="state">Page {this.state.pageIndex} of {this.props.pageState.pageBlockLimit} </span>
-                <button className="btn-cusor" onClick={() => { this.getBlocksByPageIndex(this.state.pageIndex + 1) }}>
+                <span className="state">
+                  Page {this.state.pageIndex} of{" "}
+                  {this.props.pageState.pageBlockLimit}{" "}
+                </span>
+                <button
+                  className="btn-cusor"
+                  onClick={() => {
+                    this.getBlocksByPageIndex(this.state.pageIndex + 1);
+                  }}
+                >
                   <MaterialIcon icon="keyboard_arrow_right" />
                 </button>
-                <button className="btn-common" onClick={() => { this.getBlocksByPageIndex(this.props.pageState.pageBlockLimit) }}>
+                <button
+                  className="btn-common"
+                  onClick={() => {
+                    this.getBlocksByPageIndex(
+                      this.props.pageState.pageBlockLimit
+                    );
+                  }}
+                >
                   Last
                 </button>
               </div>
             </div>
           </div>
         </div>
-      </Layout >
+      </Layout>
     );
   }
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(Blocks);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Blocks);

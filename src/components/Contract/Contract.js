@@ -1,60 +1,67 @@
 import React, { Component } from 'react';
-import {  getAccountInfo } from '../../service/get-single-data';
 import Layout from '../Layout/Layout';
 import { Link } from 'react-router-dom';
-// import tweb3 from '../../tweb3';
+import CallContract from './elements/CallContract';
+import ContractDetail from './elements/ContractDetail';
+import './Contract.scss';
 
 class Contract extends Component {
-
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            balance: 0,
-            has_src: false,
-            deploy_by: null,
-            mode: null,
+            show_call: false,
+            address: false,
+            params_url: '',
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         let address = this.props.match.params.address;
-        // console.log(address);
-        this.loadData(address);
+        let {param_url}= this.state;
+
+        this._checkTxSigned();
+        this.setState({
+            address
+        })
     }
 
-    async componentWillReceiveProps(nextProps) {
-        if (this.props !== nextProps) {
-            window.location.reload();
-            this.loadData();
-        }
+    _ChangeDetail = () => {
+        this.setState({
+            show_call: true
+        })
     }
 
-    async loadData() {
-        let address = this.props.match.params.address;
-        let response = await getAccountInfo(address);
-        // console.log(response);
-
-        if (response.code !== 200) {
-            this.props.history.push('/not-found');
-        } else {
-            console.log(response)
-            this.setState({
-                balance: response.data.balance,
-                deploy_by: response.data.deployedBy,
-                has_src: response.data.hasSrc,
-                mode: response.data.mode
-            })
-        }
+    _ChangeCall = () => {
+        this.setState({
+            show_call: false
+        })
     }
+
+    _checkTxSigned = () => {
+        // let {param_url, show_call} = this.state;
+        // let search = this.props.location.search.split("?txSigned=");
+        // if (search !== ""){
+        //     show_call = true;
+        //     param_url = JSON.parse(decodeURIComponent(search[1]))
+        //     console.log(param_url)
+        // }
+        // this.setState({param_url, show_call})
+    }
+
 
     render() {
+
+        let { show_call, address, params_url } = this.state;
+
         return (
             <Layout>
-                <div className="block_page mt_50 mb_30">
+                <div className="block_info mt_50">
                     <div className="container">
-                        <div className="block_page page_info_header">
-                            <h3>Contract </h3>
-                            <span className="sub-tilter">For #{this.props.match.params.address}</span>
+                        <div className="block_info_header page_info_header">
+                            <div className="wrap">
+                                Contract
+                                <span className="id_code">#{this.props.match.params.address}</span>
+                            </div>
                             <div className="breadcrumb">
                                 <ul>
                                     <li><Link to="/">Home</Link></li>
@@ -62,30 +69,17 @@ class Contract extends Component {
                                 </ul>
                             </div>
                         </div>
-                        <div className="table_data">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th width="350">Deploy By</th>
-                                        <th width="100">Balance</th>
-                                        <th width="100">Has Src</th>
-                                        <th width="100">Mode</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th color='green'>{this.props.match.params.address}</th>
-                                        <th>{this.state.balance ? this.state.balance : 0}</th>
-                                        <th>{this.state.has_src ? this.state.has_src.toString() : "null"}</th>
-                                        <th>{this.state.mode ? this.state.mode : 'null'}</th>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div className="pagination">
-                            <ul>
-                                <li></li>
-                            </ul>
+
+                        <div className="block_content page_info_content">
+                            <div className="title">
+                                <i className="fa fa-cube"></i>
+                                <span id ='detail'>Contract Information</span>
+                                <span id={show_call === true ? 'none' : 'choose'} className='button-contract' onClick={this._ChangeCall} >Detail</span>
+                                <span id={show_call === false ? 'none' : 'choose'} className='button-contract' onClick={this._ChangeDetail}>Call</span>
+                            </div>
+                            <div className="info_body contract-content">
+                                {show_call === true ? <CallContract address={address} state={show_call} search={params_url} /> : <ContractDetail address={address} state={!show_call} />}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -94,4 +88,4 @@ class Contract extends Component {
     }
 }
 
-export default Contract;
+export default Contract;                                                                

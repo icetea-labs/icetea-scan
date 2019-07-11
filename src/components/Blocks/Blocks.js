@@ -1,46 +1,49 @@
 import React, { PureComponent } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import Layout from "../Layout/Layout";
 import moment from "moment";
-import MaterialIcon from "material-icons-react";
+import Select from "rc-select";
+import PaginationPro from "../elements/PaginationPro";
+
 import "./Blocks.scss";
 import { setPageSate } from "../../service/blockchain/get-realtime-data";
 // import diffTime from "../../service/blockchain/find-time-return";
 import { diffTime } from "../../utils";
-import { getListBlockApi } from "../../service/api/get-list-data";
+import {
+  getListBlockApi,
+  getTotalBlockApi
+} from "../../service/api/get-list-data";
 
 class Blocks extends PureComponent {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       pageIndex: 1,
-      blocks: [],
-      list_time: []
+      current: 1,
+      pageSize: 10
     };
   }
 
   componentDidMount() {
     getListBlockApi({ page_size: 10 });
-  }
-  async componentWillReceiveProps(nextProps) {
-    if (this.props !== nextProps) {
-      const { blocks } = this.props;
-
-      for (let i = 0; i < blocks.length; i++) {
-        let item = blocks[i].height;
-        let time = await diffTime(item);
-
-        this.state.list_time.push(time);
-      }
-
-      if (this.state.pageIndex === 1) {
-        this.getBlocksByPageIndex(1);
-      }
-    }
+    getTotalBlockApi();
   }
 
-  // Set Time For Block
-  loadBlocks() {
+  renderTHead() {
+    return (
+      <tr>
+        <th>Height</th>
+        <th>Time</th>
+        <th>Age</th>
+        <th>Txns</th>
+        <th>Node</th>
+        <th>Fees</th>
+      </tr>
+    );
+  }
+
+  renderTbody() {
     const { blocksInfo } = this.props;
 
     if (blocksInfo.length === 0) {
@@ -55,7 +58,6 @@ class Blocks extends PureComponent {
         </tr>
       );
     } else {
-      // console.log("blocks", blocks);
       return blocksInfo.map((item, index) => {
         return (
           <tr key={index}>
@@ -63,7 +65,7 @@ class Blocks extends PureComponent {
               <Link to={`/block/${item.height}`}>{item.height}</Link>
             </td>
             <td>{moment(item.time).format("MMMM-DD-YYYY h:mm:ss")}</td>
-            <td>{this.state.list_time[index]}</td>
+            <td>{diffTime(item.time)}</td>
             <td>
               <Link to={`/txs?block=${item.height}`}>{item.num_txs}</Link>
             </td>
@@ -79,28 +81,16 @@ class Blocks extends PureComponent {
     }
   }
 
-  // Set Data By Page Index
-  async getBlocksByPageIndex(pageIndex) {
-    if (pageIndex <= 0) {
-      pageIndex = 1;
-    }
-
-    if (pageIndex >= this.props.pageState.pageBlockLimit) {
-      pageIndex = this.props.pageState.pageBlockLimit;
-    }
-
-    this.setState({
-      pageIndex
-    });
-
-    // return handledata.getBlocks(maxheight, pageIndex, 20);
-    getListBlockApi({
-      page_index: this.state.pageIndex,
-      page_size: this.props.pageState.pageSize
-    });
-  }
+  paginationOnChange = current => {
+    // this.setState({ current });
+    const { pageSize } = this.state;
+    getListBlockApi({ page_size: pageSize, page_index: current });
+  };
 
   render() {
+    const { current, pageSize } = this.state;
+    const { totalBlocks } = this.props;
+
     return (
       <Layout>
         <div className="block_page mt_50 mb_30">
@@ -120,66 +110,19 @@ class Blocks extends PureComponent {
             </div>
             <div className="table_data">
               <table>
-                <thead>
-                  <tr>
-                    <th>Height</th>
-                    <th>Time</th>
-                    <th>Age</th>
-                    <th>Txns</th>
-                    <th>Node</th>
-                    <th>Fees</th>
-                  </tr>
-                </thead>
-                <tbody>{this.loadBlocks()}</tbody>
+                <thead>{this.renderTHead()}</thead>
+                <tbody>{this.renderTbody()}</tbody>
               </table>
             </div>
-            <div className="pagination">
-              <ul>
-                <li />
-              </ul>
-            </div>
-            {/* <div className="page-index">
-              <div className="paging">
-                <button
-                  className="btn-common"
-                  onClick={() => {
-                    this.getBlocksByPageIndex(1);
-                  }}
-                >
-                  First
-                </button>
-                <button
-                  className="btn-cusor"
-                  onClick={() => {
-                    this.getBlocksByPageIndex(this.state.pageIndex - 1);
-                  }}
-                >
-                  <MaterialIcon icon="keyboard_arrow_left" />
-                </button>
-                <span className="state">
-                  Page {this.state.pageIndex} of{" "}
-                  {this.props.pageState.pageBlockLimit}{" "}
-                </span>
-                <button
-                  className="btn-cusor"
-                  onClick={() => {
-                    this.getBlocksByPageIndex(this.state.pageIndex + 1);
-                  }}
-                >
-                  <MaterialIcon icon="keyboard_arrow_right" />
-                </button>
-                <button
-                  className="btn-common"
-                  onClick={() => {
-                    this.getBlocksByPageIndex(
-                      this.props.pageState.pageBlockLimit
-                    );
-                  }}
-                >
-                  Last
-                </button>
-              </div>
-            </div> */}
+            <PaginationPro
+              selectComponentClass={Select}
+              showQuickJumper={false}
+              showSizeChanger={false}
+              defaultPageSize={pageSize}
+              defaultCurrent={current}
+              onChange={this.paginationOnChange}
+              total={totalBlocks}
+            />
           </div>
         </div>
       </Layout>
@@ -187,4 +130,15 @@ class Blocks extends PureComponent {
   }
 }
 
-export default Blocks;
+const mapStateToProps = state => {
+  const { chainInfo } = state;
+  return {
+    blocksInfo: chainInfo.blocks,
+    totalBlocks: chainInfo.totalBlocks
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(Blocks);

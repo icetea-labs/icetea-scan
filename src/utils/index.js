@@ -11,6 +11,13 @@ export function toUNIT(tea) {
   return resp * 10 ** decimal;
 }
 export function diffTime(time) {
+  // Set new thresholds
+  moment.relativeTimeThreshold("s", 60);
+  moment.relativeTimeThreshold("m", 60);
+  moment.relativeTimeThreshold("h", 20);
+  // moment.relativeTimeThreshold("d", 25);
+  // moment.relativeTimeThreshold("M", 10);
+
   moment.updateLocale("en", {
     relativeTime: {
       future: "in %s",

@@ -2,9 +2,9 @@ import { actionTypes } from "../actions/chainInfo";
 
 const initialState = {
   blocks: [],
-  totalBlocks: 10,
+  totalBlocks: 0,
   transactions: [],
-  totalTx: 10,
+  totalTx: 0,
   totalContract: 0
 };
 
@@ -21,6 +21,14 @@ const chainInfo = (state = initialState, action) => {
     case actionTypes.SET_TOTAL_CONTRACT:
       return Object.assign({}, state, {
         totalContract: action.data
+      });
+    case actionTypes.SET_TOTAL_BLOCK:
+      return Object.assign({}, state, {
+        totalBlocks: action.data
+      });
+    case actionTypes.SET_TOTAL_TRANSACTIONS:
+      return Object.assign({}, state, {
+        totalTx: action.data
       });
     default:
       return state;

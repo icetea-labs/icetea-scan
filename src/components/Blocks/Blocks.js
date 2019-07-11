@@ -6,7 +6,8 @@ import moment from "moment";
 import MaterialIcon from "material-icons-react";
 import "./Blocks.scss";
 import { setPageSate } from "../../service/blockchain/get-realtime-data";
-import diffTime from "../../service/blockchain/find-time-return";
+// import diffTime from "../../service/blockchain/find-time-return";
+import { diffTime } from "../../utils";
 import { getListBlockApi } from "../../service/api/get-list-data";
 
 class Blocks extends Component {

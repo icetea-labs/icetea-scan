@@ -7,23 +7,23 @@ import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 // import { store } from "./service/blockchain/init-store";
 import store from "./service/store";
-import { getRealTimeData } from "./service/blockchain/get-realtime-data";
-import { env } from "./evironment/env";
+// import { getRealTimeData } from "./service/blockchain/get-realtime-data";
+// import { env } from "./evironment/env";
 
-const times = 1000;
+// const times = 1000;
 
-if (env === "testing") {
-  setTimeout(() => {
-    getRealTimeData();
-  }, times);
-} else {
-  setTimeout(() => {
-    getRealTimeData();
-  }, 1);
-  setInterval(() => {
-    getRealTimeData();
-  }, times);
-}
+// if (env === "testing") {
+//   setTimeout(() => {
+//     getRealTimeData();
+//   }, times);
+// } else {
+//   setTimeout(() => {
+//     getRealTimeData();
+//   }, 1);
+//   setInterval(() => {
+//     getRealTimeData();
+//   }, times);
+// }
 
 ReactDOM.render(
   <Provider store={store}>

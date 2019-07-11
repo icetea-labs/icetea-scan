@@ -4,13 +4,29 @@ import Banner from "./elements/Banner";
 import BlocksBox from "../Blocks/BlocksBox";
 import TransactionsBox from "../Transactions/TransactionsBox";
 import ChainValue from "../ChainValue/ChainValue";
+import {
+  getListBlockApi,
+  getListTxApi
+} from "../../service//api/get-list-data";
 
+let interval = null;
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
       is_loading: true
     };
+  }
+
+  componentDidMount() {
+    interval = setInterval(() => {
+      getListBlockApi();
+      getListTxApi();
+    }, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(interval);
   }
 
   render() {

@@ -1,55 +1,45 @@
-import React, { Component } from "react";
-import "./TotalChain.scss";
+import React, { PureComponent } from "react";
+import "./ChainInfo.scss";
 import { connect } from "react-redux";
 import moment from "moment";
-import { getAllContracts } from "../../../service/blockchain/get-single-data";
 
-class TotalChain extends Component {
-  _isMounted = false;
-
-  constructor() {
-    super();
+class ChainInfo extends PureComponent {
+  constructor(props) {
+    super(props);
     this.state = {
-      data: null,
       time: null,
       height: 0,
       total_txs: 0,
       total_accounts: 0
     };
-
-    this.time = null;
   }
 
-  async componentWillReceiveProps() {
-    const { blocksInfo } = this.props;
-    this._isMounted = true;
-    let res = await getAllContracts();
-    // let total_accounts;
-
-    // if (res.code === 200) {
-    //   total_accounts = res.data.length;
-    // }
-    if (blocksInfo.length !== 0 && this._isMounted) {
-      this.setState({
-        time: blocksInfo[0].time,
-        height: blocksInfo[0].height,
-        total_txs: blocksInfo[0].total_txs,
-        total_accounts: res && res.data.length
-      });
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (
+      nextProps.blocksInfo.length > 0 &&
+      nextProps.blocksInfo !== prevState.blocksInfo
+    ) {
+      return {
+        time: nextProps.blocksInfo[0].time,
+        height: nextProps.blocksInfo[0].height,
+        total_txs: nextProps.blocksInfo[0].total_txs,
+        total_accounts: nextProps.totalContract
+      };
+    } else {
+      return null;
     }
   }
 
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
-
   render() {
+    // console.log("render ChainInfo");
+    const { time } = this.state;
+
     return (
       <div className="total-chain">
         <ul>
           <li>
             <p className="info-stamp">
-              {moment(this.state.time).format("DD/MM/YYYY HH:mm:ss")}
+              {moment(time).format("DD/MM/YYYY HH:mm:ss")}
             </p>
             <p>Time of last block</p>
           </li>
@@ -74,11 +64,12 @@ class TotalChain extends Component {
 const mapStateToProps = state => {
   const { chainInfo } = state;
   return {
-    blocksInfo: chainInfo.blocks
+    blocksInfo: chainInfo.blocks,
+    totalContract: chainInfo.totalContract
   };
 };
 
 export default connect(
   mapStateToProps,
   null
-)(TotalChain);
+)(ChainInfo);

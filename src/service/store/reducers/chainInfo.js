@@ -4,7 +4,8 @@ const initialState = {
   blocks: [],
   totalBlocks: 10,
   transactions: [],
-  totalTx: 10
+  totalTx: 10,
+  totalContract: 0
 };
 
 const chainInfo = (state = initialState, action) => {
@@ -16,6 +17,10 @@ const chainInfo = (state = initialState, action) => {
     case actionTypes.SET_TRANSACTIONS:
       return Object.assign({}, state, {
         transactions: action.data
+      });
+    case actionTypes.SET_TOTAL_CONTRACT:
+      return Object.assign({}, state, {
+        totalContract: action.data
       });
     default:
       return state;

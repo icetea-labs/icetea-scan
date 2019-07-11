@@ -3,11 +3,13 @@ import Layout from "../Layout/Layout";
 import Banner from "./elements/Banner";
 import BlocksBox from "../Blocks/BlocksBox";
 import TransactionsBox from "../Transactions/TransactionsBox";
-import ChainValue from "../ChainValue/ChainValue";
+import ChainInfo from "./elements/ChainInfo";
+
 import {
   getListBlockApi,
   getListTxApi
 } from "../../service//api/get-list-data";
+// import { getAllContracts } from "../../../service/blockchain/get-single-data";
 
 let interval = null;
 class Home extends Component {
@@ -20,8 +22,8 @@ class Home extends Component {
 
   componentDidMount() {
     interval = setInterval(() => {
-      getListBlockApi();
-      getListTxApi();
+      getListBlockApi({ page_size: 10 });
+      getListTxApi({ page_size: 10 });
     }, 1000);
   }
 
@@ -37,7 +39,7 @@ class Home extends Component {
           <div className="blocks_transactions_view">
             <div className="container">
               <div className="chain-value">
-                <ChainValue />
+                <ChainInfo />
               </div>
               <div className="flex">
                 <BlocksBox />

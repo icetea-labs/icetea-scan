@@ -4,11 +4,6 @@ import { connect } from "react-redux";
 import moment from "moment";
 import { getAllContracts } from "../../../service/blockchain/get-single-data";
 
-const mapStateToProps = state => {
-  return {
-    blocks: state.getRealTimeData.blocks
-  };
-};
 class TotalChain extends Component {
   _isMounted = false;
 
@@ -26,7 +21,7 @@ class TotalChain extends Component {
   }
 
   async componentWillReceiveProps() {
-    const { blocks } = this.props;
+    const { blocksInfo } = this.props;
     this._isMounted = true;
     let res = await getAllContracts();
     // let total_accounts;
@@ -34,11 +29,11 @@ class TotalChain extends Component {
     // if (res.code === 200) {
     //   total_accounts = res.data.length;
     // }
-    if (blocks.length !== 0 && this._isMounted) {
+    if (blocksInfo.length !== 0 && this._isMounted) {
       this.setState({
-        time: blocks[0].header.time,
-        height: blocks[0].header.height,
-        total_txs: blocks[0].header.total_txs,
+        time: blocksInfo[0].time,
+        height: blocksInfo[0].height,
+        total_txs: blocksInfo[0].total_txs,
         total_accounts: res && res.data.length
       });
     }
@@ -76,4 +71,14 @@ class TotalChain extends Component {
   }
 }
 
-export default connect(mapStateToProps)(TotalChain);
+const mapStateToProps = state => {
+  const { chainInfo } = state;
+  return {
+    blocksInfo: chainInfo.blocks
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(TotalChain);

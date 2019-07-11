@@ -5,21 +5,9 @@ import Layout from "../Layout/Layout";
 import moment from "moment";
 import MaterialIcon from "material-icons-react";
 import "./Blocks.scss";
-import { setPageSate } from '../../service/blockchain/get-realtime-data';
-import diffTime from '../../service/blockchain/find-time-return';
+import { setPageSate } from "../../service/blockchain/get-realtime-data";
+import diffTime from "../../service/blockchain/find-time-return";
 import { getListBlockApi } from "../../service/api/get-list-data";
-
-const mapStateToProps = state => {
-  return {
-    blocks: state.handleListBlocks,
-    pageState: state.changePageState
-  };
-};
-
-// Paging
-const mapDispatchToProps = dispatch => {
-  return {};
-};
 
 class Blocks extends Component {
   constructor() {
@@ -37,8 +25,10 @@ class Blocks extends Component {
 
   async componentWillReceiveProps(nextProps) {
     if (this.props !== nextProps) {
-      for (let i = 0; i < this.props.blocks.length; i++) {
-        let item = this.props.blocks[i].header.height;
+      const { blocks } = this.props;
+
+      for (let i = 0; i < blocks.length; i++) {
+        let item = blocks[i].height;
         let time = await diffTime(item);
 
         this.state.list_time.push(time);
@@ -54,30 +44,40 @@ class Blocks extends Component {
   loadBlocks() {
     const { blocks } = this.props;
 
-    return blocks.map((item, index) => {
+    if (blocks.length === 0) {
       return (
-        <tr key={index}>
-          <td>
-            <Link to={`/block/${item.header.height}`}>
-              {item.header.height}
-            </Link>
-          </td>
-          <td>{moment(item.header.time).format("MMMM-DD-YYYY h:mm:ss")}</td>
-          <td>{this.state.list_time[index]}</td>
-          <td>
-            <Link to={`/txs?block=${item.header.height}`}>
-              {item.header.num_txs}
-            </Link>
-          </td>
-          <td>
-            <span>{item.header.chain_id}</span>
-          </td>
-          <td>
-            <span>0 TEA</span>
-          </td>
+        <tr className="no_data">
+          <th />
+          <th />
+          <th />
+          <th>No Data</th>
+          <th />
+          <th />
         </tr>
       );
-    });
+    } else {
+      // console.log("blocks", blocks);
+      return blocks.map((item, index) => {
+        return (
+          <tr key={index}>
+            <td>
+              <Link to={`/block/${item.height}`}>{item.height}</Link>
+            </td>
+            <td>{moment(item.time).format("MMMM-DD-YYYY h:mm:ss")}</td>
+            <td>{this.state.list_time[index]}</td>
+            <td>
+              <Link to={`/txs?block=${item.height}`}>{item.num_txs}</Link>
+            </td>
+            <td>
+              <span>{item.chain_id}</span>
+            </td>
+            <td>
+              <span>0 TEA</span>
+            </td>
+          </tr>
+        );
+      });
+    }
   }
 
   // Set Data By Page Index
@@ -85,7 +85,6 @@ class Blocks extends Component {
     if (pageIndex <= 0) {
       pageIndex = 1;
     }
-    console.log(pageIndex);
 
     if (pageIndex >= this.props.pageState.pageBlockLimit) {
       pageIndex = this.props.pageState.pageBlockLimit;
@@ -188,6 +187,18 @@ class Blocks extends Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    blocks: state.handleListBlocks,
+    pageState: state.changePageState
+  };
+};
+
+// Paging
+const mapDispatchToProps = dispatch => {
+  return {};
+};
 
 export default connect(
   mapStateToProps,

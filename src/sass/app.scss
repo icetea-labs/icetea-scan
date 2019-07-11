@@ -111,6 +111,9 @@
         }
       }
     }
+    .row_blocks:hover {
+      background-color: rgba(234, 236, 239, 0.2);
+    }
   }
 
   .transactions_box {
@@ -188,6 +191,17 @@
       color: $color_secondary;
     }
   }
+
+  /* Handle */
+  .box_wrap::-webkit-scrollbar-thumb {
+    background: #dfe2e7;
+  }
+
+  /* Handle on hover */
+  .box_wrap::-webkit-scrollbar-thumb:hover {
+    background: #848e9c;
+  }
+
   .header_top {
     display: flex;
     justify-content: space-between;

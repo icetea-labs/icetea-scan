@@ -1,0 +1,87 @@
+import React, { PureComponent } from "react";
+import { Link } from "react-router-dom";
+import { diffTime } from "../../../utils";
+import "./TransactionsBox.scss";
+
+class TransactionsBox extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      cssIcon: "fa bi-spin fa-list-alt"
+    };
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (prevState.cssIcon.indexOf("bi-spin") === -1) {
+      return { cssIcon: "fa bi-spin fa-list-alt" };
+    } else {
+      return { cssIcon: "fa fa-list-alt" };
+    }
+  }
+
+  convertDataOp(op) {
+    if (op === 0) {
+      return "deploy";
+    } else if (op === 1) {
+      return "call";
+    }
+    return "transfer";
+  }
+
+  renderTransactions = () => {
+    const { transactionsInfo } = this.props;
+
+    return transactionsInfo.map((item, index) => {
+      return (
+        <div className="row_transactions" key={index}>
+          <div className="info_tx flex">
+            <div className="tx">
+              <span>TX#:</span>
+              <Link to={`/tx/${item.hash}`}>{item.hash}</Link>
+            </div>
+            <div className="seconds_time">{diffTime(item.time)}</div>
+          </div>
+          <div className="transactions flex">
+            <div className="from_to">
+              <div className="from">
+                <span>From: </span>
+                <Link to={`/address/${item.from}`}>
+                  {item.from ? item.from : "--"}
+                </Link>
+              </div>
+              <div className="to">
+                <span>To: </span>
+                <Link to={`/address/${item.to}`}>
+                  {item.to ? item.to : "--"}
+                </Link>
+              </div>
+            </div>
+            <div className="status_order">
+              <i className="fa fa-circle" />
+              <span>{this.convertDataOp(item.data_op)}</span>
+            </div>
+          </div>
+        </div>
+      );
+    });
+  };
+
+  render() {
+    const { cssIcon } = this.state;
+
+    return (
+      <div className="transactions_box">
+        <div className="header_top">
+          <div className="title">
+            <i className={cssIcon} />
+            <span>Transactions</span>
+          </div>
+          <Link to="/txs">View All →</Link>
+        </div>
+        <div className="box_wrap">{this.renderTransactions()}</div>
+      </div>
+    );
+  }
+}
+
+export default TransactionsBox;

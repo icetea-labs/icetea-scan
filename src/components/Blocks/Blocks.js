@@ -1,14 +1,11 @@
 import React, { PureComponent } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import Layout from "../Layout/Layout";
 import moment from "moment";
 import Select from "rc-select";
 import PaginationPro from "../elements/PaginationPro";
-
+import Layout from "../Layout/Layout";
 import "./Blocks.scss";
-import { setPageSate } from "../../service/blockchain/get-realtime-data";
-// import diffTime from "../../service/blockchain/find-time-return";
 import { diffTime } from "../../utils";
 import {
   getListBlockApi,
@@ -19,14 +16,14 @@ class Blocks extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      pageIndex: 1,
       current: 1,
       pageSize: 10
     };
   }
 
   componentDidMount() {
-    getListBlockApi({ page_size: 10 });
+    const { pageSize } = this.state;
+    getListBlockApi({ page_size: pageSize });
     getTotalBlockApi();
   }
 

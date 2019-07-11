@@ -4,7 +4,7 @@ const initialState = {
   blocks: [],
   totalBlocks: 0,
   transactions: [],
-  totalTx: 0,
+  totalTxs: 0,
   totalContract: 0
 };
 
@@ -28,7 +28,7 @@ const chainInfo = (state = initialState, action) => {
       });
     case actionTypes.SET_TOTAL_TRANSACTIONS:
       return Object.assign({}, state, {
-        totalTx: action.data
+        totalTxs: action.data
       });
     default:
       return state;

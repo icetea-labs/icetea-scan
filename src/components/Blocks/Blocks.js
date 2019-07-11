@@ -1,6 +1,5 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
 import Layout from "../Layout/Layout";
 import moment from "moment";
 import MaterialIcon from "material-icons-react";
@@ -10,7 +9,7 @@ import { setPageSate } from "../../service/blockchain/get-realtime-data";
 import { diffTime } from "../../utils";
 import { getListBlockApi } from "../../service/api/get-list-data";
 
-class Blocks extends Component {
+class Blocks extends PureComponent {
   constructor() {
     super();
     this.state = {
@@ -20,10 +19,9 @@ class Blocks extends Component {
     };
   }
 
-  componentWillMount() {
-    setPageSate();
+  componentDidMount() {
+    getListBlockApi({ page_size: 10 });
   }
-
   async componentWillReceiveProps(nextProps) {
     if (this.props !== nextProps) {
       const { blocks } = this.props;
@@ -43,9 +41,9 @@ class Blocks extends Component {
 
   // Set Time For Block
   loadBlocks() {
-    const { blocks } = this.props;
+    const { blocksInfo } = this.props;
 
-    if (blocks.length === 0) {
+    if (blocksInfo.length === 0) {
       return (
         <tr className="no_data">
           <th />
@@ -58,7 +56,7 @@ class Blocks extends Component {
       );
     } else {
       // console.log("blocks", blocks);
-      return blocks.map((item, index) => {
+      return blocksInfo.map((item, index) => {
         return (
           <tr key={index}>
             <td>
@@ -140,7 +138,7 @@ class Blocks extends Component {
                 <li />
               </ul>
             </div>
-            <div className="page-index">
+            {/* <div className="page-index">
               <div className="paging">
                 <button
                   className="btn-common"
@@ -181,7 +179,7 @@ class Blocks extends Component {
                   Last
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </Layout>
@@ -189,19 +187,4 @@ class Blocks extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    blocks: state.handleListBlocks,
-    pageState: state.changePageState
-  };
-};
-
-// Paging
-const mapDispatchToProps = dispatch => {
-  return {};
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Blocks);
+export default Blocks;

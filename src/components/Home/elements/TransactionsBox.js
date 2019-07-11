@@ -1,10 +1,9 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { diffTime } from "../../utils";
+import { diffTime } from "../../../utils";
 import "./TransactionsBox.scss";
 
-class TransactionsBox extends Component {
+class TransactionsBox extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -85,15 +84,4 @@ class TransactionsBox extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  const { chainInfo } = state;
-  return {
-    transactionsInfo: chainInfo.transactions,
-    hashId: state.HashIdChange
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  null
-)(TransactionsBox);
+export default TransactionsBox;

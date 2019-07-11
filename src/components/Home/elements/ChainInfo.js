@@ -1,6 +1,5 @@
 import React, { PureComponent } from "react";
 import "./ChainInfo.scss";
-import { connect } from "react-redux";
 import moment from "moment";
 
 class ChainInfo extends PureComponent {
@@ -32,7 +31,7 @@ class ChainInfo extends PureComponent {
 
   render() {
     // console.log("render ChainInfo");
-    const { time } = this.state;
+    const { time, height, total_txs, total_accounts } = this.state;
 
     return (
       <div className="total-chain">
@@ -44,15 +43,15 @@ class ChainInfo extends PureComponent {
             <p>Time of last block</p>
           </li>
           <li>
-            <p className="info-stamp"># {this.state.height}</p>
+            <p className="info-stamp"># {height}</p>
             <p>Height Block</p>
           </li>
           <li>
-            <p className="info-stamp">{this.state.total_txs}</p>
+            <p className="info-stamp">{total_txs}</p>
             <p>Total Transactions Counter</p>
           </li>
           <li>
-            <p className="info-stamp">{this.state.total_accounts}</p>
+            <p className="info-stamp">{total_accounts}</p>
             <p>Total Accounts</p>
           </li>
         </ul>
@@ -61,15 +60,4 @@ class ChainInfo extends PureComponent {
   }
 }
 
-const mapStateToProps = state => {
-  const { chainInfo } = state;
-  return {
-    blocksInfo: chainInfo.blocks,
-    totalContract: chainInfo.totalContract
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  null
-)(ChainInfo);
+export default ChainInfo;

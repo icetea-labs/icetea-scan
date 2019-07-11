@@ -1,10 +1,9 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { diffTime } from "../../utils";
-
+import { diffTime } from "../../../utils";
 import "./BlocksBox.scss";
-class BlocksBox extends Component {
+
+class BlocksBox extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -69,15 +68,4 @@ class BlocksBox extends Component {
   }
 }
 
-// get data block
-const mapStateToProps = state => {
-  const { chainInfo } = state;
-  return {
-    blocksInfo: chainInfo.blocks
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  null
-)(BlocksBox);
+export default BlocksBox;

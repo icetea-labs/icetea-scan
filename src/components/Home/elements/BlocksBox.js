@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import { diffTime } from "../../../utils";
 import "./BlocksBox.scss";
 
@@ -35,7 +36,7 @@ class BlocksBox extends PureComponent {
           <div className="includes flex">
             <div className="in_detail">
               <span>Includes</span>
-              <Link to={`/txs?block=${block.height}`}>
+              <Link to={`/txs?height=${block.height}`}>
                 <span> {block.num_txs} Txns</span>
               </Link>
             </div>
@@ -68,4 +69,14 @@ class BlocksBox extends PureComponent {
   }
 }
 
-export default BlocksBox;
+const mapStateToProps = state => {
+  const { chainInfo } = state;
+  return {
+    blocksInfo: chainInfo.blocks
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(BlocksBox);

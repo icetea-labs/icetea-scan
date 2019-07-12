@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import Layout from "../Layout/Layout";
 import Banner from "./elements/Banner";
 import BlocksBox from "./elements/BlocksBox";
@@ -14,17 +13,17 @@ import {
 
 let interval = null;
 class Home extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      is_loading: true
-    };
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     is_loading: true
+  //   };
+  // }
 
   componentDidMount() {
     interval = setInterval(() => {
       getListBlockApi({ page_size: 10 });
-      // getListTxApi({ page_size: 10 });
+      getListTxApi({ page_size: 10 });
     }, 1000);
   }
 
@@ -33,8 +32,7 @@ class Home extends Component {
   }
 
   render() {
-    const { blocksInfo, transactionsInfo, totalContract } = this.props;
-
+    // const { blocksInfo, transactionsInfo, totalContract } = this.props;
     return (
       <Layout>
         <div className="home">
@@ -42,14 +40,11 @@ class Home extends Component {
           <div className="blocks_transactions_view">
             <div className="container">
               <div className="chain-value">
-                <ChainInfo
-                  totalContract={totalContract}
-                  blocksInfo={blocksInfo}
-                />
+                <ChainInfo />
               </div>
               <div className="flex">
-                <BlocksBox blocksInfo={blocksInfo} />
-                <TransactionsBox transactionsInfo={transactionsInfo} />
+                <BlocksBox />
+                <TransactionsBox />
               </div>
             </div>
           </div>
@@ -59,16 +54,4 @@ class Home extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  const { chainInfo } = state;
-  return {
-    blocksInfo: chainInfo.blocks,
-    transactionsInfo: chainInfo.transactions,
-    totalContract: chainInfo.totalContract
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  null
-)(Home);
+export default Home;

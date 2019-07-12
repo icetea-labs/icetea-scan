@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import Layout from "../Layout/Layout";
@@ -161,15 +160,5 @@ class BlockInfo extends Component {
     );
   }
 }
-const mapStateToProps = state => {
-  const { chainInfo } = state;
-  return {
-    blocksInfo: chainInfo.blocks,
-    totalBlocks: chainInfo.totalBlocks
-  };
-};
 
-export default connect(
-  mapStateToProps,
-  null
-)(BlockInfo);
+export default BlockInfo;

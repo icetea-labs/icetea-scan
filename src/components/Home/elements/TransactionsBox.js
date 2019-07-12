@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import { diffTime, convertTxType } from "../../../utils";
 import "./TransactionsBox.scss";
 
@@ -75,4 +76,14 @@ class TransactionsBox extends PureComponent {
   }
 }
 
-export default TransactionsBox;
+const mapStateToProps = state => {
+  const { chainInfo } = state;
+  return {
+    transactionsInfo: chainInfo.transactions
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(TransactionsBox);

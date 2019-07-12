@@ -1,30 +1,12 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
 import { diffTime, convertTxType } from "../../utils";
 import Layout from "../Layout/Layout";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-// import * as findTime from "../../service/blockchain/find-time-return";
 import "./TransactionsInfo.scss";
-// import moment from "moment";
-// import tweb3 from "../../tweb3";
-// import {
-//   getMetadataContract,
-//   getDataTransaction,
-//   getDataContract
-// } from "../../service/get-single-data";
-// import { formatData } from "../../service/format-data";
 import notifi from "../elements/Notification";
 import { _get } from "../../service/api/base-api";
 import { singleTx } from "../../service/api/list-api";
-import moment from "moment";
-
-const mapStateToProps = state => {
-  return {
-    transactions: state.handleTransactions,
-    blocks: state.Blocks
-  };
-};
 
 class TransactionsInfo extends Component {
   constructor(props) {
@@ -67,41 +49,6 @@ class TransactionsInfo extends Component {
     }
   }
 
-  // async componentWillMount() {
-  //   let hashId = this.props.match.params.hashId;
-  //   let res_tx = await _get(null, singleTx + "/" + hashId);
-  //   let res_data;
-  //   let tx_data;
-  //   let diffTime;
-  //   let time;
-  //   let height;
-  //   let list_src = [];
-  //   let txStatus;
-  //   let txType;
-  //   // let src = "";
-
-  //   if (res_tx.status === 200) {
-  //     res_data = res_tx.data;
-  //     tx_data = res_data[0];
-  //     height = tx_data.height;
-  //     time = moment(tx_data.time).format("DD/MM/YYYY HH:mm:ss");
-  //     // src = tx_data.data_src;
-  //     diffTime = await findTime.diffTime(tx_data.time);
-  //     if (tx_data) {
-  //       txStatus = tx_data.result_code === null ? "Error" : "Success";
-  //       txType = "transfer";
-  //       if (tx_data) {
-  //         if (tx_data.data_op === 0) {
-  //           txType = "deploy";
-  //         } else if (tx_data.data_op === 1) {
-  //           txType = "call";
-  //         }
-  //       }
-  //     }
-  //   }
-
-  // }
-
   render() {
     const {
       hash,
@@ -117,6 +64,7 @@ class TransactionsInfo extends Component {
       nonce,
       returnvalue
     } = this.state;
+
     return (
       <Layout>
         <div className="transaction_info mt_50">
@@ -270,4 +218,5 @@ class TransactionsInfo extends Component {
     );
   }
 }
-export default connect(mapStateToProps)(TransactionsInfo);
+
+export default TransactionsInfo;

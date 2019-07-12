@@ -29,9 +29,9 @@ class Address extends Component {
   async loadData() {
     let address = this.props.match.params.address;
     let response = await getAccountInfo(address);
-    // console.log(response);
+    console.log(response);
 
-    if (response.code !== 200) {
+    if (response.status !== 200) {
       this.props.history.push("/not-found");
     } else {
       let mode = response.data.mode;
@@ -73,7 +73,7 @@ class Address extends Component {
             <div className="block_content page_info_content">
               <div className="title">
                 <i className="fa fa-cube" />
-                <span>Contract Information</span>
+                <span>Address Information</span>
               </div>
               <div className="info_body">
                 <div className="row_detail">

@@ -37,13 +37,13 @@ class TransactionsBox extends PureComponent {
             <div className="from_to">
               <div className="from">
                 <span>From: </span>
-                <Link to={`/address/${item.from}`}>
+                <Link to={`/contract/${item.from}`}>
                   {item.from ? item.from : "--"}
                 </Link>
               </div>
               <div className="to">
                 <span>To: </span>
-                <Link to={`/address/${item.to}`}>
+                <Link to={`/contract/${item.to}`}>
                   {item.to ? item.to : "--"}
                 </Link>
               </div>

@@ -4,38 +4,68 @@ import { Link } from "react-router-dom";
 import CallContract from "./elements/CallContract";
 import ContractDetail from "./elements/ContractDetail";
 import "./Contract.scss";
-
+import Tabs, { TabPane } from "rc-tabs";
+import TabContent from "rc-tabs/lib/TabContent";
+import ScrollableInkTabBar from "rc-tabs/lib/ScrollableInkTabBar";
+import "rc-tabs/assets/index.css";
+import {
+  getAccountInfo,
+  getMetadataContract
+} from "../../service/blockchain/get-single-data";
+const defaultTabKey = "1";
 class Contract extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_call: false,
-      address: false,
-      params_url: ""
+      isContractAddress: false,
+      address: "",
+      params_url: "",
+      addresDetail: {},
+      metadata: {}
     };
   }
 
-  componentWillMount() {
-    let address = this.props.match.params.address;
-    let { param_url } = this.state;
-
-    this._checkTxSigned();
-    this.setState({
-      address
-    });
+  componentDidMount() {
+    // const address = this.props.match.params.address;
+    // let { param_url } = this.state;
+    // this._checkTxSigned();
+    // this.setState({ address });
+    const address = this.props.match.params.address;
+    this.loadData(address);
   }
 
-  _ChangeDetail = () => {
-    this.setState({
-      show_call: true
-    });
-  };
+  async loadData(address) {
+    const addressInfoResp = await getAccountInfo(address);
+    let isContract = false;
+    let metadataResp = {};
+    // console.log("addressInfoResp", addressInfoResp);
+    if (addressInfoResp && addressInfoResp.data.deployedBy) {
+      metadataResp = await getMetadataContract(address);
+      isContract = true;
+    } else {
+      isContract = false;
+    }
 
-  _ChangeCall = () => {
     this.setState({
-      show_call: false
+      isContractAddress: isContract,
+      addresDetail: addressInfoResp.data || {},
+      metadata: metadataResp.data || {}
     });
-  };
+
+    console.log("response", addressInfoResp);
+    // console.log("res_metadata", metadataContractResp);
+  }
+  // _ChangeDetail = () => {
+  //   this.setState({
+  //     show_call: true
+  //   });
+  // };
+
+  // _ChangeCall = () => {
+  //   this.setState({
+  //     show_call: false
+  //   });
+  // };
 
   _checkTxSigned = () => {
     // let {param_url, show_call} = this.state;
@@ -48,8 +78,20 @@ class Contract extends Component {
     // this.setState({param_url, show_call})
   };
 
+  tabOnChange = value => {
+    console.log(`selected ${value}`);
+  };
+
   render() {
-    let { show_call, address, params_url } = this.state;
+    const {
+      show_call,
+      params_url,
+      isContractAddress,
+      addresDetail,
+      metadata
+    } = this.state;
+    const address = this.props.match.params.address;
+    // console.log("isContractAddress", isContractAddress);
 
     return (
       <Layout>
@@ -58,9 +100,7 @@ class Contract extends Component {
             <div className="block_info_header page_info_header">
               <div className="wrap">
                 <span className="wrap-title">Contract</span>
-                <span className="id_code">
-                  #{this.props.match.params.address}
-                </span>
+                <span className="id_code">{address}</span>
               </div>
               <div className="breadcrumb">
                 <ul>
@@ -75,7 +115,7 @@ class Contract extends Component {
             </div>
 
             <div className="block_content page_info_content">
-              <div className="title">
+              {/* <div className="title">
                 <i className="fa fa-cube" />
                 <span id="detail">Contract Information</span>
                 <span
@@ -92,9 +132,10 @@ class Contract extends Component {
                 >
                   Call
                 </span>
-              </div>
+              </div> */}
+
               <div className="info_body contract-content">
-                {show_call === true ? (
+                {/* {show_call === true ? (
                   <CallContract
                     address={address}
                     state={show_call}
@@ -102,7 +143,36 @@ class Contract extends Component {
                   />
                 ) : (
                   <ContractDetail address={address} state={!show_call} />
-                )}
+                )} */}
+                <Tabs
+                  defaultActiveKey={defaultTabKey}
+                  destroyInactiveTabPane
+                  renderTabBar={() => <ScrollableInkTabBar />}
+                  renderTabContent={() => <TabContent />}
+                  onChange={this.tabOnChange}
+                >
+                  <TabPane tab="Detail" key="1" placeholder="loading Detail">
+                    <ContractDetail
+                      address={address}
+                      addresDetail={addresDetail}
+                      metadata={metadata}
+                    />
+                  </TabPane>
+                  {isContractAddress && (
+                    <TabPane
+                      tab="Call Contract"
+                      key="2"
+                      placeholder="loading Call"
+                    >
+                      <CallContract
+                        address={address}
+                        state={show_call}
+                        search={params_url}
+                        metadata={metadata}
+                      />
+                    </TabPane>
+                  )}
+                </Tabs>
               </div>
             </div>
           </div>

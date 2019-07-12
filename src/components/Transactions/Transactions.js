@@ -94,14 +94,14 @@ class Transactions extends Component {
             <td className="statusTx">{convertTxType(item.data_op)}</td>
             <td className="text_overflow">
               {item.from ? (
-                <Link to={`/address/${item.from}`}>{item.from}</Link>
+                <Link to={`/contract/${item.from}`}>{item.from}</Link>
               ) : (
                 <span>--</span>
               )}
             </td>
             <td className="text_overflow">
               {item.to ? (
-                <Link to={`/address/${item.to}`}>{item.to}</Link>
+                <Link to={`/contract/${item.to}`}>{item.to}</Link>
               ) : (
                 <span>--</span>
               )}

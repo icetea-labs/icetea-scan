@@ -90,9 +90,7 @@ export const getAccountInfo = async address => {
   let info = null;
 
   try {
-    info = await tweb3.getAccountInfo(
-      "teat1t766tnnlcd3937rrlxjld9vzhcpxr5qwh8sqhq"
-    );
+    info = await tweb3.getAccountInfo(address);
     if (info !== null) {
       return { msg: "ok", data: info, status: 200 };
     }

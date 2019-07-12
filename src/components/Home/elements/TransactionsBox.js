@@ -48,10 +48,7 @@ class TransactionsBox extends PureComponent {
                 </Link>
               </div>
             </div>
-            <div className="status_order">
-              <i className="fa fa-circle" />
-              <span>{convertTxType(item.data_op)}</span>
-            </div>
+            <div className="statusTx">{convertTxType(item.data_op)}</div>
           </div>
         </div>
       );

@@ -165,16 +165,6 @@
             overflow: hidden;
           }
         }
-        .status_order {
-          color: $color_primary;
-          text-transform: capitalize;
-          & i {
-            color: green;
-            font-size: 7px;
-            margin-right: 5px;
-            vertical-align: middle;
-          }
-        }
         a {
           color: $color_secondary;
           font-weight: 500;
@@ -412,9 +402,6 @@
   }
   td {
     padding: 11px 16px;
-    &.tx_type {
-      text-transform: capitalize;
-    }
     &.text_overflow {
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -425,4 +412,22 @@
 
 .id_code {
   margin-right: 30px;
+}
+.statusTx {
+  color: $color_primary;
+  text-transform: capitalize;
+  & i {
+    font-size: 7px;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+  .deploy {
+    color: #d881ee;
+  }
+  .transfer {
+    color: #00c087;
+  }
+  .call {
+    color: #4a90e2;
+  }
 }

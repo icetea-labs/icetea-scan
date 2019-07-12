@@ -7,7 +7,11 @@ import "./Transactions.scss";
 import moment from "moment";
 import Select from "rc-select";
 import PaginationPro from "../elements/PaginationPro";
-import { getListTxApi, getTotalTxsApi } from "../../service/api/get-list-data";
+import {
+  getListTxApi,
+  getTotalTxsApi,
+  getTotalTxsByHeighApi
+} from "../../service/api/get-list-data";
 
 class Transactions extends Component {
   constructor(props) {
@@ -30,6 +34,7 @@ class Transactions extends Component {
 
     if (height) {
       getListTxApi({ height: height, page_size: pageSize });
+      getTotalTxsByHeighApi(height);
       this.setState({ isShowTxForBlock: true, height });
     } else {
       getListTxApi({ page_size: pageSize });
@@ -38,20 +43,9 @@ class Transactions extends Component {
   }
 
   paginationOnChange = current => {
-    // this.setState({ current });
     const { pageSize } = this.state;
     getListTxApi({ page_size: pageSize, page_index: current });
   };
-
-  // getTxsByHeight() {
-  //   handleData.getTransactions(
-  //     null,
-  //     null,
-  //     this.state.height,
-  //     this.props.pageState.total_blocks,
-  //     this.props.pageState.total_txs
-  //   );
-  // }
 
   renderThead() {
     return (
@@ -96,15 +90,7 @@ class Transactions extends Component {
               </Link>
             </td>
             <td>{moment(item.time).format("MMMM-DD-YYYY h:mm:ss")}</td>
-            <td className="tx_type">
-              <div className="name_type">
-                <div
-                  className="circle-span"
-                  style={{ background: item.data_op === 0 ? "green" : "blue" }}
-                />
-                {convertTxType(item.data_op)}
-              </div>
-            </td>
+            <td className="statusTx">{convertTxType(item.data_op)}</td>
             <td className="text_overflow">
               {item.from ? (
                 <Link to={`/address/${item.from}`}>{item.from}</Link>

@@ -1,3 +1,4 @@
+import React from "react";
 import moment from "moment";
 
 export const decimal = 6;
@@ -41,10 +42,21 @@ export function diffTime(time) {
 
 export function convertTxType(dataOp) {
   let txType = "transfer";
+  let typeColor = "transfer";
+
   if (dataOp === 0) {
     txType = "deploy";
+    typeColor = "deploy";
   } else if (dataOp === 1) {
     txType = "call";
+    typeColor = "call";
   }
-  return txType;
+  typeColor += " fa fa-circle";
+
+  return (
+    <React.Fragment>
+      <i className={typeColor} />
+      <span>{txType}</span>
+    </React.Fragment>
+  );
 }

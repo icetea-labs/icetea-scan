@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { diffTime, convertTxType } from "../../utils";
 import Layout from "../Layout/Layout";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import * as findTime from "../../service/blockchain/find-time-return";
+// import * as findTime from "../../service/blockchain/find-time-return";
 import "./TransactionsInfo.scss";
 // import moment from "moment";
 // import tweb3 from "../../tweb3";
@@ -16,7 +17,7 @@ import "./TransactionsInfo.scss";
 import notifi from "../elements/Notification";
 import { _get } from "../../service/api/base-api";
 import { singleTx } from "../../service/api/list-api";
-import moment from 'moment';
+import moment from "moment";
 
 const mapStateToProps = state => {
   return {
@@ -34,67 +35,98 @@ class TransactionsInfo extends Component {
       list_src: [],
       time: null,
       diffTime: null,
-      txStatus: '',
-      txType: ''
+      txStatus: "",
+      txType: ""
     };
   }
-
-  async componentWillMount() {
-    let hashId = this.props.match.params.hashId;
-    let res_tx = await _get(null, singleTx + '/' + hashId);
-    let res_data;
-    let tx_data;
-    let diffTime;
-    let time;
-    let height;
-    let list_src = [];
-    let txStatus;
-    let txType;
-    // let src = "";
-
-    if (res_tx.status === 200) {
-      res_data = res_tx.data;
-      tx_data = res_data[0];
-      height = tx_data.height;
-      time = moment(tx_data.time).format("DD/MM/YYYY HH:mm:ss");;
-      // src = tx_data.data_src;
-      diffTime = await findTime.diffTime(tx_data.time);
-      if (tx_data) {
-        txStatus = tx_data.result_code === null ? "Error" : "Success";
-        txType = "transfer";
-        if (tx_data) {
-          if (tx_data.data_op === 0) {
-            txType = "deploy";
-          } else if (tx_data.data_op === 1) {
-            txType = "call";
-          }
-        }
-      }
-    }
-
-    this.setState({
-      hashId,
-      tx_data,
-      diffTime,
-      time,
-      list_src,
-      height,
-      txType,
-      txStatus
-    });
+  componentDidMount() {
+    const hashId = this.props.match.params.hashId;
+    this.loadTransaction(hashId);
   }
 
+  async loadTransaction(hashId) {
+    const response = await _get(null, singleTx + "/" + hashId);
+    if (response.status === 200) {
+      const { data } = response;
+      const txInfo = data[0];
+      console.log(response);
+      this.setState({
+        hash: hashId,
+        txStatus: txInfo.result_code,
+        height: txInfo.height,
+        timeStamp: txInfo.time,
+        txType: txInfo.data_op,
+        gasused: txInfo.gasused,
+        from: txInfo.from,
+        to: txInfo.to,
+        payer: txInfo.payer,
+        gaslimit: txInfo.gaslimit,
+        nonce: txInfo.nonce,
+        returnvalue: txInfo.returnvalue
+      });
+    }
+  }
+
+  // async componentWillMount() {
+  //   let hashId = this.props.match.params.hashId;
+  //   let res_tx = await _get(null, singleTx + "/" + hashId);
+  //   let res_data;
+  //   let tx_data;
+  //   let diffTime;
+  //   let time;
+  //   let height;
+  //   let list_src = [];
+  //   let txStatus;
+  //   let txType;
+  //   // let src = "";
+
+  //   if (res_tx.status === 200) {
+  //     res_data = res_tx.data;
+  //     tx_data = res_data[0];
+  //     height = tx_data.height;
+  //     time = moment(tx_data.time).format("DD/MM/YYYY HH:mm:ss");
+  //     // src = tx_data.data_src;
+  //     diffTime = await findTime.diffTime(tx_data.time);
+  //     if (tx_data) {
+  //       txStatus = tx_data.result_code === null ? "Error" : "Success";
+  //       txType = "transfer";
+  //       if (tx_data) {
+  //         if (tx_data.data_op === 0) {
+  //           txType = "deploy";
+  //         } else if (tx_data.data_op === 1) {
+  //           txType = "call";
+  //         }
+  //       }
+  //     }
+  //   }
+
+  // }
+
   render() {
+    const {
+      hash,
+      txStatus,
+      height,
+      timeStamp,
+      txType,
+      gasused,
+      from,
+      to,
+      payer,
+      gaslimit,
+      nonce,
+      returnvalue
+    } = this.state;
     return (
       <Layout>
         <div className="transaction_info mt_50">
           <div className="container">
             <div className="transaction_header page_info_header">
               <div className="wrap">
-                Transactions
-                <span className="id_code">{this.state.tx_data.hash}</span>
+                <span className="wrap-title">Transactions</span>
+                <span className="id_code">{hash}</span>
                 <CopyToClipboard
-                  text={this.state.tx_data.hash}
+                  text={hash}
                   onCopy={() => {
                     notifi.info("Copy Succesful!");
                   }}
@@ -123,61 +155,55 @@ class TransactionsInfo extends Component {
                 <span>Transaction Information</span>
               </div>
               <div className="info_body">
-                {/* TxHash */}
                 <div className="row_detail">
                   <span className="label">TxHash: </span>
-                  <div className="text_wrap">{this.state.tx_data.hash}</div>
+                  <div className="text_wrap">{hash}</div>
                 </div>
                 <div className="row_detail">
                   <span className="label">TxReceipt Status:</span>
                   <div className="text_wrap">
-                    <label className={
-                        this.state.tx_data && this.state.tx_data.result_code !== 0
-                          ? "error_color"
-                          : "success_color"}>
-                      {this.state.txStatus}
-                    </label>
+                    <span
+                      className={
+                        txStatus !== 0 ? "error_color" : "success_color"
+                      }
+                    >
+                      {txStatus !== 0 ? "Error" : "Success"}
+                    </span>
                   </div>
                 </div>
                 <div className="row_detail">
                   <span className="label">Block Height:</span>
                   <div className="text_wrap">
-                    <Link to={`/block/${this.state.height}`}>
-                      #{this.state.tx_data.height}
-                    </Link>
+                    <Link to={`/block/${height}`}>{`# ${height}`}</Link>
                   </div>
                 </div>
-                {/* TimeStamp */}
                 <div className="row_detail">
                   <span className="label">TimeStamp:</span>
                   <div className="text_wrap">
-                    {this.state.time + " [ " + this.state.diffTime + " ]"}
+                    {diffTime(timeStamp) + " [ " + timeStamp + " ]"}
                   </div>
                 </div>
-                {/* TransactionType */}
                 <div className="row_detail">
                   <span className="label">Transaction Type:</span>
                   <div className="text_wrap transaction_type">
-                    {this.state.txType}
+                    {convertTxType(txType)}
                   </div>
                 </div>
                 <div className="row_detail">
                   <span className="label">Gas Used:</span>
-                  <div className="text_wrap">{this.state.tx_data && this.state.tx_data.gasused} TEA</div>
+                  <div className="text_wrap">{`${gasused} TEA`}</div>
                 </div>
 
-                {/* From */}
                 <div className="row_detail">
                   <span className="label">From:</span>
                   <div className="text_wrap">
-                    {this.state.tx_data && this.state.tx_data.from ? (
-                      <Link to={`/contract/${this.state.tx_data.from}`}>{this.state.tx_data.from}</Link>
+                    {from ? (
+                      <Link to={`/contract/${from}`}>{from}</Link>
                     ) : (
-                        <span>--</span>
-                      )}
-
+                      <span>--</span>
+                    )}
                     <CopyToClipboard
-                      text={this.state.tx_data.from}
+                      text={from}
                       onCopy={() => {
                         notifi.info("Copy Succesful!");
                       }}
@@ -186,18 +212,16 @@ class TransactionsInfo extends Component {
                     </CopyToClipboard>
                   </div>
                 </div>
-
-                {/* To */}
                 <div className="row_detail">
                   <span className="label">To:</span>
                   <div className="text_wrap">
-                    {this.state.tx_data && this.state.tx_data.to ? (
-                      <Link to={`/contract/${this.state.tx_data.to}`}>{this.state.tx_data.to}</Link>
+                    {to ? (
+                      <Link to={`/contract/${to}`}>{to}</Link>
                     ) : (
-                        <span>--</span>
-                      )}
+                      <span>--</span>
+                    )}
                     <CopyToClipboard
-                      text={this.state.tx_data.from}
+                      text={to}
                       onCopy={() => {
                         notifi.info("Copy Succesful!");
                       }}
@@ -206,18 +230,16 @@ class TransactionsInfo extends Component {
                     </CopyToClipboard>
                   </div>
                 </div>
-
-                {/* Payer */}
                 <div className="row_detail">
                   <span className="label">Payer:</span>
                   <div className="text_wrap">
-                    {this.state.tx_data && this.state.tx_data.payer ? (
-                      <Link to={`/contract/${this.state.tx_data.payer}`}>{this.state.tx_data.payer}</Link>
+                    {payer ? (
+                      <Link to={`/contract/${payer}`}>{payer}</Link>
                     ) : (
-                        <span>--</span>
-                      )}
+                      <span>--</span>
+                    )}
                     <CopyToClipboard
-                      text={this.state.tx_data.from}
+                      text={payer}
                       onCopy={() => {
                         notifi.info("Copy Succesful!");
                       }}
@@ -226,23 +248,19 @@ class TransactionsInfo extends Component {
                     </CopyToClipboard>
                   </div>
                 </div>
-
-                {/* GasLimit */}
                 <div className="row_detail">
                   <span className="label">Gas Limit:</span>
-                  <div className="text_wrap">{this.state.tx_data && this.state.tx_data.gaslimit > 0? this.state.tx_data.gaslimit + " TEA" : "Not Set" }</div>
+                  <div className="text_wrap">
+                    {gaslimit > 0 ? `${gaslimit} TEA` : "Not Set"}
+                  </div>
                 </div>
-
-                {/* Nonce */}
                 <div className="row_detail">
                   <span className="label">Nonce:</span>
-                  <div className="text_wrap">{this.state.tx_data && this.state.tx_data.nonce} </div>
+                  <div className="text_wrap">{nonce}</div>
                 </div>
-
-                {/* Result */}
                 <div className="row_detail">
                   <span className="label">Result:</span>
-                  <pre className="result_data">{JSON.stringify(this.state.tx_data.result_data)}</pre>
+                  <pre className="result_data">{returnvalue}</pre>
                 </div>
               </div>
             </div>

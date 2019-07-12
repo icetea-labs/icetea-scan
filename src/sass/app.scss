@@ -252,6 +252,11 @@
   align-content: center;
 
   .wrap {
+    .wrap-title {
+      color: rgb(0, 0, 0);
+      font-size: 20px;
+      margin: 0px 1.25rem 0px 0px;
+    }
     .id_code {
       font-size: $font_size_medium;
       color: $color_secondary;
@@ -316,7 +321,7 @@
   .info_body {
     padding: 20px;
     margin-bottom: 50px;
-    height: 80pc;
+    // height: 80pc;
     .row_detail {
       padding: 8px 0;
       margin-bottom: 12px;

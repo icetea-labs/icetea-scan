@@ -38,3 +38,13 @@ export function diffTime(time) {
   });
   return moment(time).fromNow();
 }
+
+export function convertTxType(dataOp) {
+  let txType = "transfer";
+  if (dataOp === 0) {
+    txType = "deploy";
+  } else if (dataOp === 1) {
+    txType = "call";
+  }
+  return txType;
+}

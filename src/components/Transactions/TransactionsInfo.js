@@ -31,21 +31,22 @@ class TransactionsInfo extends Component {
     if (response.status === 200) {
       const { data } = response;
       const txInfo = data[0];
-      console.log(response);
-      this.setState({
-        hash: hashId,
-        txStatus: txInfo.result_code,
-        height: txInfo.height,
-        timeStamp: txInfo.time,
-        txType: txInfo.data_op,
-        gasused: txInfo.gasused,
-        from: txInfo.from,
-        to: txInfo.to,
-        payer: txInfo.payer,
-        gaslimit: txInfo.gaslimit,
-        nonce: txInfo.nonce,
-        returnvalue: txInfo.returnvalue
-      });
+      // console.log(response);
+      txInfo &&
+        this.setState({
+          hash: hashId,
+          txStatus: txInfo.result_code,
+          height: txInfo.height,
+          timeStamp: txInfo.time,
+          txType: txInfo.data_op,
+          gasused: txInfo.gasused,
+          from: txInfo.from,
+          to: txInfo.to,
+          payer: txInfo.payer,
+          gaslimit: txInfo.gaslimit,
+          nonce: txInfo.nonce,
+          returnvalue: txInfo.returnvalue
+        });
     }
   }
 

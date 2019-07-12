@@ -9,7 +9,7 @@ import {
   getListBlockApi,
   getListTxApi
 } from "../../service//api/get-list-data";
-// import { getAllContracts } from "../../../service/blockchain/get-single-data";
+import { getAllContracts } from "../../service/blockchain/get-single-data";
 
 let interval = null;
 class Home extends Component {
@@ -24,6 +24,7 @@ class Home extends Component {
     interval = setInterval(() => {
       getListBlockApi({ page_size: 10 });
       getListTxApi({ page_size: 10 });
+      getAllContracts();
     }, 1000);
   }
 

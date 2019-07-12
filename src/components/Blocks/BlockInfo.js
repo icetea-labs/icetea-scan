@@ -33,17 +33,17 @@ class BlockInfo extends Component {
     const response = await _get(null, singleBlock + "/" + height);
     if (response.status === 200) {
       const { data } = response;
-      const data_block = data[0];
-
-      this.setState({
-        height: data_block.height,
-        blockInfo: data_block,
-        blockHash: data_block.hash,
-        num_txs: data_block.num_txs,
-        node: data_block.chain_id,
-        time: data_block.time,
-        diff_time: diffTime(data_block.time)
-      });
+      const blockInfo = data[0];
+      blockInfo &&
+        this.setState({
+          height: blockInfo.height,
+          blockInfo: blockInfo,
+          blockHash: blockInfo.hash,
+          num_txs: blockInfo.num_txs,
+          node: blockInfo.chain_id,
+          time: blockInfo.time,
+          diff_time: diffTime(blockInfo.time)
+        });
     } else {
       this.props.history.push("/not-found");
     }
@@ -52,16 +52,16 @@ class BlockInfo extends Component {
     if (height - 2 > 0) {
       parentHeight = height - 2;
     }
-
     const resp = await _get(null, singleBlock + "/" + parentHeight);
 
     if (resp.status === 200) {
       const { data } = resp;
-      const data_block = data[0];
-      this.setState({
-        parentHash: data_block.hash,
-        parentHeight: parentHeight
-      });
+      const parentBlockInfo = data[0];
+      parentBlockInfo &&
+        this.setState({
+          parentHash: parentBlockInfo.hash,
+          parentHeight: parentHeight
+        });
     } else {
       this.setState({
         parentHash: "N/A"

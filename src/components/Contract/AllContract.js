@@ -1,6 +1,9 @@
 /* eslint-disable no-undef */
 import React, { Component } from "react";
 import { ContractMode } from "@iceteachain/common";
+import { connect } from "react-redux";
+import Select from "rc-select";
+import PaginationPro from "../elements/PaginationPro";
 import { Link } from "react-router-dom";
 import { toTEA } from "../../utils";
 import Layout from "../Layout/Layout";
@@ -8,52 +11,67 @@ import {
   getAllContracts,
   getDataContract
 } from "../../service/blockchain/get-single-data";
-
+import * as actions from "../../store/actions";
 class AllContract extends Component {
-  _isMounted = false;
-
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      contract_data: []
+      current: 1,
+      pageSize: 10,
+      total: 0,
+      dataCurrentPage: [],
+      allContractsAddress: []
     };
-    // this.contract_data = [];
   }
 
   async componentDidMount() {
-    let res = await getAllContracts();
-    console.log(res);
-    if (res.status === 200) {
-      let data_res = res.data;
-      this.loadData(data_res);
-    }
+    const res = await getAllContracts();
+    // console.log(res);
+    // if (res.status === 200) {
+    //   let data_res = res.data;
+    //   this.loadData(data_res);
+    // }
+    this.loadData(res.data);
   }
 
   async loadData(data) {
-    let contract_data = [];
-    this._isMounted = true;
-    for (let i = 0; i < data.length; i++) {
-      let res = await getDataContract(data[i]);
-      const contract = res.data;
-      contract.address = data[i];
+    const { current, pageSize } = this.state;
+    const total = data.length;
+    const from = (current - 1) * pageSize;
+    let to = from + pageSize;
+    let contract = [];
 
-      if (res.status === 200) {
-        contract_data.push(contract);
+    if (total > 0) {
+      if (to > total) to = total;
+      console.log("from: ", from, "-to", to);
+      contract = data.filter((item, index) => {
+        return index >= from && index < to;
+      });
+    }
+
+    // console.log("contract", contract);
+    let tmp = [];
+    for (let i = 0; i < contract.length; i++) {
+      let res = await getDataContract(contract[i]);
+      // console.log("res", res);
+      res.data.address = contract[i];
+      // if (res.status === 200) {
+      tmp.push(res.data);
+      // }
+    }
+    this.setState(
+      { allContractsAddress: data, dataCurrentPage: tmp, total },
+      () => {
+        const { setLoading } = this.props;
+        setLoading(false);
       }
-    }
-    if (this._isMounted) {
-      this.setState({ contract_data });
-    }
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
+    );
   }
 
   renderTbody() {
-    const { contract_data } = this.state;
+    const { dataCurrentPage } = this.state;
 
-    return contract_data.map((item, index) => {
+    return dataCurrentPage.map((item, index) => {
       return (
         <tr key={index}>
           <td>
@@ -75,7 +93,20 @@ class AllContract extends Component {
     });
   }
 
+  paginationOnChange = current => {
+    // console.log("current", current);
+    const { allContractsAddress } = this.state;
+    const { setLoading } = this.props;
+
+    this.setState({ current }, () => {
+      setLoading(true);
+      this.loadData(allContractsAddress);
+    });
+  };
+
   render() {
+    const { current, pageSize, total } = this.state;
+
     return (
       <Layout>
         <div className="block_page mt_50 mb_30">
@@ -106,11 +137,15 @@ class AllContract extends Component {
                 <tbody>{this.renderTbody()}</tbody>
               </table>
             </div>
-            <div className="pagination">
-              <ul>
-                <li />
-              </ul>
-            </div>
+            <PaginationPro
+              selectComponentClass={Select}
+              showQuickJumper={false}
+              showSizeChanger={false}
+              defaultPageSize={pageSize}
+              defaultCurrent={current}
+              onChange={this.paginationOnChange}
+              total={total}
+            />
           </div>
         </div>
       </Layout>
@@ -118,4 +153,15 @@ class AllContract extends Component {
   }
 }
 
-export default AllContract;
+const mapDispatchToProps = dispatch => {
+  return {
+    setLoading: value => {
+      dispatch(actions.setLoading(value));
+    }
+  };
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(AllContract);

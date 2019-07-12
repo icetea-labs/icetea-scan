@@ -1,8 +1,8 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import SearchBox from "../../Layout/SearchBox/SearchBox";
 import "./Banner.scss";
 
-class Banner extends Component {
+class Banner extends PureComponent {
   render() {
     return (
       <div className="banner">

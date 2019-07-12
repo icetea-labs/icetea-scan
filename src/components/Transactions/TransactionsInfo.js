@@ -134,7 +134,7 @@ class TransactionsInfo extends Component {
                 </div>
                 <div className="row_detail">
                   <span className="label">Transaction Type:</span>
-                  <div className="text_wrap transaction_type">
+                  <div className="text_wrap statusTx">
                     {convertTxType(txType)}
                   </div>
                 </div>

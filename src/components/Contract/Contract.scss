@@ -2,9 +2,17 @@
   width: auto;
   height: auto;
   // position: absolute;
+  margin-top: 10px !important;
+  .row_detail {
+    padding: 5px 0 !important;
+    margin-bottom: 0 !important;
+  }
 }
 
 .contract-content {
   // border-top: solid rgb(202, 202, 202) 1px;
   // height: 80pc;
+  .rc-tabs-nav-container {
+    font-size: 15px;
+  }
 }

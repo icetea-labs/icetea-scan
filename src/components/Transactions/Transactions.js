@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Layout from "../Layout/Layout";
-import { toTEA, convertTxType } from "../../utils";
+import { toTEA, convertTxType, diffTime } from "../../utils";
 import "./Transactions.scss";
 import moment from "moment";
 import Select from "rc-select";
@@ -90,7 +90,7 @@ class Transactions extends Component {
                 {item.height}
               </Link>
             </td>
-            <td>{moment(item.time).format("MMMM-DD-YYYY h:mm:ss")}</td>
+            <td>{diffTime(item.time)}</td>
             <td className="statusTx">{convertTxType(item.data_op)}</td>
             <td className="text_overflow">
               {item.from ? (

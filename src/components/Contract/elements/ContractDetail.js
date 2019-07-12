@@ -81,7 +81,9 @@ class Contract extends PureComponent {
       <div className="tab-contract">
         <div className="row_detail">
           <span className="label">Balance:</span>
-          <div className="text_wrap">{toTEA(addresDetail.balance || 0)}</div>
+          <div className="text_wrap">
+            {`${toTEA(addresDetail.balance || 0)} TEA`}
+          </div>
         </div>
         <div className="row_detail">
           <span className="label">Has Src:</span>

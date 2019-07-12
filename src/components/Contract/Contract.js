@@ -12,7 +12,7 @@ import {
   getAccountInfo,
   getMetadataContract
 } from "../../service/blockchain/get-single-data";
-const defaultTabKey = "1";
+const defaultTabKey = "2";
 class Contract extends Component {
   constructor(props) {
     super(props);
@@ -52,7 +52,7 @@ class Contract extends Component {
       metadata: metadataResp.data || {}
     });
 
-    console.log("response", addressInfoResp);
+    // console.log("response", addressInfoResp);
     // console.log("res_metadata", metadataContractResp);
   }
   // _ChangeDetail = () => {

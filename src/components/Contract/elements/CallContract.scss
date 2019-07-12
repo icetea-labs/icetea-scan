@@ -43,7 +43,7 @@
       color: black;
       background-color: whitesmoke;
       border-radius: 10px;
-      &:hover{
+      &:hover {
         background-color: khaki;
         cursor: pointer;
       }
@@ -68,7 +68,7 @@
     font-weight: 600;
   }
 
-  .btn-option{
+  .btn-option {
     margin: 10px;
     padding: 10px;
   }
@@ -129,7 +129,7 @@
         border: solid gray 1px;
         padding: 10px;
         margin-right: 4px;
-        &:hover{
+        &:hover {
           background-color: rgb(70, 70, 255);
           color: white;
         }
@@ -161,4 +161,109 @@
 
 textarea {
   width: 500px;
+}
+
+.container-call-contract {
+  position: relative;
+  width: 100%;
+  height: 650px; //100vh;
+  overflow: hidden;
+  .side-left {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+    overflow-y: auto;
+    .rc-tabs-tab {
+      padding: 18px;
+      margin-right: 10px;
+    }
+    .rc-tabs-top {
+      border: none;
+    }
+    .rc-tabs-nav-container {
+      font-size: 14px;
+    }
+    .wrapper-funcs {
+      display: flex;
+      flex-direction: column;
+      // margin-top: 28px;
+      // padding-right: 40px;
+      // border-right: 1px solid rgb(234, 236, 239);
+      li {
+        margin: 10px;
+        height: 40px;
+        line-height: 40px;
+        cursor: pointer;
+        // width: 200px;
+        padding-left: 20px;
+        padding-right: 10px;
+        // margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        -webkit-box-align: center;
+        align-items: center;
+        font-size: inherit;
+        position: relative;
+        box-sizing: border-box;
+        color: rgb(38, 49, 71);
+        font-weight: 400;
+        border-radius: 3px;
+        // border-left: 4px solid rgb(255, 255, 255);
+        border-left: 4px solidf #f5f2f0;
+        box-shadow: rgba(223, 226, 231, 0.5) 0px 0px 5px 0px;
+        background: #f5f2f0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      li:hover {
+        font-weight: 600;
+        box-shadow: rgba(223, 226, 231, 0.5) 0px 0px 15px 0px;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+        // background: rgb(255, 255, 255);
+        background: #f5f2f0;
+        border-left: 4px solid rgb(21, 181, 221);
+      }
+      .on {
+        box-shadow: rgba(223, 226, 231, 0.5) 0px 0px 15px 0px;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+        font-weight: 600;
+        // background: rgb(255, 255, 255);
+        background: #f5f2f0;
+        border-left: 4px solid rgb(21, 181, 221);
+      }
+      .typeFunc {
+        font-size: 0.8em;
+        width: 30%;
+        text-align: left;
+      }
+    }
+  }
+  .dragbar {
+    position: absolute;
+    top: 0px;
+    // width: 0.5em;
+    right: 0;
+    bottom: 0;
+    cursor: col-resize;
+    z-index: 999;
+    border-right: 1px solid #f3f3f3;
+  }
+  .side-main {
+    left: 450px;
+    // width: 787px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+  }
 }

@@ -13,7 +13,8 @@ export function toUNIT(tea) {
 }
 export function diffTime(time) {
   // Set new thresholds
-  moment.relativeTimeThreshold("s", 60);
+  // moment.relativeTimeThreshold("s", 10);
+  moment.relativeTimeThreshold("ss", 60);
   moment.relativeTimeThreshold("m", 60);
   moment.relativeTimeThreshold("h", 20);
   // moment.relativeTimeThreshold("d", 25);
@@ -23,11 +24,11 @@ export function diffTime(time) {
     relativeTime: {
       future: "in %s",
       past: "%s ago",
-      s: "%d seconds",
-      ss: "%d seconds",
+      s: "%d secs",
+      ss: "%d secs",
       m: "a minute",
       mm: "%d minutes",
-      h: "an hour",
+      h: "%d hour",
       hh: "%d hours",
       d: "a day",
       dd: "%d days",

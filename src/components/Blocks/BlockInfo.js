@@ -125,7 +125,7 @@ class BlockInfo extends Component {
                     {num_txs === 0 ? (
                       "0"
                     ) : (
-                      <Link to={`/txs?block=${height}`}>{num_txs}</Link>
+                      <Link to={`/txs?height=${height}`}>{num_txs}</Link>
                     )}
                     <span> Transactions in this block</span>
                   </div>

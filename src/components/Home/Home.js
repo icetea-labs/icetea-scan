@@ -24,7 +24,7 @@ class Home extends Component {
   componentDidMount() {
     interval = setInterval(() => {
       getListBlockApi({ page_size: 10 });
-      getListTxApi({ page_size: 10 });
+      // getListTxApi({ page_size: 10 });
     }, 1000);
   }
 

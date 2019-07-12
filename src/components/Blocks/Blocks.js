@@ -64,7 +64,7 @@ class Blocks extends PureComponent {
             <td>{moment(item.time).format("MMMM-DD-YYYY h:mm:ss")}</td>
             <td>{diffTime(item.time)}</td>
             <td>
-              <Link to={`/txs?block=${item.height}`}>{item.num_txs}</Link>
+              <Link to={`/txs?height=${item.height}`}>{item.num_txs}</Link>
             </td>
             <td>
               <span>{item.chain_id}</span>

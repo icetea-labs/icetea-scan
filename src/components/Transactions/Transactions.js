@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Layout from "../Layout/Layout";
-import { toTEA } from "../../utils";
+import { toTEA, convertTxType } from "../../utils";
 import "./Transactions.scss";
 import moment from "moment";
 import Select from "rc-select";
@@ -13,8 +13,9 @@ class Transactions extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      height: 1,
+      isShowTxForBlock: false,
       pageIndex: 1,
-      height: null,
       to: "",
       from: "",
       current: 1,
@@ -24,8 +25,16 @@ class Transactions extends Component {
 
   componentDidMount() {
     const { pageSize } = this.state;
-    getListTxApi({ page_size: pageSize });
-    getTotalTxsApi();
+    const search_params = new URLSearchParams(window.location.search);
+    const height = search_params.get("height");
+
+    if (height) {
+      getListTxApi({ height: height, page_size: pageSize });
+      this.setState({ isShowTxForBlock: true, height });
+    } else {
+      getListTxApi({ page_size: pageSize });
+      getTotalTxsApi();
+    }
   }
 
   paginationOnChange = current => {
@@ -33,6 +42,16 @@ class Transactions extends Component {
     const { pageSize } = this.state;
     getListTxApi({ page_size: pageSize, page_index: current });
   };
+
+  // getTxsByHeight() {
+  //   handleData.getTransactions(
+  //     null,
+  //     null,
+  //     this.state.height,
+  //     this.props.pageState.total_blocks,
+  //     this.props.pageState.total_txs
+  //   );
+  // }
 
   renderThead() {
     return (
@@ -66,14 +85,6 @@ class Transactions extends Component {
       );
     } else {
       return transactionsInfo.map((item, index) => {
-        let txType = "transfer";
-
-        if (item.data_op === 0) {
-          txType = "deploy";
-        } else if (item.data_op === 1) {
-          txType = "call";
-        }
-
         return (
           <tr key={index}>
             <td className="text_overflow">
@@ -91,7 +102,7 @@ class Transactions extends Component {
                   className="circle-span"
                   style={{ background: item.data_op === 0 ? "green" : "blue" }}
                 />
-                {txType}
+                {convertTxType(item.data_op)}
               </div>
             </td>
             <td className="text_overflow">
@@ -118,7 +129,7 @@ class Transactions extends Component {
   }
 
   render() {
-    const { current, pageSize } = this.state;
+    const { current, pageSize, isShowTxForBlock, height } = this.state;
     const { totalTxs } = this.props;
 
     return (
@@ -129,9 +140,9 @@ class Transactions extends Component {
               <h3>Transactions</h3>
               <span
                 className="sub-tilter"
-                style={{ display: this.state.show_paging ? "none" : "block" }}
+                style={{ display: isShowTxForBlock ? "block" : "none" }}
               >
-                For Block #{this.state.height}
+                <span>{`For Block #${height}`}</span>
               </span>
               <div className="breadcrumb">
                 <ul>

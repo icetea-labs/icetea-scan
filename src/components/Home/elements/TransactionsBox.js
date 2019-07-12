@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import { Link } from "react-router-dom";
-import { diffTime } from "../../../utils";
+import { diffTime, convertTxType } from "../../../utils";
 import "./TransactionsBox.scss";
 
 class TransactionsBox extends PureComponent {
@@ -17,15 +17,6 @@ class TransactionsBox extends PureComponent {
     } else {
       return { cssIcon: "fa fa-list-alt" };
     }
-  }
-
-  convertDataOp(op) {
-    if (op === 0) {
-      return "deploy";
-    } else if (op === 1) {
-      return "call";
-    }
-    return "transfer";
   }
 
   renderTransactions = () => {
@@ -58,7 +49,7 @@ class TransactionsBox extends PureComponent {
             </div>
             <div className="status_order">
               <i className="fa fa-circle" />
-              <span>{this.convertDataOp(item.data_op)}</span>
+              <span>{convertTxType(item.data_op)}</span>
             </div>
           </div>
         </div>

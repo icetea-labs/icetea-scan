@@ -31,6 +31,8 @@ class AllContract extends Component {
     //   let data_res = res.data;
     //   this.loadData(data_res);
     // }
+    const { setLoading } = this.props;
+    setLoading(true);
     this.loadData(res.data);
   }
 

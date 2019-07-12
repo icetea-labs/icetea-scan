@@ -11,21 +11,37 @@ import {
   getListBlockApi,
   getTotalBlockApi
 } from "../../service/api/get-list-data";
+import * as actions from "../../store/actions";
 
 class Blocks extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       current: 1,
-      pageSize: 10
+      pageSize: 10,
+      blocksInfo: []
     };
   }
+
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   if (nextProps.blocksInfo !== prevState.blocksInfo) {
+  //     return { blocksInfo: nextProps.blocksInfo };
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   componentDidMount() {
     const { pageSize } = this.state;
     getListBlockApi({ page_size: pageSize });
     getTotalBlockApi();
   }
+
+  // componentDidUpdate() {
+  //   const { setLoading } = this.props;
+  //   console.log("componentDidUpdate");
+  //   setLoading(false);
+  // }
 
   renderTHead() {
     return (
@@ -42,7 +58,7 @@ class Blocks extends PureComponent {
 
   renderTbody() {
     const { blocksInfo } = this.props;
-
+    // console.log("renderTbody");
     if (blocksInfo.length === 0) {
       return (
         <tr className="no_data">
@@ -78,10 +94,16 @@ class Blocks extends PureComponent {
     }
   }
 
-  paginationOnChange = current => {
-    // this.setState({ current });
-    const { pageSize } = this.state;
-    getListBlockApi({ page_size: pageSize, page_index: current });
+  paginationOnChange = pageNum => {
+    const { current, pageSize } = this.state;
+    // const { setLoading } = this.props;
+
+    if (pageNum !== current) {
+      this.setState({ current }, () => {
+        // setLoading(true);
+      });
+      getListBlockApi({ page_size: pageSize, page_index: pageNum });
+    }
   };
 
   render() {
@@ -135,7 +157,15 @@ const mapStateToProps = state => {
   };
 };
 
+const mapDispatchToProps = dispatch => {
+  return {
+    setLoading: value => {
+      dispatch(actions.setLoading(value));
+    }
+  };
+};
+
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(Blocks);

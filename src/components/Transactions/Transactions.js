@@ -12,6 +12,7 @@ import {
   getTotalTxsApi,
   getTotalTxsByHeighApi
 } from "../../service/api/get-list-data";
+import * as actions from "../../store/actions";
 
 class Transactions extends Component {
   constructor(props) {
@@ -171,7 +172,15 @@ const mapStateToProps = state => {
   };
 };
 
+const mapDispatchToProps = dispatch => {
+  return {
+    setLoading: value => {
+      dispatch(actions.setLoading(value));
+    }
+  };
+};
+
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(Transactions);

@@ -1,9 +1,9 @@
-import store from "../store";
+import store from "../../store";
+import * as actions from "../../store/actions";
 import { _get } from "./base-api";
 import { listBlocks, listTxs, countBlock, countTxs } from "./list-api";
 // import { getListBlocks } from "../../redux/actions/handleListBlocks";
-import { getListTxs } from "../../redux/actions/handleTransactions";
-import * as actions from "../store/actions";
+// import { getListTxs } from "../../redux/actions/handleTransactions";
 
 export const getListBlockApi = async params => {
   const response = await _get(params, listBlocks);

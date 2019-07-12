@@ -1,36 +1,32 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { ContractMode } from "@iceteachain/common";
-import {
-  getAccountInfo,
-  getMetadataContract
-} from "../../../service/blockchain/get-single-data";
 import { toTEA } from "../../../utils";
 
-class Contract extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      addresDetail: {},
-      balance: 0,
-      has_src: false,
-      deploy_by: null,
-      mode: null,
-      metadata: null,
-      show_call: false
-    };
-  }
+class Contract extends PureComponent {
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     addresDetail: {},
+  //     balance: 0,
+  //     has_src: false,
+  //     deploy_by: null,
+  //     mode: null,
+  //     metadata: null,
+  //     show_call: false
+  //   };
+  // }
 
-  componentDidMount() {
-    const { address } = this.props;
-    // this.loadData(address);
-  }
+  //   componentDidMount() {
+  //     const { address } = this.props;
+  //     // this.loadData(address);
+  //   }
 
-  async componentWillReceiveProps(nextProps) {
-    // if (this.props !== nextProps) {
-    //     window.location.reload();
-    //     this.loadData();
-    // }
-  }
+  //   async componentWillReceiveProps(nextProps) {
+  //     // if (this.props !== nextProps) {
+  //     //     window.location.reload();
+  //     //     this.loadData();
+  //     // }
+  //   }
 
   //   static getDerivedStateFromProps(nextProps, prevState) {
   //     console.log(nextProps.addresDetail, "--", prevState.addresDetail);
@@ -46,41 +42,41 @@ class Contract extends Component {
   //     }
   //   }
 
-  async loadData(address) {
-    console.log("loadData", address);
-    let response = await getAccountInfo(address);
-    if (response && response.data.deployedBy) {
-      await getMetadataContract(address);
-    }
-    let res_metadata = await getMetadataContract(address);
+  //   async loadData(address) {
+  //     console.log("loadData", address);
+  //     let response = await getAccountInfo(address);
+  //     if (response && response.data.deployedBy) {
+  //       await getMetadataContract(address);
+  //     }
+  //     let res_metadata = await getMetadataContract(address);
 
-    // console.log("response", response);
-    // console.log("res_metadata", res_metadata);
+  // console.log("response", response);
+  // console.log("res_metadata", res_metadata);
 
-    // if (response.status !== 200) {
-    //   this.props.history.push("/not-found");
-    // } else {
-    //   let mode = response.data.mode;
-    //   this.setState({
-    //     balance: response.data.balance,
-    //     deploy_by: response.data.deployedBy,
-    //     has_src: response.data.hasSrc,
-    //     mode: mode === undefined ? "null" : mode
-    //   });
-    // }
+  // if (response.status !== 200) {
+  //   this.props.history.push("/not-found");
+  // } else {
+  //   let mode = response.data.mode;
+  //   this.setState({
+  //     balance: response.data.balance,
+  //     deploy_by: response.data.deployedBy,
+  //     has_src: response.data.hasSrc,
+  //     mode: mode === undefined ? "null" : mode
+  //   });
+  // }
 
-    // if (res_metadata.code === 200) {
-    //   this.setState({
-    //     metadata: res_metadata.data
-    //   });
-    // }
-  }
+  // if (res_metadata.code === 200) {
+  //   this.setState({
+  //     metadata: res_metadata.data
+  //   });
+  // }
+  //   }
 
   render() {
     const { addresDetail, metadata } = this.props;
     console.log(addresDetail);
     console.log(metadata);
-    console.log(addresDetail.hasSrc);
+
     return (
       <div className="tab-contract">
         <div className="row_detail">

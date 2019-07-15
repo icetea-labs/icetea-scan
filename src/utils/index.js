@@ -61,3 +61,13 @@ export function convertTxType(dataOp) {
     </React.Fragment>
   );
 }
+export function fmtType(t, convert) {
+  if (!t) return "any";
+  if (!Array.isArray(t)) {
+    t = [t];
+  }
+  if (convert) {
+    t = t.map(item => (item === "undefined" ? "void" : item));
+  }
+  return t.join("|");
+}

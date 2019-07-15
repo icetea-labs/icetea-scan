@@ -5,6 +5,9 @@ import TabContent from "rc-tabs/lib/TabContent";
 import ScrollableInkTabBar from "rc-tabs/lib/ScrollableInkTabBar";
 import "rc-tabs/assets/index.css";
 import "./CallContract.scss";
+import { Input } from "antd";
+import { Button } from "antd";
+import { fmtType } from "../../../utils";
 
 import {
   getAccountInfo,
@@ -20,6 +23,7 @@ import {
   createBankKey,
   createRegularKey
 } from "../../../service/wallet/create";
+const { TextArea } = Input;
 
 class CallContract extends Component {
   constructor(props) {
@@ -57,7 +61,10 @@ class CallContract extends Component {
       param_url: "",
       metadataBase: {},
       metadata: {},
-      selectedFunc: ""
+      selectedFuncByType: "",
+      selectedMetadata: [],
+      loading: false,
+      iconLoading: false
     };
 
     this.params = [];
@@ -149,15 +156,23 @@ class CallContract extends Component {
     ) {
       const { metadata } = nextProps;
       const newMeta = Object.keys(metadata).map((key, index) => {
-        return {
-          selected: false,
-          name: key,
-          decorators: metadata[key]["decorators"] || [],
-          params: metadata[key]["params"] || {},
-          type: metadata[key]["type"] || []
-        };
+        return Object.assign(
+          {},
+          {
+            selected: false,
+            name: key,
+            decorators: metadata[key]["decorators"] || [],
+            params: metadata[key]["params"] || []
+            // type: metadata[key]["type"] || []
+          },
+          metadata[key]
+        );
       });
-      return { metadataBase: metadata, metadata: newMeta };
+      return {
+        metadataBase: metadata,
+        metadata: newMeta,
+        selectedMetadata: newMeta
+      };
     } else {
       return null;
     }
@@ -435,47 +450,46 @@ class CallContract extends Component {
     this.setState({ show_method_wallet, option_button });
   };
 
-  callback = key => {};
-
-  selectedFunc = name => {
-    let value;
+  onChangeTab = index => {
     const { metadata } = this.state;
-    metadata.forEach(item => {
-      if (item.name === name) {
-        item.selected = true;
-        value = name;
-      } else {
-        item.selected = false;
-      }
+    let typeFunc = null;
+    if (index === "2") typeFunc = "transaction";
+    if (index === "3") typeFunc = "view";
+    if (index === "4") typeFunc = "pure";
+    // console.log("typeFunc", typeFunc);
+    const newMeta = metadata.filter(func => {
+      return func.decorators[0] === typeFunc || !typeFunc;
     });
-    console.log("metadata", metadata);
-    this.setState({ selectedFunc: value });
+    // console.log("callback newMeta", newMeta);
+    this.setState({ selectedMetadata: newMeta });
   };
 
-  renderLeftPanel = () => {
+  renderFuncLeftPanel = () => {
     const { metadata } = this.state;
+    // console.log("renderFuncLeftPanel", metadata);
+    const disabled = metadata[0].type === "unknown";
 
     return (
       <Tabs
         defaultActiveKey="1"
-        onChange={this.callback}
+        onChange={this.onChangeTab}
         renderTabBar={() => <ScrollableInkTabBar />}
         renderTabContent={() => <TabContent />}
       >
         <TabPane tab="All" key="1">
           <div className="wrapper-funcs">{this.renderFuncs(metadata)}</div>
         </TabPane>
-        <TabPane tab="Write" key="2">
+        <TabPane tab="Write" key="2" disabled={disabled}>
           <div className="wrapper-funcs">
             {this.renderFuncs(metadata, "transaction")}
           </div>
         </TabPane>
-        <TabPane tab="View" key="3">
+        <TabPane tab="View" key="3" disabled={disabled}>
           <div className="wrapper-funcs">
             {this.renderFuncs(metadata, "view")}
           </div>
         </TabPane>
-        <TabPane tab="Pure" key="4">
+        <TabPane tab="Pure" key="4" disabled={disabled}>
           <div className="wrapper-funcs">
             {this.renderFuncs(metadata, "pure")}
           </div>
@@ -487,10 +501,8 @@ class CallContract extends Component {
   renderFuncs = (metadata, typeFunc) => {
     // console.log("type", typeFunc);
     const newMeta = metadata.filter(func => {
-      // if (!typeFunc) return true;
       return func.decorators[0] === typeFunc || !typeFunc;
     });
-    // console.log("newMeta1", newMeta);
     return (
       <ul>
         {newMeta &&
@@ -500,7 +512,7 @@ class CallContract extends Component {
                 key={index}
                 className={func.selected ? "on" : ""}
                 id={func.name}
-                onClick={() => this.selectedFunc(func.name)}
+                onClick={() => this.selectedFuncByType(func.name)}
               >
                 <span>{func.name}</span>
                 <code className="typeFunc">
@@ -513,28 +525,134 @@ class CallContract extends Component {
     );
   };
 
-  render() {
-    let {
-      address,
-      is_choose,
-      show_create,
-      have_wallet,
-      show_method_wallet,
-      option_button,
-      data,
-      data_func,
-      metadata
-    } = this.state;
+  selectedFuncByType = name => {
+    let value;
+    const { metadata } = this.state;
+    metadata.forEach(item => {
+      if (item.name === name) {
+        item.selected = true;
+        value = name;
+      } else {
+        item.selected = false;
+      }
+    });
+    // console.log("metadata", metadata);
+    this.setState({ selectedFuncByType: value });
+  };
 
-    console.log("metadata", metadata);
+  renderInforRightPanel = () => {
+    const { selectedMetadata } = this.state;
+    // const tmpFunc = metadata.filter(func => {
+    //   return func.selected || true;
+    // });
+    const signatures = [];
+    console.log("metadata1", selectedMetadata);
+    selectedMetadata.forEach((func, index) => {
+      if (func) {
+        const funcName = func.name;
+        const decorators = func.decorators || [];
+        const decos = decorators.map(d => "@" + d);
+
+        let signature = decos.join(" ");
+        if (signature) {
+          signature = signature + " ";
+        }
+        signature = signature + funcName;
+
+        if (func.params) {
+          let ps = func.params
+            .reduce((prev, p) => {
+              prev.push(p.name + ": " + fmtType(p.type));
+              return prev;
+            }, [])
+            .join(", ");
+          signature += "(" + ps + ")";
+        }
+
+        signature +=
+          ": " + fmtType(func.fieldType || func.returnType, func.returnType);
+        signatures[index] = signature;
+      }
+    });
+    const { loading } = this.state;
+
+    return selectedMetadata.map((func, index) => {
+      return (
+        <div className="wrapper-func" key={index}>
+          <div className="info-box">
+            <code>
+              {index + 1}) {signatures[index]}
+            </code>
+          </div>
+          <div className="func-content">
+            <div className="func-body">
+              {func.type === "unknown" ? (
+                <React.Fragment>
+                  <label>
+                    Params (each param 1 row, JSON accepted, use " to denote
+                    string)
+                  </label>
+                  <TextArea rows={4} />
+                </React.Fragment>
+              ) : (
+                // selectedMetadata[index].params &&
+                func.params.map((func, i) => {
+                  return (
+                    <div key={i} className="wrapper-input">
+                      <label>{`${func.name} (${func.type})`}</label>
+                      <Input placeholder={`${func.name} (${func.type})`} />
+                    </div>
+                  );
+                })
+              )}
+              <Button
+                type="primary"
+                loading={loading}
+                onClick={this.enterLoading}
+              >
+                <span>
+                  {func.decorators[0] === "transaction" ? "Call" : "Querry"}
+                </span>
+              </Button>
+            </div>
+          </div>
+        </div>
+      );
+    });
+  };
+
+  enterLoading = () => {
+    const { loading } = this.state;
+    this.setState({ loading: !loading });
+  };
+
+  enterIconLoading = () => {
+    const { iconLoading } = this.state;
+    this.setState({ iconLoading: !iconLoading });
+  };
+  render() {
+    // let {
+    //   address,
+    //   is_choose,
+    //   show_create,
+    //   have_wallet,
+    //   show_method_wallet,
+    //   option_button,
+    //   data,
+    //   data_func,
+    //   metadata
+    // } = this.state;
+    const { loading } = this.state;
 
     return (
       <div className="container-call-contract">
         <div className="side-left">
           <div className="dragbar" />
-          {this.renderLeftPanel()}
+          {this.renderFuncLeftPanel()}
         </div>
-        <div className="side-main">bbbb</div>
+        <div className="side-main">
+          <div className="contrainer-main">{this.renderInforRightPanel()}</div>
+        </div>
       </div>
       // <div className='tab-contract'>
       //     {/* Left SideBar */}

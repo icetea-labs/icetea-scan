@@ -45,7 +45,6 @@ class Contract extends Component {
     } else {
       isContract = false;
     }
-
     this.setState({
       isContractAddress: isContract,
       addresDetail: addressInfoResp.data || {},
@@ -134,7 +133,7 @@ class Contract extends Component {
                 </span>
               </div> */}
 
-              <div className="info_body contract-content">
+              <div className="info_body contract-content ">
                 {/* {show_call === true ? (
                   <CallContract
                     address={address}

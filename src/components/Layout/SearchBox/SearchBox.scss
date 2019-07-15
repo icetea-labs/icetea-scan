@@ -172,6 +172,67 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  .anticon > * {
+    line-height: 1;
+  }
+  .anticon svg {
+    display: inline-block;
+  }
+  .anticon::before {
+    display: none;
+  }
+  .anticon .anticon-icon {
+    display: block;
+  }
+  .anticon[tabindex] {
+    cursor: pointer;
+  }
+  @-webkit-keyframes loadingCircle {
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes loadingCircle {
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+  .ant-btn .anticon {
+    -webkit-transition: margin-left 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition: margin-left 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  }
+  .ant-btn .anticon.anticon-plus > svg,
+  .ant-btn .anticon.anticon-minus > svg {
+    shape-rendering: optimizeSpeed;
+  }
+  .ant-btn.ant-btn-loading {
+    position: relative;
+    pointer-events: none;
+  }
+  .ant-btn.ant-btn-loading::before {
+    display: block;
+  }
+  .ant-btn.ant-btn-loading:not(.ant-btn-circle):not(.ant-btn-circle-outline):not(.ant-btn-icon-only) {
+    padding-left: 29px;
+  }
+  .ant-btn.ant-btn-loading:not(.ant-btn-circle):not(.ant-btn-circle-outline):not(.ant-btn-icon-only)
+    .anticon:not(:last-child) {
+    margin-left: -14px;
+  }
+  .ant-mention-dropdown-notfound.ant-mention-dropdown-item .anticon-loading {
+    display: block;
+    color: #1890ff;
+    text-align: center;
+  }
+  .ant-upload-list-item-info .anticon-loading,
+  .ant-upload-list-item-info .anticon-paper-clip {
+    position: absolute;
+    top: 5px;
+    color: rgba(0, 0, 0, 0.45);
+    font-size: 14px;
+  }
   .ant-input-clear-icon {
     font-size: 12px;
     vertical-align: top;

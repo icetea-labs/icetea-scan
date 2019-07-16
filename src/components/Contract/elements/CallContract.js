@@ -1,74 +1,71 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
-import Tabs, { TabPane } from "rc-tabs";
-import TabContent from "rc-tabs/lib/TabContent";
-import ScrollableInkTabBar from "rc-tabs/lib/ScrollableInkTabBar";
-import "rc-tabs/assets/index.css";
-import "./CallContract.scss";
-import { Input } from "antd";
-import { Button } from "antd";
-import { fmtType } from "../../../utils";
+import Tabs, { TabPane } from 'rc-tabs';
+import TabContent from 'rc-tabs/lib/TabContent';
+import ScrollableInkTabBar from 'rc-tabs/lib/ScrollableInkTabBar';
+import 'rc-tabs/assets/index.css';
+import './CallContract.scss';
+import { Input } from 'antd';
+import { Button } from 'antd';
+import { fmtType, formatResult } from '../../../utils';
+// import "antd/dist/antd.css"
 
-import {
-  getAccountInfo,
-  getMetadataContract
-} from "../../../service/blockchain/get-single-data";
-import { ContractMode } from "@iceteachain/common";
-import {
-  execContract,
-  callWithWallet
-} from "../../../service/blockchain/exec-contract";
-// import tweb3 from '../../../tweb3';
-import {
-  createBankKey,
-  createRegularKey
-} from "../../../service/wallet/create";
+// import {
+//   getAccountInfo,
+//   getMetadataContract
+// } from "../../../service/blockchain/get-single-data";
+// import { ContractMode } from "@iceteachain/common";
+import { execContract, callWithWallet } from '../../../service/blockchain/exec-contract';
+import tweb3 from '../../../tweb3';
+import { createBankKey, createRegularKey } from '../../../service/wallet/create';
 const { TextArea } = Input;
 
 class CallContract extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      address: "",
-      private_key: "",
-      balance: null,
-      list_func: [],
-      write_func: [],
-      view_func: [],
-      pure_func: [],
-      choose_funcion: [],
-      is_choose: "all",
-      type: "",
-      info_modename: "",
-      type_func: [],
-      name_func: "exampleFunction",
-      return_type: "any",
-      params: [],
-      value: 0,
-      fee: 0,
-      params_value: [],
-      data: "",
-      method: "",
-      is_hidden: true,
-      wallet: "",
-      show_option: false,
-      option: "Create random, throw-away account",
-      show_create: true,
-      private_key_wallet: "",
-      have_wallet: false,
-      show_method_wallet: true,
-      option_button: "Hidden",
-      param_url: "",
+      // address: "",
+      // private_key: "",
+      // balance: null,
+      // list_func: [],
+      // write_func: [],
+      // view_func: [],
+      // pure_func: [],
+      // choose_funcion: [],
+      // is_choose: "all",
+      // type: "",
+      // info_modename: "",
+      // type_func: [],
+      // name_func: "exampleFunction",
+      // return_type: "any",
+      // params: [],
+      // value: 0,
+      // fee: 0,
+      // params_value: [],
+      // data: "",
+      // method: "",
+      // is_hidden: true,
+      // wallet: "",
+      // show_option: false,
+      // option: "Create random, throw-away account",
+      // show_create: true,
+      // private_key_wallet: "",
+      // have_wallet: false,
+      // show_method_wallet: true,
+      // option_button: "Hidden",
+      // param_url: "",
+      account: {},
       metadataBase: {},
       metadata: {},
-      selectedFuncByType: "",
-      selectedMetadata: [],
-      loading: false,
-      iconLoading: false
+      selectedMeta: [],
+      selectedFunc: '',
+      params_value: {},
+      loading: [],
+      iconLoading: false,
     };
 
-    this.params = [];
-    this.params_value = [];
+    // this.params = [];
+    // this.params_value = [];
   }
 
   // async componentWillMount() {
@@ -150,19 +147,17 @@ class CallContract extends Component {
   // }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (
-      JSON.stringify(nextProps.metadata) !==
-      JSON.stringify(prevState.metadataBase)
-    ) {
+    if (JSON.stringify(nextProps.metadata) !== JSON.stringify(prevState.metadataBase)) {
       const { metadata } = nextProps;
       const newMeta = Object.keys(metadata).map((key, index) => {
         return Object.assign(
           {},
           {
             selected: false,
+            answer: '',
             name: key,
-            decorators: metadata[key]["decorators"] || [],
-            params: metadata[key]["params"] || []
+            decorators: metadata[key]['decorators'] || [],
+            params: metadata[key]['params'] || [],
             // type: metadata[key]["type"] || []
           },
           metadata[key]
@@ -171,308 +166,317 @@ class CallContract extends Component {
       return {
         metadataBase: metadata,
         metadata: newMeta,
-        selectedMetadata: newMeta
+        selectedMeta: newMeta,
       };
     } else {
       return null;
     }
   }
 
-  _handleValue = event => {
-    this.setState({
-      value: event.target.value
-    });
-  };
-
-  _handleFee = event => {
-    this.setState({
-      fee: event.target.value
-    });
-  };
-
-  _hiddenWallet = () => {
-    this.setState({
-      is_hidden: !this.state.is_hidden
-    });
-  };
-
-  _handleWallet = event => {
-    this.setState({
-      wallet: event.target.value
-    });
-  };
-
-  // Submit private key
-  _submitKey = () => {
-    let { private_key } = this.state;
-    localStorage.setItem("private_key_wallet", private_key);
-    this._checkKey();
-  };
-
-  // Check key
-  _checkKey = () => {
-    let {
-      have_wallet,
-      private_key,
-      show_method_wallet,
-      option_button
-    } = this.state;
-    let private_key_wallet = localStorage.getItem("private_key_wallet");
-
-    if (private_key_wallet !== null) {
-      have_wallet = true;
-      private_key = private_key_wallet;
-      show_method_wallet = false;
-      option_button = "Hidden";
-    }
-
-    this.setState({
-      have_wallet,
-      private_key_wallet,
-      private_key,
-      show_method_wallet,
-      option_button
-    });
-  };
-
-  // Set option for create wallet
-  _setOption = event => {
-    let { show_create } = false;
-    switch (event.target.id) {
-      case "create":
-        show_create = true;
-
-        this.setState({
-          option: "Create random, throw-away account"
-        });
-        break;
-
-      case "signin":
-        show_create = false;
-
-        this.setState({
-          option: "Sign with Icetea Wallet"
-        });
-        break;
-
-      default:
-        break;
-    }
-
-    this.setState({ show_create });
-  };
-
-  _setChoose = is_choose => {
-    this.setState({
-      is_choose
-    });
-
-    let data_func = this.state.list_func;
-
-    // eslint-disable-next-line default-case
-    switch (is_choose) {
-      case "pure":
-        data_func = this.state.pure_func;
-        break;
-      case "view":
-        data_func = this.state.view_func;
-        break;
-      case "transaction":
-        data_func = this.state.write_func;
-        break;
-    }
-
-    this.setState({
-      data_func
-    });
-  };
-
-  // Set function for using wallet
-  _setFunction = event => {
-    let name_func = event.target.id;
-    let choose_func;
-    for (let i = 0; i < this.state.data_func.length; i++) {
-      let func = this.state.data_func[i];
-      if (func[0] === name_func) {
-        choose_func = func;
-      }
-    }
-
-    let type_func = choose_func[1].decorators;
-    let params = choose_func[1].params;
-    let return_type = choose_func[1].returnType;
-    let params_value = Array(params.length);
-
-    this.setState({
-      params,
-      name_func,
-      return_type,
-      params_value,
-      type_func
-    });
-
-    this.params = [];
-    this.params_value = [];
-    this._setParam();
-  };
-
-  // Set params for function
-  _setParam = () => {
-    this.params = this.state.params.map((item, index) => {
-      let i = index;
-      let add_detail = ", ";
-      if (i === this.state.params.length - 1) {
-        add_detail = null;
-      }
-
-      let type = "";
-      let add_or = "|";
-      if (Array.isArray(item.type) === true) {
-        for (let i = 0; i < item.type.length; i++) {
-          if (i === item.type.length - 1) {
-            add_or = "";
-          }
-          type += item.type[i] + add_or;
-        }
-      } else {
-        type = item.type;
-      }
-
-      return (
-        <label key={index}>
-          <span>{item.name}</span>: <span id="type-data">{type}</span>
-          {add_detail}
-        </label>
-      );
-    });
-
-    return this.params;
-  };
-
-  _createData = () => {
-    let data;
-    this.setState({
-      data
-    });
-  };
-
-  // Create account for test
-  _generateAccount = event => {
-    let { account, private_key } = this.state;
-    let data = {};
-    switch (event.target.id) {
-      case "regular":
-        data = createRegularKey();
-        break;
-      case "bank":
-        data = createBankKey();
-        break;
-
-      default:
-        break;
-    }
-
-    account = data.account;
-    private_key = data.privateKey;
-    this.setState({ account, private_key });
-  };
-  // Run  function
-  _runFunc = event => {
-    let name = event.target.id;
-
-    console.log(name);
-    this._execFunc(name);
-  };
-
-  // Chose type for function
-  async _execFunc(name) {
-    let type_func = this.state.type_func[0];
-    let { name_func, address, method, fee, value } = this.state;
-
-    switch (type_func) {
-      case "read":
-        method = "callReadonlyContractMethod";
-        break;
-      case "pure":
-        method = "callPureContractMethod";
-        break;
-      case "transaction":
-        method = this.state.name_func;
-        break;
-      default:
-        break;
-    }
-
-    console.log(method);
-
-    let response_c_f;
-    console.log(name);
-    if (name === "normal") {
-      response_c_f = await execContract(
-        this.params_value,
-        name_func,
-        address,
-        method,
-        fee,
-        value
-      );
-    } else {
-      response_c_f = await callWithWallet(address, null, value, fee, null);
-    }
-
-    let data = response_c_f.data;
-    let code_status = response_c_f.code_status;
-
-    if (data === undefined) {
-      this.setState({
-        data: response_c_f.code_status
-      });
-    } else {
-      this.setState({
-        data: code_status + " " + JSON.stringify(data)
-      });
-    }
+  componentDidMount() {
+    // {privateKey, address}
+    const tmpAccount = createBankKey();
+    tweb3.wallet.importAccount(tmpAccount.privateKey);
+    tweb3.wallet.defaultAccount = tmpAccount.address;
+    this.setState({ account: tmpAccount });
+    console.log('account', tmpAccount);
   }
 
-  _setParamValue = event => {
-    this.params_value[parseInt(event.target.id)] = event.target.value;
-  };
+  // _handleValue = event => {
+  //   this.setState({
+  //     value: event.target.value
+  //   });
+  // };
 
-  _handleMethodWallet = () => {
-    let { show_method_wallet, option_button } = this.state;
-    show_method_wallet = !show_method_wallet;
-    if (show_method_wallet === true) {
-      option_button = "Hidden";
-    } else {
-      option_button = "Open";
-    }
+  // _handleFee = event => {
+  //   this.setState({
+  //     fee: event.target.value
+  //   });
+  // };
 
-    this.setState({ show_method_wallet, option_button });
-  };
+  // _hiddenWallet = () => {
+  //   this.setState({
+  //     is_hidden: !this.state.is_hidden
+  //   });
+  // };
 
-  onChangeTab = index => {
+  // _handleWallet = event => {
+  //   this.setState({
+  //     wallet: event.target.value
+  //   });
+  // };
+
+  // // Submit private key
+  // _submitKey = () => {
+  //   let { private_key } = this.state;
+  //   localStorage.setItem("private_key_wallet", private_key);
+  //   this._checkKey();
+  // };
+
+  // // Check key
+  // _checkKey = () => {
+  //   let {
+  //     have_wallet,
+  //     private_key,
+  //     show_method_wallet,
+  //     option_button
+  //   } = this.state;
+  //   let private_key_wallet = localStorage.getItem("private_key_wallet");
+
+  //   if (private_key_wallet !== null) {
+  //     have_wallet = true;
+  //     private_key = private_key_wallet;
+  //     show_method_wallet = false;
+  //     option_button = "Hidden";
+  //   }
+
+  //   this.setState({
+  //     have_wallet,
+  //     private_key_wallet,
+  //     private_key,
+  //     show_method_wallet,
+  //     option_button
+  //   });
+  // };
+
+  // // Set option for create wallet
+  // _setOption = event => {
+  //   let { show_create } = false;
+  //   switch (event.target.id) {
+  //     case "create":
+  //       show_create = true;
+
+  //       this.setState({
+  //         option: "Create random, throw-away account"
+  //       });
+  //       break;
+
+  //     case "signin":
+  //       show_create = false;
+
+  //       this.setState({
+  //         option: "Sign with Icetea Wallet"
+  //       });
+  //       break;
+
+  //     default:
+  //       break;
+  //   }
+
+  //   this.setState({ show_create });
+  // };
+
+  // _setChoose = is_choose => {
+  //   this.setState({
+  //     is_choose
+  //   });
+
+  //   let data_func = this.state.list_func;
+
+  //   // eslint-disable-next-line default-case
+  //   switch (is_choose) {
+  //     case "pure":
+  //       data_func = this.state.pure_func;
+  //       break;
+  //     case "view":
+  //       data_func = this.state.view_func;
+  //       break;
+  //     case "transaction":
+  //       data_func = this.state.write_func;
+  //       break;
+  //   }
+
+  //   this.setState({
+  //     data_func
+  //   });
+  // };
+
+  // // Set function for using wallet
+  // _setFunction = event => {
+  //   let name_func = event.target.id;
+  //   let choose_func;
+  //   for (let i = 0; i < this.state.data_func.length; i++) {
+  //     let func = this.state.data_func[i];
+  //     if (func[0] === name_func) {
+  //       choose_func = func;
+  //     }
+  //   }
+
+  //   let type_func = choose_func[1].decorators;
+  //   let params = choose_func[1].params;
+  //   let return_type = choose_func[1].returnType;
+  //   let params_value = Array(params.length);
+
+  //   this.setState({
+  //     params,
+  //     name_func,
+  //     return_type,
+  //     params_value,
+  //     type_func
+  //   });
+
+  //   this.params = [];
+  //   this.params_value = [];
+  //   this._setParam();
+  // };
+
+  // // Set params for function
+  // _setParam = () => {
+  //   this.params = this.state.params.map((item, index) => {
+  //     let i = index;
+  //     let add_detail = ", ";
+  //     if (i === this.state.params.length - 1) {
+  //       add_detail = null;
+  //     }
+
+  //     let type = "";
+  //     let add_or = "|";
+  //     if (Array.isArray(item.type) === true) {
+  //       for (let i = 0; i < item.type.length; i++) {
+  //         if (i === item.type.length - 1) {
+  //           add_or = "";
+  //         }
+  //         type += item.type[i] + add_or;
+  //       }
+  //     } else {
+  //       type = item.type;
+  //     }
+
+  //     return (
+  //       <label key={index}>
+  //         <span>{item.name}</span>: <span id="type-data">{type}</span>
+  //         {add_detail}
+  //       </label>
+  //     );
+  //   });
+
+  //   return this.params;
+  // };
+
+  // _createData = () => {
+  //   let data;
+  //   this.setState({
+  //     data
+  //   });
+  // };
+
+  // // Create account for test
+  // _generateAccount = event => {
+  //   let { account, private_key } = this.state;
+  //   let data = {};
+  //   switch (event.target.id) {
+  //     case "regular":
+  //       data = createRegularKey();
+  //       break;
+  //     case "bank":
+  //       data = createBankKey();
+  //       break;
+
+  //     default:
+  //       break;
+  //   }
+
+  //   account = data.account;
+  //   private_key = data.privateKey;
+  //   this.setState({ account, private_key });
+  // };
+  // // Run  function
+  // _runFunc = event => {
+  //   let name = event.target.id;
+
+  //   console.log(name);
+  //   this._execFunc(name);
+  // };
+
+  // // Chose type for function
+  // async _execFunc(name) {
+  //   let type_func = this.state.type_func[0];
+  //   let { name_func, address, method, fee, value } = this.state;
+
+  //   switch (type_func) {
+  //     case "read":
+  //       method = "callReadonlyContractMethod";
+  //       break;
+  //     case "pure":
+  //       method = "callPureContractMethod";
+  //       break;
+  //     case "transaction":
+  //       method = this.state.name_func;
+  //       break;
+  //     default:
+  //       break;
+  //   }
+
+  //   console.log(method);
+
+  //   let response_c_f;
+  //   console.log(name);
+  //   if (name === "normal") {
+  //     response_c_f = await execContract(
+  //       this.params_value,
+  //       name_func,
+  //       address,
+  //       method,
+  //       fee,
+  //       value
+  //     );
+  //   } else {
+  //     response_c_f = await callWithWallet(address, null, value, fee, null);
+  //   }
+
+  //   let data = response_c_f.data;
+  //   let code_status = response_c_f.code_status;
+
+  //   if (data === undefined) {
+  //     this.setState({
+  //       data: response_c_f.code_status
+  //     });
+  //   } else {
+  //     this.setState({
+  //       data: code_status + " " + JSON.stringify(data)
+  //     });
+  //   }
+  // }
+
+  // _setParamValue = event => {
+  //   this.params_value[parseInt(event.target.id)] = event.target.value;
+  // };
+
+  // _handleMethodWallet = () => {
+  //   let { show_method_wallet, option_button } = this.state;
+  //   show_method_wallet = !show_method_wallet;
+  //   if (show_method_wallet === true) {
+  //     option_button = "Hidden";
+  //   } else {
+  //     option_button = "Open";
+  //   }
+
+  //   this.setState({ show_method_wallet, option_button });
+  // };
+
+  onChangeTypeFunc = index => {
     const { metadata } = this.state;
     let typeFunc = null;
-    if (index === "2") typeFunc = "transaction";
-    if (index === "3") typeFunc = "view";
-    if (index === "4") typeFunc = "pure";
-    // console.log("typeFunc", typeFunc);
+    if (index === '2') typeFunc = 'transaction';
+    if (index === '3') typeFunc = 'view';
+    if (index === '4') typeFunc = 'pure';
+
     const newMeta = metadata.filter(func => {
       return func.decorators[0] === typeFunc || !typeFunc;
     });
     // console.log("callback newMeta", newMeta);
-    this.setState({ selectedMetadata: newMeta });
+    this.setState({ selectedMeta: newMeta });
   };
 
   renderFuncLeftPanel = () => {
     const { metadata } = this.state;
     // console.log("renderFuncLeftPanel", metadata);
-    const disabled = metadata[0].type === "unknown";
+    const disabled = metadata[0].type === 'unknown';
 
     return (
       <Tabs
         defaultActiveKey="1"
-        onChange={this.onChangeTab}
+        onChange={this.onChangeTypeFunc}
         renderTabBar={() => <ScrollableInkTabBar />}
         renderTabContent={() => <TabContent />}
       >
@@ -480,19 +484,13 @@ class CallContract extends Component {
           <div className="wrapper-funcs">{this.renderFuncs(metadata)}</div>
         </TabPane>
         <TabPane tab="Write" key="2" disabled={disabled}>
-          <div className="wrapper-funcs">
-            {this.renderFuncs(metadata, "transaction")}
-          </div>
+          <div className="wrapper-funcs">{this.renderFuncs(metadata, 'transaction')}</div>
         </TabPane>
         <TabPane tab="View" key="3" disabled={disabled}>
-          <div className="wrapper-funcs">
-            {this.renderFuncs(metadata, "view")}
-          </div>
+          <div className="wrapper-funcs">{this.renderFuncs(metadata, 'view')}</div>
         </TabPane>
         <TabPane tab="Pure" key="4" disabled={disabled}>
-          <div className="wrapper-funcs">
-            {this.renderFuncs(metadata, "pure")}
-          </div>
+          <div className="wrapper-funcs">{this.renderFuncs(metadata, 'pure')}</div>
         </TabPane>
       </Tabs>
     );
@@ -510,14 +508,12 @@ class CallContract extends Component {
             return (
               <li
                 key={index}
-                className={func.selected ? "on" : ""}
+                className={func.selected ? 'on' : ''}
                 id={func.name}
-                onClick={() => this.selectedFuncByType(func.name)}
+                onClick={() => this.selectFunc(func.name)}
               >
                 <span>{func.name}</span>
-                <code className="typeFunc">
-                  @{func.decorators[0] || func.type}
-                </code>
+                <code className="typeFunc">@{func.decorators[0] || func.type}</code>
               </li>
             );
           })}
@@ -525,7 +521,7 @@ class CallContract extends Component {
     );
   };
 
-  selectedFuncByType = name => {
+  selectFunc = name => {
     let value;
     const { metadata } = this.state;
     metadata.forEach(item => {
@@ -537,99 +533,172 @@ class CallContract extends Component {
       }
     });
     // console.log("metadata", metadata);
-    this.setState({ selectedFuncByType: value });
+    this.setState({ selectedFunc: value });
   };
 
   renderInforRightPanel = () => {
-    const { selectedMetadata } = this.state;
-    // const tmpFunc = metadata.filter(func => {
-    //   return func.selected || true;
-    // });
-    const signatures = [];
-    console.log("metadata1", selectedMetadata);
-    selectedMetadata.forEach((func, index) => {
+    const { selectedMeta } = this.state;
+    const funcsInfo = {};
+    // console.log("metadata1", selectedMeta);
+
+    if (selectedMeta.length <= 0) {
+      return <span>No function</span>;
+    }
+
+    selectedMeta.forEach((func, index) => {
       if (func) {
         const funcName = func.name;
         const decorators = func.decorators || [];
-        const decos = decorators.map(d => "@" + d);
+        const decos = decorators.map(d => '@' + d);
 
-        let signature = decos.join(" ");
-        if (signature) {
-          signature = signature + " ";
+        let funcInfo = decos.join(' ');
+        if (funcInfo) {
+          funcInfo = funcInfo + ' ';
         }
-        signature = signature + funcName;
+        funcInfo = funcInfo + funcName;
 
         if (func.params) {
           let ps = func.params
             .reduce((prev, p) => {
-              prev.push(p.name + ": " + fmtType(p.type));
+              prev.push(p.name + ': ' + fmtType(p.type));
               return prev;
             }, [])
-            .join(", ");
-          signature += "(" + ps + ")";
+            .join(', ');
+          funcInfo += '(' + ps + ')';
         }
 
-        signature +=
-          ": " + fmtType(func.fieldType || func.returnType, func.returnType);
-        signatures[index] = signature;
+        funcInfo += ': ' + fmtType(func.fieldType || func.returnType, func.returnType);
+        funcsInfo[funcName] = funcInfo;
       }
     });
+
     const { loading } = this.state;
 
-    return selectedMetadata.map((func, index) => {
+    return selectedMeta.map((func, index) => {
       return (
         <div className="wrapper-func" key={index}>
           <div className="info-box">
             <code>
-              {index + 1}) {signatures[index]}
+              {index + 1}) {funcsInfo[func.name]}
             </code>
           </div>
           <div className="func-content">
-            <div className="func-body">
-              {func.type === "unknown" ? (
+            <form className="func-body">
+              {func.type === 'unknown' ? (
                 <React.Fragment>
-                  <label>
-                    Params (each param 1 row, JSON accepted, use " to denote
-                    string)
-                  </label>
+                  <label>Params (each param 1 row, JSON accepted, use " to denote string)</label>
                   <TextArea rows={4} />
                 </React.Fragment>
               ) : (
-                // selectedMetadata[index].params &&
-                func.params.map((func, i) => {
+                func.params.map((param, paramIndex) => {
+                  const paramType = param.type.toString() === 'number' ? 'number' : '';
+                  // console.log("type", type, param.type.toString());
                   return (
-                    <div key={i} className="wrapper-input">
-                      <label>{`${func.name} (${func.type})`}</label>
-                      <Input placeholder={`${func.name} (${func.type})`} />
+                    <div key={paramIndex} className="wrapper-input">
+                      <label>{`${param.name} (${param.type})`}</label>
+                      <Input
+                        type={paramType}
+                        onChange={event => this.onChangeParam(event, func.name, paramType, paramIndex)}
+                        placeholder={`${param.name} (${param.type})`}
+                        allowClear
+                      />
                     </div>
                   );
                 })
               )}
-              <Button
-                type="primary"
-                loading={loading}
-                onClick={this.enterLoading}
-              >
-                <span>
-                  {func.decorators[0] === "transaction" ? "Call" : "Querry"}
-                </span>
+              <Button type="primary" loading={loading[func.name]} onClick={() => this.submitForm(func, index)}>
+                <span>{func.decorators[0] === 'transaction' || func.type === 'unknown' ? 'Send' : 'Querry'}</span>
               </Button>
-            </div>
+              {func.answer && (
+                <div className="myanswer">
+                  <span>
+                    &nbsp;[&nbsp;
+                    <b>
+                      <code>{func.name}():</code>
+                    </b>
+                    &nbsp;method Response&nbsp;]
+                  </span>
+                  <br />
+                  &nbsp;&nbsp;
+                  <span className="text-success">
+                    <i className="fa  fa-angle-double-right fa-6" />
+                  </span>
+                  <strong />
+                  &nbsp;
+                  <span>{func.answer}</span>
+                </div>
+              )}
+            </form>
           </div>
         </div>
       );
     });
   };
 
-  enterLoading = () => {
+  onChangeParam = (event, funcName, paramType, indexParam) => {
+    const { params_value } = this.state;
+    let value = event.currentTarget.value;
+
+    if (paramType === 'number') value = parseInt(value);
+    if (!params_value[funcName]) params_value[funcName] = [];
+    params_value[funcName][indexParam] = value;
+    // console.log("params_value", params_value);
+  };
+
+  submitForm = (func, indexFunc) => {
     const { loading } = this.state;
-    this.setState({ loading: !loading });
+    loading[func.name] = true;
+    // console.log("submitForm", func);
+    if (func.decorators[0] === 'view' || func.decorators[0] === 'pure') {
+      this.callReadOrPure(func, indexFunc);
+    } else {
+      this.sendTransaction(func, indexFunc);
+    }
+
+    this.setState({ loading: loading });
+  };
+
+  callReadOrPure = async (func, index) => {
+    const { address } = this.props;
+    const { selectedMeta, loading } = this.state;
+
+    try {
+      const method = func.decorators[0] === 'view' ? 'callReadonlyContractMethod' : 'callPureContractMethod';
+      const result = await tweb3[method](address, func.name, func.params);
+      // console.log("result", result);
+      selectedMeta[index]['answer'] = result || '' + result;
+    } catch (error) {
+      console.log('error', error);
+      selectedMeta[index]['answer'] = error;
+    } finally {
+      loading[func.name] = false;
+      this.setState({ selectedMeta, loading });
+    }
+  };
+
+  sendTransaction = async (func, index) => {
+    const { address } = this.props;
+    const { selectedMeta, loading, params_value, account } = this.state;
+    const signers = account.address;
+    // console.log("func", func);
+    try {
+      const ct = tweb3.contract(address);
+      const result = await ct.methods[func.name](...params_value[func.name]).sendCommit({ signers });
+      selectedMeta[index]['answer'] = formatResult(result);
+    } catch (error) {
+      console.log('error', error);
+      selectedMeta[index]['answer'] = formatResult(error, true);
+    } finally {
+      loading[func.name] = false;
+      this.setState({ selectedMeta, loading });
+    }
   };
 
   enterIconLoading = () => {
     const { iconLoading } = this.state;
     this.setState({ iconLoading: !iconLoading });
   };
+
   render() {
     // let {
     //   address,
@@ -642,7 +711,6 @@ class CallContract extends Component {
     //   data_func,
     //   metadata
     // } = this.state;
-    const { loading } = this.state;
 
     return (
       <div className="container-call-contract">

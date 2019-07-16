@@ -11,7 +11,7 @@ import Blocks from "./components/Blocks/Blocks";
 import Transactions from "./components/Transactions/Transactions";
 import NotFound from "./components/NotFound/NotFound";
 import Contract from "./components/Contract/Contract";
-import AllContract from "./components/Contract/AllContract";
+import ListContracts from "./components/Contract/ListContracts";
 import Address from "./components/Address/Address";
 import GlobaLoading from "./components/elements/GlobaLoading";
 class App extends Component {
@@ -27,7 +27,7 @@ class App extends Component {
             <Route exact path={`/blocks`} component={Blocks} />;
             <Route exact path={`/txs`} component={Transactions} />;
             <Route exact path={"/contract/:address"} component={Contract} />;
-            <Route exact path={`/contracts`} component={AllContract} />
+            <Route exact path={`/contracts`} component={ListContracts} />
             <Route exact path={"/address/:address"} component={Address} />
             <Route component={NotFound} />
           </Switch>

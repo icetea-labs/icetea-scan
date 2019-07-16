@@ -1,18 +1,15 @@
 /* eslint-disable no-undef */
-import React, { Component } from "react";
-import { ContractMode } from "@iceteachain/common";
-import { connect } from "react-redux";
-import Select from "rc-select";
-import PaginationPro from "../elements/PaginationPro";
-import { Link } from "react-router-dom";
-import { toTEA } from "../../utils";
-import Layout from "../Layout/Layout";
-import {
-  getAllContracts,
-  getDataContract
-} from "../../service/blockchain/get-single-data";
-import * as actions from "../../store/actions";
-class AllContract extends Component {
+import React, { Component } from 'react';
+import { ContractMode } from '@iceteachain/common';
+import { connect } from 'react-redux';
+import Select from 'rc-select';
+import PaginationPro from '../elements/PaginationPro';
+import { Link } from 'react-router-dom';
+import { toTEA } from '../../utils';
+import Layout from '../Layout/Layout';
+import { getAllContracts, getDataContract } from '../../service/blockchain/get-single-data';
+import * as actions from '../../store/actions';
+class ListContracts extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,7 +17,7 @@ class AllContract extends Component {
       pageSize: 10,
       total: 0,
       dataCurrentPage: [],
-      allContractsAddress: []
+      allContractsAddress: [],
     };
   }
 
@@ -45,7 +42,7 @@ class AllContract extends Component {
 
     if (total > 0) {
       if (to > total) to = total;
-      console.log("from: ", from, "-to", to);
+      console.log('from: ', from, '-to', to);
       contract = data.filter((item, index) => {
         return index >= from && index < to;
       });
@@ -61,13 +58,10 @@ class AllContract extends Component {
       tmp.push(res.data);
       // }
     }
-    this.setState(
-      { allContractsAddress: data, dataCurrentPage: tmp, total },
-      () => {
-        const { setLoading } = this.props;
-        setLoading(false);
-      }
-    );
+    this.setState({ allContractsAddress: data, dataCurrentPage: tmp, total }, () => {
+      const { setLoading } = this.props;
+      setLoading(false);
+    });
   }
 
   renderTbody() {
@@ -86,9 +80,7 @@ class AllContract extends Component {
             <Link to={`/contract/${item.deployedBy}`}>{item.deployedBy}</Link>
           </td>
           <td>
-            <span>
-              {item.mode === ContractMode.WASM ? "WebAssembly" : "JavaScript"}
-            </span>
+            <span>{item.mode === ContractMode.WASM ? 'WebAssembly' : 'JavaScript'}</span>
           </td>
         </tr>
       );
@@ -159,11 +151,11 @@ const mapDispatchToProps = dispatch => {
   return {
     setLoading: value => {
       dispatch(actions.setLoading(value));
-    }
+    },
   };
 };
 
 export default connect(
   null,
   mapDispatchToProps
-)(AllContract);
+)(ListContracts);

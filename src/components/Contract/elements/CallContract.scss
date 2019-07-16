@@ -258,6 +258,9 @@ textarea {
     border-right: 1px solid #f3f3f3;
   }
   .side-main {
+    [tabindex='-1']:focus {
+      outline: none !important;
+    }
     left: 300px;
     width: 75%;
     min-width: 800px;
@@ -305,26 +308,38 @@ textarea {
       .func-body {
         padding: 1.25rem;
         color: #212529;
+        .ant-input-affix-wrapper {
+          margin-bottom: 1rem;
+        }
         & input,
         & textarea {
-          margin-bottom: 1rem;
           min-width: 100%;
+        }
+        & textarea {
+          margin-bottom: 1rem;
         }
         & label {
           display: inline-block;
           margin-bottom: 0.5rem;
         }
+        .myanswer {
+          display: block;
+          margin-top: 20px;
+          line-height: 1.5;
+          & pre {
+            font-size: 12px;
+          }
+          .text-success {
+            color: #28a745 !important;
+            & i {
+              font-weight: 700;
+            }
+          }
+          .error {
+            color: #dc3545;
+          }
+        }
       }
-      // .wrapper-input {
-      //   & input,
-      //   & textarea {
-      //     margin-bottom: 1rem;
-      //   }
-      //   & label {
-      //     display: inline-block;
-      //     margin-bottom: 0.5rem;
-      //   }
-      // }
     }
   }
 }

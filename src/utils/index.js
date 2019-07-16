@@ -77,49 +77,41 @@ export function formatResult(r, isError) {
   if (fail) {
     return (
       <React.Fragment>
-        <pre>
-          <code>
-            <b>Result</b>: <span className="error">ERROR</span>
-            <br />
-            <b>Message</b>: <span className="error">{r.deliver_tx.log || r.check_tx.log || tryStringifyJson(r)}</span>
-            <br />
-            <b>Hash</b>::&nbsp;
-            {r.hash ? (
-              <a target="_blank" rel="noopener noreferrer" href={`/tx/${r.hash}`}>
-                {r.hash}
-              </a>
-            ) : (
-              'N/A'
-            )}
-          </code>
-        </pre>
+        <b>Result</b>: <span className="error">ERROR</span>
+        <br />
+        <b>Message</b>: <span className="error">{r.deliver_tx.log || r.check_tx.log || tryStringifyJson(r)}</span>
+        <br />
+        <b>Hash</b>::&nbsp;
+        {r.hash ? (
+          <a target="_blank" rel="noopener noreferrer" href={`/tx/${r.hash}`}>
+            {r.hash}
+          </a>
+        ) : (
+          'N/A'
+        )}
       </React.Fragment>
     );
   } else {
     return (
       <React.Fragment>
-        <pre>
-          <code>
-            <b>Result</b>:
-            <span className="text-success">
-              &nbsp;<b>SUCCESS</b>
-            </span>
-            <br />
-            <b>Returned Value</b>:&nbsp;
-            <span className="text-success">{tryStringifyJson(r.returnValue)}</span>
-            <br />
-            <b>Hash</b>:&nbsp;
-            <a target="_blank" rel="noopener noreferrer" href={`/tx/${r.hash}`}>
-              {r.hash}
-            </a>
-            <br />
-            <b>Height</b>: {r.height}
-            <br />
-            <b>Tags</b>: {tryStringifyJson(r.tags)}
-            <br />
-            <b>Events:</b> {tryStringifyJson(r.events)}
-          </code>
-        </pre>
+        <b>Result</b>:
+        <span className="text-success">
+          &nbsp;<b>SUCCESS</b>
+        </span>
+        <br />
+        <b>Returned Value</b>:&nbsp;
+        <span className="text-success">{tryStringifyJson(r.returnValue)}</span>
+        <br />
+        <b>Hash</b>:&nbsp;
+        <a target="_blank" rel="noopener noreferrer" href={`/tx/${r.hash}`}>
+          {r.hash}
+        </a>
+        <br />
+        <b>Height</b>: {r.height}
+        <br />
+        <b>Tags</b>: {tryStringifyJson(r.tags)}
+        <br />
+        <b>Events:</b> {tryStringifyJson(r.events)}
       </React.Fragment>
     );
   }
@@ -133,4 +125,25 @@ export function tryStringifyJson(p, replacer = undefined, space = 2) {
   } catch (e) {
     return String(p);
   }
+}
+export function parseParamList(pText) {
+  pText = replaceAll(pText, '\r', '\n');
+  pText = replaceAll(pText, '\n\n', '\n');
+  let params = pText
+    .split('\n')
+    .filter(e => e.trim())
+    .map(tryParseJson);
+
+  return params;
+}
+export function tryParseJson(p) {
+  try {
+    return JSON.parse(p);
+  } catch (e) {
+    // console.log("WARN: ", e);
+    return p;
+  }
+}
+export function replaceAll(text, search, replacement) {
+  return text.split(search).join(replacement);
 }

@@ -7,7 +7,7 @@ import 'rc-tabs/assets/index.css';
 import './CallContract.scss';
 import { Input } from 'antd';
 import { Button } from 'antd';
-import { fmtType, formatResult } from '../../../utils';
+import { fmtType, formatResult, parseParamList, tryStringifyJson } from '../../../utils';
 // import "antd/dist/antd.css"
 
 // import {
@@ -587,7 +587,21 @@ class CallContract extends Component {
               {func.type === 'unknown' ? (
                 <React.Fragment>
                   <label>Params (each param 1 row, JSON accepted, use " to denote string)</label>
-                  <TextArea rows={4} />
+                  <TextArea onChange={event => this.onChangeParam(event, func.name)} rows={3} />
+                  <Button
+                    type="primary"
+                    loading={(loading[func.name] && loading[func.name]['view']) || false}
+                    onClick={() => this.submitForm(func, index, 'view')}
+                  >
+                    <span>{'View'}</span>
+                  </Button>
+                  <Button
+                    type="primary"
+                    loading={(loading[func.name] && loading[func.name]['pure']) || false}
+                    onClick={() => this.submitForm(func, index, 'pure')}
+                  >
+                    <span>{'Pure'}</span>
+                  </Button>
                 </React.Fragment>
               ) : (
                 func.params.map((param, paramIndex) => {
@@ -601,12 +615,13 @@ class CallContract extends Component {
                         onChange={event => this.onChangeParam(event, func.name, paramType, paramIndex)}
                         placeholder={`${param.name} (${param.type})`}
                         allowClear
+                        r
                       />
                     </div>
                   );
                 })
               )}
-              <Button type="primary" loading={loading[func.name]} onClick={() => this.submitForm(func, index)}>
+              <Button type="primary" loading={loading[func.name] === true} onClick={() => this.submitForm(func, index)}>
                 <span>{func.decorators[0] === 'transaction' || func.type === 'unknown' ? 'Send' : 'Querry'}</span>
               </Button>
               {func.answer && (
@@ -625,7 +640,11 @@ class CallContract extends Component {
                   </span>
                   <strong />
                   &nbsp;
-                  <span>{func.answer}</span>
+                  <span>
+                    <pre>
+                      <code>{func.answer}</code>
+                    </pre>
+                  </span>
                 </div>
               )}
             </form>
@@ -638,19 +657,31 @@ class CallContract extends Component {
   onChangeParam = (event, funcName, paramType, indexParam) => {
     const { params_value } = this.state;
     let value = event.currentTarget.value;
+    // JS
+    if (paramType) {
+      if (paramType === 'number') value = parseInt(value);
+      if (!params_value[funcName]) params_value[funcName] = [];
+      params_value[funcName][indexParam] = value;
+    } else {
+      //WebAssembly
+      params_value[funcName] = parseParamList(value);
+    }
 
-    if (paramType === 'number') value = parseInt(value);
-    if (!params_value[funcName]) params_value[funcName] = [];
-    params_value[funcName][indexParam] = value;
     // console.log("params_value", params_value);
   };
 
-  submitForm = (func, indexFunc) => {
+  submitForm = (func, indexFunc, typeCall) => {
     const { loading } = this.state;
-    loading[func.name] = true;
-    // console.log("submitForm", func);
-    if (func.decorators[0] === 'view' || func.decorators[0] === 'pure') {
-      this.callReadOrPure(func, indexFunc);
+
+    if (typeCall) {
+      loading[func.name] = [];
+      loading[func.name][typeCall] = true;
+    } else {
+      loading[func.name] = true;
+    }
+    console.log('loading', loading);
+    if (typeCall || func.decorators[0] === 'view' || func.decorators[0] === 'pure') {
+      this.callReadOrPure(func, indexFunc, typeCall);
     } else {
       this.sendTransaction(func, indexFunc);
     }
@@ -658,18 +689,20 @@ class CallContract extends Component {
     this.setState({ loading: loading });
   };
 
-  callReadOrPure = async (func, index) => {
+  callReadOrPure = async (func, index, typeCall) => {
     const { address } = this.props;
     const { selectedMeta, loading } = this.state;
 
     try {
-      const method = func.decorators[0] === 'view' ? 'callReadonlyContractMethod' : 'callPureContractMethod';
+      const method =
+        func.decorators[0] === 'view' || typeCall === 'view' ? 'callReadonlyContractMethod' : 'callPureContractMethod';
+      console.log('method', method);
       const result = await tweb3[method](address, func.name, func.params);
       // console.log("result", result);
       selectedMeta[index]['answer'] = result || '' + result;
     } catch (error) {
       console.log('error', error);
-      selectedMeta[index]['answer'] = error;
+      selectedMeta[index]['answer'] = tryStringifyJson(error, true);
     } finally {
       loading[func.name] = false;
       this.setState({ selectedMeta, loading });
@@ -680,10 +713,10 @@ class CallContract extends Component {
     const { address } = this.props;
     const { selectedMeta, loading, params_value, account } = this.state;
     const signers = account.address;
-    // console.log("func", func);
+    // console.log('params_value', params_value);
     try {
       const ct = tweb3.contract(address);
-      const result = await ct.methods[func.name](...params_value[func.name]).sendCommit({ signers });
+      const result = await ct.methods[func.name](...(params_value[func.name] || [])).sendCommit({ signers });
       selectedMeta[index]['answer'] = formatResult(result);
     } catch (error) {
       console.log('error', error);

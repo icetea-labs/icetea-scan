@@ -1,3 +1,5 @@
+@import './common.scss';
+@import './responsive.scss';
 @import './header.scss';
 @import './main.scss';
 @import './footer.scss';
@@ -46,7 +48,7 @@
     width: 40%;
     .row_blocks {
       margin: 0 15px;
-      padding: 13px 0;
+      padding: 12px 0;
       box-sizing: border-box;
       border-bottom: 1px solid rgba($color_grey_athens, 0.5);
       .title {
@@ -82,7 +84,7 @@
     margin-left: 20px;
     .row_transactions {
       margin: 0 15px;
-      padding: 13px 0;
+      padding: 12px 0;
       box-sizing: border-box;
       border-bottom: 1px solid rgba($color_grey_athens, 0.5);
       .info_tx {
@@ -250,7 +252,7 @@
   }
   .info_body {
     padding: 20px;
-    margin-bottom: 50px;
+    // margin-bottom: 50px;
     // height: 80pc;
     .row_detail {
       padding: 8px 0;
@@ -264,9 +266,10 @@
 
 .row_detail {
   span.label {
-    color: $color_primary;
+    color: #48515d;
     display: block;
     width: 14%;
+    font-family: DINPro-Regular;
   }
   .text_wrap {
     width: calc(100% - 14%);
@@ -312,40 +315,6 @@
 }
 
 // .table_data
-.table_data {
-  table {
-    width: 100%;
-    display: table;
-    border-spacing: 0 5px;
-    table-layout: fixed;
-  }
-  th {
-    padding: 11px 16px;
-    text-align: left;
-    color: $color_secondary;
-  }
-  tbody {
-    tr {
-      background: $color_white;
-      line-height: 18.2px;
-      margin-bottom: 4px;
-      box-shadow: rgba(0, 0, 0, 0.06) 0px 0px 10px 0px;
-      transition: all 0.3s ease;
-      &:hover {
-        box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 10px 0px;
-        transition: all 0.3s ease;
-      }
-    }
-  }
-  td {
-    padding: 11px 16px;
-    &.text_overflow {
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
-  }
-}
 
 .id_code {
   margin-right: 30px;

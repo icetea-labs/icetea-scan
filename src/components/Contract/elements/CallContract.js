@@ -178,18 +178,19 @@ class CallContract extends Component {
   }
 
   componentDidMount() {
-    const search_params = new URLSearchParams(window.location.search);
-    let txSigned = search_params.get('txSigned');
-    if (txSigned) txSigned = JSON.parse(decodeURIComponent(txSigned));
-
-    console.log('txSigned', txSigned);
-    // {privateKey, address}
     const tmpAccount = createBankKey();
     tweb3.wallet.importAccount(tmpAccount.privateKey);
     tweb3.wallet.defaultAccount = tmpAccount.address;
 
-    this.setState({ account: tmpAccount, txSigned });
-    // console.log('account', tmpAccount);
+    const search_params = new URLSearchParams(window.location.search);
+    let txSigned = search_params.get('txSigned');
+    if (txSigned) {
+      txSigned = JSON.parse(decodeURIComponent(txSigned));
+      this.setState({ account: tmpAccount, txSigned, isIceteaWallet: true });
+    } else {
+      this.setState({ account: tmpAccount });
+    }
+    console.log('txSigned', txSigned);
   }
 
   // _handleValue = event => {
@@ -761,6 +762,8 @@ class CallContract extends Component {
     const { answers, txSigned, params_value } = this.state;
     const funcName = txSigned.data.name;
     const paramTmp = txSigned.data.params;
+    const address = txSigned.to;
+
     paramTmp.forEach((e, i) => {
       if (!params_value[funcName]) params_value[funcName] = [];
       params_value[funcName][i] = e;
@@ -775,6 +778,7 @@ class CallContract extends Component {
       answers[funcName] = formatResult(error, true);
     } finally {
       this.setState({ answers, txSigned: '' });
+      window.history.pushState({}, document.title, '/contract/' + address);
     }
   };
 
@@ -807,7 +811,7 @@ class CallContract extends Component {
     //   data_func,
     //   metadata
     // } = this.state;
-    const { txSigned, isIceteaWallet } = this.state;
+    const { txSigned, isIceteaWallet, selectedMeta } = this.state;
     // console.log('txSigned', txSigned);
     return (
       <div className="container-call-contract">
@@ -817,25 +821,23 @@ class CallContract extends Component {
         </div>
         <div className="side-main">
           <div className="contrainer-main">
-            <div className="connector-wallet">
-              <i id="connector" className="fa fa-circle" />
-              <span> Connect to </span>
-              <Select
-                // size="small"
-                // value={(isIceteaWallet && 'icetea') || ''}
-                style={{ width: 300 }}
-                onChange={this.handleChange}
-                placeholder="Please select wallet"
-                animation="slide-up"
-              >
-                <Option value="random">Generate a random, throw-away account</Option>
-                <Option value="icetea">Sign with Icetea Wallet</Option>
-                <Option value="icetea1">Sign with Icetea Wallet</Option>
-                <Option value="icetea2">Sign with Icetea Wallet</Option>
-                <Option value="icetea3">Sign with Icetea Wallet</Option>
-                <Option value="icetea4">Sign with Icetea Wallet</Option>
-              </Select>
-            </div>
+            {selectedMeta.length > 0 && (
+              <div className="connector-wallet">
+                <i id="connector" className="fa fa-circle" />
+                <span> Connect to </span>
+                <Select
+                  // size="small"
+                  value={(isIceteaWallet && 'icetea') || 'random'}
+                  style={{ width: 300 }}
+                  onChange={this.handleChange}
+                  placeholder="Please select wallet"
+                  animation="slide-up"
+                >
+                  <Option value="random">Generate a random, throw-away account</Option>
+                  <Option value="icetea">Sign with Icetea Wallet</Option>
+                </Select>
+              </div>
+            )}
             {this.renderInforRightPanel()}
           </div>
         </div>

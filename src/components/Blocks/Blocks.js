@@ -14,7 +14,7 @@ class Blocks extends PureComponent {
     super(props);
     this.state = {
       current: 1,
-      pageSize: 10,
+      pageSize: 15,
       blocksInfo: [],
     };
   }
@@ -93,9 +93,8 @@ class Blocks extends PureComponent {
   paginationOnChange = pageNum => {
     const { current, pageSize } = this.state;
     // const { setLoading } = this.props;
-
     if (pageNum !== current) {
-      this.setState({ current }, () => {
+      this.setState({ current: pageNum }, () => {
         // setLoading(true);
       });
       getListBlockApi({ page_size: pageSize, page_index: pageNum });
@@ -105,39 +104,43 @@ class Blocks extends PureComponent {
   render() {
     const { current, pageSize } = this.state;
     const { totalBlocks } = this.props;
+    let form = totalBlocks - current * pageSize + 1;
+    if (form < process.env.REACT_APP_INIT_BLOCK) form = process.env.REACT_APP_INIT_BLOCK;
+    let to = totalBlocks - current * pageSize + pageSize;
+    if (to > totalBlocks) to = totalBlocks;
 
     return (
-      <div className="block_page mb_30">
-        <div className="container">
-          <div className="block_page page_info_header">
-            <h3>Blocks</h3>
-            <div className="breadcrumb">
-              <ul>
-                <li>
-                  <Link to="/">Home</Link>
-                </li>
-                <li>
-                  <Link to="/blocks">Blocks</Link>
-                </li>
-              </ul>
-            </div>
+      <div className="blocks pc-container ">
+        <h3>Blocks</h3>
+        <div className="flexBox">
+          <div className="sub-title">
+            Block <span>#{form}</span> to <span>#{to}</span> (Total of<span> {totalBlocks} </span>blocks)
           </div>
-          <div className="table_data">
-            <table>
-              <thead>{this.renderTHead()}</thead>
-              <tbody>{this.renderTbody()}</tbody>
-            </table>
+          <div className="breadcrumb">
+            <span className="breadcrumb-item">
+              <Link to="/">Home</Link>
+            </span>
+            <div className="breadcrumb-separator">/</div>
+            <span className="breadcrumb-item">
+              <Link to="/blocks">Blocks</Link>
+            </span>
           </div>
-          <PaginationPro
-            selectComponentClass={Select}
-            showQuickJumper={false}
-            showSizeChanger={false}
-            defaultPageSize={pageSize}
-            defaultCurrent={current}
-            onChange={this.paginationOnChange}
-            total={totalBlocks}
-          />
         </div>
+        <div className="table_data">
+          <table>
+            <thead>{this.renderTHead()}</thead>
+            <tbody>{this.renderTbody()}</tbody>
+          </table>
+        </div>
+        <PaginationPro
+          selectComponentClass={Select}
+          showQuickJumper={false}
+          showSizeChanger={false}
+          defaultPageSize={pageSize}
+          defaultCurrent={current}
+          onChange={this.paginationOnChange}
+          total={totalBlocks}
+        />
       </div>
     );
   }

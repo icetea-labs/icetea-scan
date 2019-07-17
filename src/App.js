@@ -4,7 +4,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import 'antd/dist/antd.css';
 import './sass/reset.css';
 import './sass/app.scss';
-import './sass/_responsive.scss';
+// import './sass/_responsive.scss';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { HomeContainer, Layout } from './components/Layout/Layout';
 import Home from './components/Home/Home';

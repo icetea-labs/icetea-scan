@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Layout from '../Layout/Layout';
 import { toTEA, convertTxType, diffTime } from '../../utils';
 import './Transactions.scss';
-import moment from 'moment';
+// import moment from 'moment';
 import Select from 'rc-select';
 import PaginationPro from '../elements/PaginationPro';
 import { getListTxApi, getTotalTxsApi, getTotalTxsByHeighApi } from '../../service/api/get-list-data';
@@ -20,7 +19,7 @@ class Transactions extends Component {
       to: '',
       from: '',
       current: 1,
-      pageSize: 10,
+      pageSize: 15,
     };
   }
 
@@ -108,40 +107,47 @@ class Transactions extends Component {
     const { totalTxs } = this.props;
 
     return (
-      <div className="block_page mb_30">
-        <div className="container">
-          <div className="block_page page_info_header">
+      <div className="transactions pc-container ">
+        {isShowTxForBlock ? (
+          <div className="flexBox flex-header">
             <h3>Transactions</h3>
-            <span className="sub-tilter" style={{ display: isShowTxForBlock ? 'block' : 'none' }}>
+            <span className="id_status">
               <span>{`For Block #${height}`}</span>
             </span>
-            <div className="breadcrumb">
-              <ul>
-                <li>
-                  <Link to="/">Home</Link>
-                </li>
-                <li>
-                  <Link to="/txs">Transactions</Link>
-                </li>
-              </ul>
-            </div>
           </div>
-          <div className="table_data">
-            <table>
-              <thead>{this.renderThead()}</thead>
-              <tbody>{this.renderTbody()}</tbody>
-            </table>
+        ) : (
+          <h3>Transactions</h3>
+        )}
+        <div className="flexBox">
+          <div className="sub-title">
+            More than > <span>{totalTxs}</span> transactions found
           </div>
-          <PaginationPro
-            selectComponentClass={Select}
-            showQuickJumper={false}
-            showSizeChanger={false}
-            defaultPageSize={pageSize}
-            defaultCurrent={current}
-            onChange={this.paginationOnChange}
-            total={totalTxs}
-          />
+          <div className="breadcrumb">
+            <span className="breadcrumb-item">
+              <Link to="/">Home</Link>
+            </span>
+            <div className="breadcrumb-separator">/</div>
+            <span className="breadcrumb-item">
+              <Link to="/txs">Transactions</Link>
+            </span>
+          </div>
         </div>
+
+        <div className="table_data">
+          <table>
+            <thead>{this.renderThead()}</thead>
+            <tbody>{this.renderTbody()}</tbody>
+          </table>
+        </div>
+        <PaginationPro
+          selectComponentClass={Select}
+          showQuickJumper={false}
+          showSizeChanger={false}
+          defaultPageSize={pageSize}
+          defaultCurrent={current}
+          onChange={this.paginationOnChange}
+          total={totalTxs}
+        />
       </div>
     );
   }

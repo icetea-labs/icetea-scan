@@ -13,7 +13,7 @@ class ListContracts extends Component {
     super(props);
     this.state = {
       current: 1,
-      pageSize: 10,
+      pageSize: 15,
       total: 0,
       dataCurrentPage: [],
       allContractsAddress: [],
@@ -101,44 +101,44 @@ class ListContracts extends Component {
     const { current, pageSize, total } = this.state;
 
     return (
-      <div className="block_page mb_30">
-        <div className="container">
-          <div className="block_page page_info_header">
-            <h3>Contract </h3>
-            <div className="breadcrumb">
-              <ul>
-                <li>
-                  <Link to="/">Home</Link>
-                </li>
-                <li>
-                  <Link to="/contracts">Contract</Link>
-                </li>
-              </ul>
-            </div>
+      <div className="listContract pc-container">
+        <h3>Contract</h3>
+        <div className="flexBox">
+          <div className="sub-title">
+            More than > <span>{total}</span> contracts found
           </div>
-          <div className="table_data">
-            <table>
-              <thead>
-                <tr>
-                  <th width="35%">Address</th>
-                  <th width="15%">Balance</th>
-                  <th width="35%">Deployed by</th>
-                  <th width="15%">Type</th>
-                </tr>
-              </thead>
-              <tbody>{this.renderTbody()}</tbody>
-            </table>
+          <div className="breadcrumb">
+            <span className="breadcrumb-item">
+              <Link to="/">Home</Link>
+            </span>
+            <div className="breadcrumb-separator">/</div>
+            <span className="breadcrumb-item">
+              <Link to="/contracts">Addresses</Link>
+            </span>
           </div>
-          <PaginationPro
-            selectComponentClass={Select}
-            showQuickJumper={false}
-            showSizeChanger={false}
-            defaultPageSize={pageSize}
-            defaultCurrent={current}
-            onChange={this.paginationOnChange}
-            total={total}
-          />
         </div>
+        <div className="table_data">
+          <table>
+            <thead>
+              <tr>
+                <th width="35%">Address</th>
+                <th width="15%">Balance</th>
+                <th width="35%">Deployed by</th>
+                <th width="15%">Type</th>
+              </tr>
+            </thead>
+            <tbody>{this.renderTbody()}</tbody>
+          </table>
+        </div>
+        <PaginationPro
+          selectComponentClass={Select}
+          showQuickJumper={false}
+          showSizeChanger={false}
+          defaultPageSize={pageSize}
+          defaultCurrent={current}
+          onChange={this.paginationOnChange}
+          total={total}
+        />
       </div>
     );
   }

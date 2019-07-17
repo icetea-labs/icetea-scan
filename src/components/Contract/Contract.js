@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import notifi from '../elements/Notification';
 import CallContract from './elements/CallContract';
 import ContractDetail from './elements/ContractDetail';
 import './Contract.scss';
@@ -83,27 +85,38 @@ class Contract extends Component {
     // console.log("isContractAddress", isContractAddress);
 
     return (
-      <div className="block_info mt_50">
-        <div className="container">
-          <div className="block_info_header page_info_header">
-            <div className="wrap">
-              <span className="wrap-title">Contract</span>
-              <span className="id_code">{address}</span>
-            </div>
+      <div className="viewcontact detailBlocks pc-container">
+        <div className="flex-wrap">
+          <div className="flexBox">
+            <h3>Address</h3>
+            <span className="id_status">{address}</span>
+            <CopyToClipboard
+              text={address}
+              onCopy={() => {
+                notifi.info('Copy Succesful!');
+              }}
+            >
+              <span className="copy_to_add fa fa-clipboard" />
+            </CopyToClipboard>
+          </div>
+          <div className="flexBox">
             <div className="breadcrumb">
-              <ul>
-                <li>
-                  <Link to="/">Home</Link>
-                </li>
-                <li>
-                  <Link to="/contracts">Contract</Link>
-                </li>
-              </ul>
+              <span className="breadcrumb-item">
+                <Link to="/">Home</Link>
+              </span>
+              <div className="breadcrumb-separator">/</div>
+              <span className="breadcrumb-item">
+                <Link to="/contracts">Addresses</Link>
+              </span>
+              <div className="breadcrumb-separator">/</div>
+              <span className="breadcrumb-item">
+                <Link to={`/contracts/${address}`}>Address Info</Link>
+              </span>
             </div>
           </div>
-
-          <div className="block_content page_info_content">
-            {/* <div className="title">
+        </div>
+        <div className="block_content page_info_content">
+          {/* <div className="title">
                 <i className="fa fa-cube" />
                 <span id="detail">Contract Information</span>
                 <span
@@ -122,8 +135,8 @@ class Contract extends Component {
                 </span>
               </div> */}
 
-            <div className="info_body contract-content ">
-              {/* {show_call === true ? (
+          <div className="info_body contract-content ">
+            {/* {show_call === true ? (
                   <CallContract
                     address={address}
                     state={show_call}
@@ -132,23 +145,22 @@ class Contract extends Component {
                 ) : (
                   <ContractDetail address={address} state={!show_call} />
                 )} */}
-              <Tabs
-                defaultActiveKey={defaultTabKey}
-                destroyInactiveTabPane
-                renderTabBar={() => <ScrollableInkTabBar />}
-                renderTabContent={() => <TabContent />}
-                onChange={this.tabOnChange}
-              >
-                <TabPane tab="Detail" key="1" placeholder="loading Detail">
-                  <ContractDetail address={address} addresDetail={addresDetail} metadata={metadata} />
+            <Tabs
+              defaultActiveKey={defaultTabKey}
+              destroyInactiveTabPane
+              renderTabBar={() => <ScrollableInkTabBar />}
+              renderTabContent={() => <TabContent />}
+              onChange={this.tabOnChange}
+            >
+              <TabPane tab="Detail" key="1" placeholder="loading Detail">
+                <ContractDetail address={address} addresDetail={addresDetail} metadata={metadata} />
+              </TabPane>
+              {isContractAddress && (
+                <TabPane tab="Call Contract" key="2" placeholder="loading Call">
+                  <CallContract address={address} state={show_call} search={params_url} metadata={metadata} />
                 </TabPane>
-                {isContractAddress && (
-                  <TabPane tab="Call Contract" key="2" placeholder="loading Call">
-                    <CallContract address={address} state={show_call} search={params_url} metadata={metadata} />
-                  </TabPane>
-                )}
-              </Tabs>
-            </div>
+              )}
+            </Tabs>
           </div>
         </div>
       </div>

@@ -1,25 +1,25 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 // import logo from '../../../assets/img/logo.png';
-import logo from "../../../assets/img/icetea-logo.svg";
-import Menu from "../Menu/Menu";
-import SearchBox from "../SearchBox/SearchBox";
-import "./Header.scss";
+import logo from '../../../assets/img/icetea-logo.svg';
+import Menu from '../Menu/Menu';
+import SearchBox from '../SearchBox/SearchBox';
+import './Header.scss';
 
 class Header extends Component {
   render() {
     return (
-      <div className="header">
+      <header className="header">
         <div className="logo">
           <Link to="/">
-            <img src={logo} alt="itea-scan" />{" "}
+            <img src={logo} alt="itea-scan" />{' '}
           </Link>
         </div>
         <div className="search-box">
           <SearchBox show_cb="header" />
         </div>
         <Menu />
-      </div>
+      </header>
     );
   }
 }

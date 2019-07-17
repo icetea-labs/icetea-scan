@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import { connect } from "react-redux";
 import "./ChainInfo.scss";
 import moment from "moment";
 
@@ -60,4 +61,15 @@ class ChainInfo extends PureComponent {
   }
 }
 
-export default ChainInfo;
+const mapStateToProps = state => {
+  const { chainInfo } = state;
+  return {
+    blocksInfo: chainInfo.blocks,
+    totalContract: chainInfo.totalContract
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(ChainInfo);

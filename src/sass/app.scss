@@ -1,59 +1,22 @@
-@import "./variables";
-@import "./common";
-@import "./responsive";
+@import './common.scss';
+@import './responsive.scss';
+@import './header.scss';
+@import './main.scss';
+@import './footer.scss';
 
-.header {
-  width: 100%;
-  // background: rgb(206, 206, 206);
-  height: 50px;
-  padding: 0 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  // border-bottom: 1px solid rgba(132, 132, 0, 0.442);
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 3;
-  background: linear-gradient(
-    to right,
-    $color_blue_lagoon 0%,
-    $color_blue 50%,
-    $color_blue_lagoon 100%
-  );
-  .search_box_container {
-    position: absolute;
-    left: 25%;
-  }
-
-  .logo {
-    position: relative;
-    top: 0px;
-    & img {
-      // width: 40px;
-      height: 40px;
-    }
-  }
-
-  a {
-    color: #ffffff;
-    transition: color 0.5s;
-  }
-  a:hover {
-    color: #ccc7c7;
-    text-decoration-color: #ccc7c7;
-  }
+.layout_container {
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: 100%;
+  min-width: 992px;
+  background-color: rgb(253, 253, 253);
 }
 
-.content {
-  min-height: 50pc;
-  margin-bottom: 50px;
-}
-
+// .content {
+//   min-height: 50pc;
+//   padding: 60px 0;
+// }
 // home container
-.home {
-  margin-top: 50px;
-}
 
 .chain-value {
   margin-bottom: 40px;
@@ -85,7 +48,7 @@
     width: 40%;
     .row_blocks {
       margin: 0 15px;
-      padding: 11px 0;
+      padding: 12px 0;
       box-sizing: border-box;
       border-bottom: 1px solid rgba($color_grey_athens, 0.5);
       .title {
@@ -121,7 +84,7 @@
     margin-left: 20px;
     .row_transactions {
       margin: 0 15px;
-      padding: 11px 0;
+      padding: 12px 0;
       box-sizing: border-box;
       border-bottom: 1px solid rgba($color_grey_athens, 0.5);
       .info_tx {
@@ -165,16 +128,6 @@
             overflow: hidden;
           }
         }
-        .status_order {
-          color: $color_primary;
-          text-transform: capitalize;
-          & i {
-            color: green;
-            font-size: 7px;
-            margin-right: 5px;
-            vertical-align: middle;
-          }
-        }
         a {
           color: $color_secondary;
           font-weight: 500;
@@ -183,7 +136,7 @@
     }
   }
   .box_wrap {
-    height: 360px;
+    height: 366px;
     overflow-y: scroll;
     background: $color_white;
     box-shadow: rgba(90, 102, 124, 0.1) 0px 2px 10px 0px;
@@ -222,27 +175,6 @@
   }
 }
 
-// footer
-.footer {
-  width: 100%;
-  line-height: 50px;
-  background: rgb(228, 228, 228);
-  z-index: 10;
-  position: fixed;
-  bottom: 0;
-  // left: 0;
-  .container {
-    display: flex;
-    justify-content: flex-end;
-  }
-  .infomation {
-    a {
-      padding: 0 7px;
-      cursor: pointer;
-    }
-  }
-}
-
 // page_info_common
 .page_info_header {
   padding-top: 28px;
@@ -252,6 +184,11 @@
   align-content: center;
 
   .wrap {
+    .wrap-title {
+      color: rgb(0, 0, 0);
+      font-size: 20px;
+      margin: 0px 1.25rem 0px 0px;
+    }
     .id_code {
       font-size: $font_size_medium;
       color: $color_secondary;
@@ -315,8 +252,8 @@
   }
   .info_body {
     padding: 20px;
-    margin-bottom: 50px;
-    height: 80pc;
+    // margin-bottom: 50px;
+    // height: 80pc;
     .row_detail {
       padding: 8px 0;
       margin-bottom: 12px;
@@ -329,9 +266,10 @@
 
 .row_detail {
   span.label {
-    color: $color_primary;
+    color: #48515d;
     display: block;
     width: 14%;
+    font-family: DINPro-Regular;
   }
   .text_wrap {
     width: calc(100% - 14%);
@@ -356,9 +294,6 @@
       color: $color_red;
     }
   }
-  .transaction_type {
-    text-transform: capitalize;
-  }
 }
 
 .breadcrumb {
@@ -371,7 +306,7 @@
       color: $color_secondary;
       position: relative;
       &:after {
-        content: "/";
+        content: '/';
         position: absolute;
         right: -3px;
       }
@@ -380,44 +315,35 @@
 }
 
 // .table_data
-.table_data {
-  table {
-    width: 100%;
-    display: table;
-    border-spacing: 0 5px;
-    table-layout: fixed;
-  }
-  th {
-    padding: 11px 16px;
-    text-align: left;
-    color: $color_secondary;
-  }
-  tbody {
-    tr {
-      background: $color_white;
-      line-height: 18.2px;
-      margin-bottom: 4px;
-      box-shadow: rgba(0, 0, 0, 0.06) 0px 0px 10px 0px;
-      transition: all 0.3s ease;
-      &:hover {
-        box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 10px 0px;
-        transition: all 0.3s ease;
-      }
-    }
-  }
-  td {
-    padding: 11px 16px;
-    &.tx_type {
-      text-transform: capitalize;
-    }
-    &.text_overflow {
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
-  }
-}
 
 .id_code {
   margin-right: 30px;
+}
+.statusTx {
+  color: $color_primary;
+  text-transform: capitalize;
+  & i {
+    font-size: 7px;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+  .deploy {
+    color: #d881ee;
+  }
+  .transfer {
+    color: #00c087;
+  }
+  .call {
+    color: #4a90e2;
+  }
+}
+.modal-txSigned {
+  // display: flex;
+  // flex-wrap: wrap;
+  & pre {
+    font-size: 12px;
+    min-width: 400px;
+    max-height: 500px;
+    overflow: scroll;
+  }
 }

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
-import "antd/lib/input/style/index.css";
-import "antd/lib/button/style/index.css";
-import "antd/lib/icon/style/index.css";
+// import "antd/lib/input/style/index.css";
+// import "antd/lib/button/style/index.css";
+// import "antd/lib/icon/style/index.css";
 // import "antd/dist/antd.css";
 import "./SearchBox.scss";
 

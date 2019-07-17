@@ -3,6 +3,10 @@
   left: 50%;
   transform: translateX(-50%);
   .search-box_out-side {
-    width: 420px;
+    width: 350px;
+    transition: all 0.3s ease;
+    &:hover {
+      width: 410px;
+    }
   }
 }

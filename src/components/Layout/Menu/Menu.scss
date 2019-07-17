@@ -2,7 +2,7 @@
 
 .main_nav {
     position: absolute;
-    right: 0px;
+    right: 20px;
     .nav_hed {
       display: flex;
       align-items: center;
@@ -10,10 +10,10 @@
         padding: 0 15px;
         font-weight: 500;
         line-height: 50px;
-        color: $color_primary;
+        // color: $color_primary;
   
         &:hover {
-          background-color: rgba(128, 128, 128, 0.578);
+          // background-color: rgba(128, 128, 128, 0.578);
         }
         &.sub {
           position: relative;

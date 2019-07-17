@@ -5,6 +5,8 @@
   "dependencies": {
     "@iceteachain/common": "github:TradaTech/icetea-common",
     "@iceteachain/web3": "github:TradaTech/icetea-web3",
+    "antd": "^3.20.1",
+    "axios": "^0.19.0",
     "font-awesome": "^4.7.0",
     "gulp-sass": "^3.1.1",
     "material-icons-react": "^1.0.4",
@@ -12,16 +14,21 @@
     "node-sass": "^4.12.0",
     "promise": "^8.0.3",
     "rc-notification": "^3.3.1",
+    "rc-pagination": "^1.20.1",
+    "rc-tabs": "^9.6.4",
     "react": "^16.8.6",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.8.6",
     "react-redux": "^6.0.1",
     "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",
-    "redux": "^4.0.1"
+    "redux": "^4.0.1",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-thunk": "^2.3.0",
+    "styled-components": "^4.3.2"
   },
   "scripts": {
-    "start": "set PORT=3006 && react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

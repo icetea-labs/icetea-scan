@@ -1,6 +1,12 @@
-.search-box{
-    position: absolute;
-    left: 30%;
-    height: 100%;
-    width: 30%;
+.search-box {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  .search-box_out-side {
+    width: 350px;
+    transition: all 0.3s ease;
+    &:hover {
+      width: 410px;
+    }
+  }
 }

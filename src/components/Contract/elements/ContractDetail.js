@@ -1,84 +1,117 @@
-import React, { Component } from 'react';
-import { getAccountInfo, getMetadataContract } from '../../../service/get-single-data';
-// import tweb3 from '../../tweb3';
+import React, { PureComponent } from "react";
+import { ContractMode } from "@iceteachain/common";
+import { toTEA } from "../../../utils";
 
-class Contract extends Component {
+class Contract extends PureComponent {
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     addresDetail: {},
+  //     balance: 0,
+  //     has_src: false,
+  //     deploy_by: null,
+  //     mode: null,
+  //     metadata: null,
+  //     show_call: false
+  //   };
+  // }
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            balance: 0,
-            has_src: false,
-            deploy_by: null,
-            mode: null,
-            metadata: null,
-            show_call: false,
-        }
-    }
+  //   componentDidMount() {
+  //     const { address } = this.props;
+  //     // this.loadData(address);
+  //   }
 
-    componentWillMount() {
-        let address = this.props.address;
-        this.loadData(address);
-    }
+  //   async componentWillReceiveProps(nextProps) {
+  //     // if (this.props !== nextProps) {
+  //     //     window.location.reload();
+  //     //     this.loadData();
+  //     // }
+  //   }
 
-    async componentWillReceiveProps(nextProps) {
-        if (this.props !== nextProps) {
-            window.location.reload();
-            this.loadData();
-        }
-    }
+  //   static getDerivedStateFromProps(nextProps, prevState) {
+  //     console.log(nextProps.addresDetail, "--", prevState.addresDetail);
+  //     if (
+  //       nextProps.addresDetail &&
+  //       nextProps.addresDetail !== prevState.addresDetail
+  //     ) {
+  //       const info = nextProps.addresDetail.data;
 
-    async loadData() {
-        let address = this.props.address;
-        let response = await getAccountInfo(address);
-        let res_metadata = await getMetadataContract(address);
+  //       return { addresDetail: nextProps.addresDetail, balance: info.balance };
+  //     } else {
+  //       return null;
+  //     }
+  //   }
 
-        if (response.code !== 200) {
-            this.props.history.push('/not-found');
-        } else {
+  //   async loadData(address) {
+  //     console.log("loadData", address);
+  //     let response = await getAccountInfo(address);
+  //     if (response && response.data.deployedBy) {
+  //       await getMetadataContract(address);
+  //     }
+  //     let res_metadata = await getMetadataContract(address);
 
-            let mode = response.data.mode;
-            this.setState({
-                balance: response.data.balance,
-                deploy_by: response.data.deployedBy,
-                has_src: response.data.hasSrc,
-                mode: mode === undefined ? 'null' : mode
-            })
-        }
+  // console.log("response", response);
+  // console.log("res_metadata", res_metadata);
 
-        if (res_metadata.code === 200) {
-            this.setState({
-                metadata: res_metadata.data
-            })
-        }
-    }
+  // if (response.status !== 200) {
+  //   this.props.history.push("/not-found");
+  // } else {
+  //   let mode = response.data.mode;
+  //   this.setState({
+  //     balance: response.data.balance,
+  //     deploy_by: response.data.deployedBy,
+  //     has_src: response.data.hasSrc,
+  //     mode: mode === undefined ? "null" : mode
+  //   });
+  // }
 
-    render() {
-        return (
-            <div className='tab-contract'>
-                <div className="row_detail">
-                    <span className="label">Balance:</span>
-                    <div className="text_wrap">{JSON.stringify(this.state.balance, null, 2)}</div>
-                </div>
-                <div className="row_detail">
-                    <span className="label">Has Src:</span>
-                    <div className="text_wrap">{JSON.stringify(this.state.has_src, null, 2)}</div>
-                </div>
-                <div className="row_detail">
-                    <span className="label">Mode:</span>
-                    <div className="text_wrap">{JSON.stringify(this.state.mode, null, 2)}</div>
-                </div>
-                <div className="row_detail">
-                    <span className="label">Metadata:</span>
-                    <div className="text_wrap">
-                        <pre className='result_string'>
-                            {JSON.stringify(this.state.metadata, null, 2)}
-                        </pre>
-                    </div>
-                </div>
+  // if (res_metadata.code === 200) {
+  //   this.setState({
+  //     metadata: res_metadata.data
+  //   });
+  // }
+  //   }
+
+  render() {
+    const { addresDetail, metadata } = this.props;
+    console.log(addresDetail);
+    console.log(metadata);
+
+    return (
+      <div className="tab-contract">
+        <div className="row_detail">
+          <span className="label">Balance:</span>
+          <div className="text_wrap">
+            {`${toTEA(addresDetail.balance || 0)} TEA`}
+          </div>
+        </div>
+        <div className="row_detail">
+          <span className="label">Has Src:</span>
+          <div className="text_wrap">{`${addresDetail.hasSrc}`}</div>
+        </div>
+        {addresDetail.hasSrc && (
+          <React.Fragment>
+            <div className="row_detail">
+              <span className="label">Mode:</span>
+              <div className="text_wrap">
+                {addresDetail.mode === ContractMode.WASM
+                  ? "WebAssembly"
+                  : "JavaScript"}
+              </div>
             </div>
-        );
-    }
+            <div className="row_detail">
+              <span className="label">Metadata:</span>
+              <div className="text_wrap">
+                <pre className="result_string">
+                  {JSON.stringify(metadata, null, 2)}
+                </pre>
+              </div>
+            </div>
+          </React.Fragment>
+        )}
+      </div>
+    );
+  }
 }
 
 export default Contract;

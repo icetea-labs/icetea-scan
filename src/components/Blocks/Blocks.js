@@ -1,153 +1,168 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Layout from '../Layout/Layout';
 import moment from 'moment';
-import * as handledata from '../../service/handle-data';
-import MaterialIcon from 'material-icons-react';
+import Select from 'rc-select';
+import PaginationPro from '../elements/PaginationPro';
 import './Blocks.scss';
-import { setPageSate } from '../../service/get-realtime-data';
-import diffTime from '../../service/find-time-by-block';
+import { diffTime } from '../../utils';
+import { getListBlockApi, getTotalBlockApi } from '../../service/api/get-list-data';
+import * as actions from '../../store/actions';
 
-const mapStateToProps = (state) => {
-  return {
-    blocks: state.handleListBlocks,
-    pageState: state.changePageState,
-  }
-}
-
-// Paging 
-const mapDispatchToProps = (dispatch) => {
-  return {
-  }
-}
-
-class Blocks extends Component {
-
-  constructor() {
-    super();
+class Blocks extends PureComponent {
+  constructor(props) {
+    super(props);
     this.state = {
-      pageIndex: 1,
-      blocks: [],
-      list_time: []
-    }
+      current: 1,
+      pageSize: 15,
+      blocksInfo: [],
+    };
   }
 
-  componentWillMount() {
-    setPageSate();
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   if (nextProps.blocksInfo !== prevState.blocksInfo) {
+  //     return { blocksInfo: nextProps.blocksInfo };
+  //   } else {
+  //     return null;
+  //   }
+  // }
+
+  componentDidMount() {
+    const { pageSize } = this.state;
+    getListBlockApi({ page_size: pageSize });
+    getTotalBlockApi();
   }
 
-  async componentWillReceiveProps(nextProps) {
-    if (this.props !== nextProps) {
-      for (let i = 0; i < this.props.blocks.length; i ++) {
-        let item = this.props.blocks[i].header.height;
-        let time = await diffTime(item);
-        
-        this.state.list_time.push(time);
-      }
+  // componentDidUpdate() {
+  //   const { setLoading } = this.props;
+  //   console.log("componentDidUpdate");
+  //   setLoading(false);
+  // }
 
-      if (this.state.pageIndex === 1) {
-        handledata.getBlocks( this.props.pageState.total_blocks ,1 , 20);
-      }
-    }
+  renderTHead() {
+    return (
+      <tr>
+        <th>Height</th>
+        <th>Time</th>
+        <th>Age</th>
+        <th>Txns</th>
+        <th>Node</th>
+        <th>Fees</th>
+      </tr>
+    );
   }
 
-  // Set Time For Block
-  loadBlocks() {
-    let blocks = this.props.blocks && this.props.blocks.map((item, index) => {
+  renderTbody() {
+    const { blocksInfo } = this.props;
+    // console.log("renderTbody");
+    if (blocksInfo.length === 0) {
       return (
-        <tr key={index}>
-          <td><Link to={`/block/${item.header.height}`}>{item.header.height}</Link></td>
-          <td>{moment(item.header.time).format("MMMM-DD-YYYY h:mm:ss")}</td>
-          <td>{this.state.list_time[index]}</td>
-          <td>
-            {(item.header.num_txs > 0) ? <Link to={`/txs?block=${item.header.height}`}>{item.header.num_txs}</Link> : 0}
-          </td>
-          <td>VN</td>
-          <td>0 TEA</td>
+        <tr className="no_data">
+          <th />
+          <th />
+          <th />
+          <th>No Data</th>
+          <th />
+          <th />
         </tr>
-      )
-    })
-
-    return blocks
+      );
+    } else {
+      return blocksInfo.map((item, index) => {
+        return (
+          <tr key={index}>
+            <td>
+              <Link to={`/block/${item.height}`}>{item.height}</Link>
+            </td>
+            <td>{moment(item.time).format('MMMM-DD-YYYY h:mm:ss')}</td>
+            <td>{diffTime(item.time)}</td>
+            <td>
+              <Link to={`/txs?height=${item.height}`}>{item.num_txs}</Link>
+            </td>
+            <td>
+              <span>{item.chain_id}</span>
+            </td>
+            <td>
+              <span>0 TEA</span>
+            </td>
+          </tr>
+        );
+      });
+    }
   }
 
-  // Set Data By Page Index
-  getBlocksByPageIndex(pageIndex) {
-    let maxheight = this.props.pageState.total_blocks;
-
-    if (pageIndex <= 0) {
-      pageIndex = 1;
+  paginationOnChange = pageNum => {
+    const { current, pageSize } = this.state;
+    // const { setLoading } = this.props;
+    if (pageNum !== current) {
+      this.setState({ current: pageNum }, () => {
+        // setLoading(true);
+      });
+      getListBlockApi({ page_size: pageSize, page_index: pageNum });
     }
-
-    if (pageIndex >= this.props.pageState.pageBlockLimit) {
-      pageIndex = this.props.pageState.pageBlockLimit
-    }
-
-    this.setState({
-      pageIndex
-    })
-
-    return handledata.getBlocks(maxheight, pageIndex, 20);
-  }
+  };
 
   render() {
+    const { current, pageSize } = this.state;
+    const { totalBlocks } = this.props;
+    let form = totalBlocks - current * pageSize + 1;
+    if (form < process.env.REACT_APP_INIT_BLOCK) form = process.env.REACT_APP_INIT_BLOCK;
+    let to = totalBlocks - current * pageSize + pageSize;
+    if (to > totalBlocks) to = totalBlocks;
+
     return (
-      <Layout>
-        <div className="block_page mt_50 mb_30">
-          <div className="container">
-            <div className="block_page page_info_header">
-              <h3>Blocks</h3>
-              <div className="breadcrumb">
-                <ul>
-                  <li><Link to="/">Home</Link></li>
-                  <li><Link to="/blocks">Blocks</Link></li>
-                </ul>
-              </div>
-            </div>
-            <div className="table_data">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Height</th>
-                    <th>Time</th>
-                    <th>Age</th>
-                    <th>Txns</th>
-                    <th>Node</th>
-                    <th>Fees</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.loadBlocks()}
-                </tbody>
-              </table>
-            </div>
-            <div className="pagination">
-              <ul>
-                <li></li>
-              </ul>
-            </div>
-            <div className="page-index">
-              <div className="paging">
-                <button className="btn-common" onClick={() => { this.getBlocksByPageIndex(1) }}>First</button>
-                <button className="btn-cusor" onClick={() => { this.getBlocksByPageIndex(this.state.pageIndex - 1) }} >
-                  <MaterialIcon icon="keyboard_arrow_left" />
-                </button>
-                <span className="state">Page {this.state.pageIndex} of {this.props.pageState.pageBlockLimit} </span>
-                <button className="btn-cusor" onClick={() => { this.getBlocksByPageIndex(this.state.pageIndex + 1) }}>
-                  <MaterialIcon icon="keyboard_arrow_right" />
-                </button>
-                <button className="btn-common" onClick={() => { this.getBlocksByPageIndex(this.props.pageState.pageBlockLimit) }}>
-                  Last
-                </button>
-              </div>
-            </div>
+      <div className="blocks pc-container ">
+        <h3>Blocks</h3>
+        <div className="flexBox">
+          <div className="sub-title">
+            Block <span>#{form}</span> to <span>#{to}</span> (Total of<span> {totalBlocks} </span>blocks)
+          </div>
+          <div className="breadcrumb">
+            <span className="breadcrumb-item">
+              <Link to="/">Home</Link>
+            </span>
+            <div className="breadcrumb-separator">/</div>
+            <span className="breadcrumb-item">
+              <Link to="/blocks">Blocks</Link>
+            </span>
           </div>
         </div>
-      </Layout >
+        <div className="table_data">
+          <table>
+            <thead>{this.renderTHead()}</thead>
+            <tbody>{this.renderTbody()}</tbody>
+          </table>
+        </div>
+        <PaginationPro
+          selectComponentClass={Select}
+          showQuickJumper={false}
+          showSizeChanger={false}
+          defaultPageSize={pageSize}
+          defaultCurrent={current}
+          onChange={this.paginationOnChange}
+          total={totalBlocks}
+        />
+      </div>
     );
   }
 }
 
+const mapStateToProps = state => {
+  const { chainInfo } = state;
+  return {
+    blocksInfo: chainInfo.blocks,
+    totalBlocks: chainInfo.totalBlocks,
+  };
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Blocks);
+const mapDispatchToProps = dispatch => {
+  return {
+    setLoading: value => {
+      dispatch(actions.setLoading(value));
+    },
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Blocks);

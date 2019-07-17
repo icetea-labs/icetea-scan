@@ -1,127 +1,67 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import Layout from "../Layout/Layout";
-import MaterialIcon from "material-icons-react";
-import "./Transactions.scss";
-import * as handleData from "../../service/handle-data";
-import diffTime from "../../service/find-time-by-block";
-import { getFirstTxsData } from "../../service/init-store";
-import { setPageSate } from "../../service/get-realtime-data";
-
-const mapStateToProps = state => {
-  return {
-    transactions: state.handleTransactions,
-    pageState: state.changePageState
-  };
-};
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { toTEA, convertTxType, diffTime } from '../../utils';
+import './Transactions.scss';
+// import moment from 'moment';
+import Select from 'rc-select';
+import PaginationPro from '../elements/PaginationPro';
+import { getListTxApi, getTotalTxsApi, getTotalTxsByHeighApi } from '../../service/api/get-list-data';
+import * as actions from '../../store/actions';
 
 class Transactions extends Component {
-  _isMounted = false;
-
   constructor(props) {
     super(props);
     this.state = {
+      height: 1,
+      isShowTxForBlock: false,
       pageIndex: 1,
-      height: null,
-      show_paging: false,
-      list_time: []
+      to: '',
+      from: '',
+      current: 1,
+      pageSize: 15,
     };
-
-    this.listTxs = [];
   }
 
-  async componentWillMount() {
-    setPageSate();
-  }
+  componentDidMount() {
+    const { pageSize } = this.state;
+    const search_params = new URLSearchParams(window.location.search);
+    const height = search_params.get('height');
 
-  async componentWillReceiveProps(nextProps) {
-    this._isMounted = true;
-
-    let search = this.props.location.search;
-
-    // Check is searching txs
-    if (this.props !== nextProps) {
-      if (this.props.location.search !== "") {
-        let data = search.split("?block=");
-        this.setState({
-          height: Number(data[1]),
-          show_paging: false
-        });
-        this.getTxsByHeight(this.state.height);
-      } else {
-        if (this.props.handleTransactions === []) {
-          getFirstTxsData();
-        }
-
-        this.setState({
-          show_paging: true
-        });
-        if (this.state.pageIndex === 1) {
-          handleData.getTransactions(
-            1,
-            20,
-            null,
-            this.props.pageState.total_blocks,
-            this.props.pageState.total_txs
-          );
-        }
-      }
-
-      let listTime = [];
-      for (let i = 0; i < this.props.transactions.length; i++) {
-        let time = await diffTime(this.props.transactions[i].height);
-        listTime.push(time);
-        // this.state.list_time.push(time);
-      }
-      if (this._isMounted) {
-        this.setState({
-          list_time: listTime
-        });
-      }
+    if (height) {
+      getListTxApi({ height: height, page_size: pageSize });
+      getTotalTxsByHeighApi(height);
+      this.setState({ isShowTxForBlock: true, height });
+    } else {
+      getListTxApi({ page_size: pageSize });
+      getTotalTxsApi();
     }
   }
 
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
+  paginationOnChange = current => {
+    const { pageSize } = this.state;
+    getListTxApi({ page_size: pageSize, page_index: current });
+  };
 
-  getTransactionByBlock(pageIndex) {
-    // console.log(this.props.pageState);
-    if (pageIndex <= 1) {
-      pageIndex = 1;
-    }
-
-    if (pageIndex >= this.props.pageState.pageTxsLimit) {
-      pageIndex = this.props.pageState.pageTxsLimit;
-    }
-
-    this.setState({
-      pageIndex
-    });
-
-    handleData.getTransactions(
-      pageIndex,
-      20,
-      null,
-      this.props.pageState.total_blocks,
-      this.props.pageState.total_txs
+  renderThead() {
+    return (
+      <tr>
+        <th width="20%">TxHash</th>
+        <th width="7%">Height</th>
+        <th width="15%">Age</th>
+        <th width="8%">Type</th>
+        <th width="20%">From</th>
+        <th width="20%">To</th>
+        <th width="10%">Value</th>
+      </tr>
     );
   }
 
-  getTxsByHeight() {
-    handleData.getTransactions(
-      null,
-      null,
-      this.state.height,
-      this.props.pageState.total_blocks,
-      this.props.pageState.total_txs
-    );
-  }
-
-  loadTransactions() {
+  renderTbody() {
     // window.location.reload();
-    if (this.props.transactions.length === 0) {
+    const { transactionsInfo } = this.props;
+
+    if (transactionsInfo.length === 0) {
       return (
         <tr className="no_data">
           <th />
@@ -134,21 +74,10 @@ class Transactions extends Component {
         </tr>
       );
     } else {
-      this.listTxs = this.props.transactions.map((item, index) => {
-        let txType = "transfer";
-        let txdata = JSON.parse(item.tx.data) || {};
-
-        if (txdata.op === 0) {
-          txType = "deploy";
-        } else if (txdata.op === 1) {
-          txType = "call";
-        }
-
-        // diffTime
+      return transactionsInfo.map((item, index) => {
         return (
           <tr key={index}>
             <td className="text_overflow">
-              {" "}
               <Link to={`/tx/${item.hash}`}>{item.hash}</Link>
             </td>
             <td>
@@ -156,134 +85,91 @@ class Transactions extends Component {
                 {item.height}
               </Link>
             </td>
-            <td>{this.state.list_time[index]}</td>
-            <td className="tx_type">
-              <div className="name_type">
-                <div className="circle-span" />
-                {txType}
-              </div>
+            <td>{diffTime(item.time)}</td>
+            <td className="statusTx">{convertTxType(item.data_op)}</td>
+            <td className="text_overflow">
+              {item.from ? <Link to={`/contract/${item.from}`}>{item.from}</Link> : <span>--</span>}
             </td>
             <td className="text_overflow">
-              {item.tags["tx.from"] ? (
-                <Link to={`/contract/${item.tags["tx.from"]}`}>
-                  {item.tags["tx.from"]}
-                </Link>
-              ) : (
-                <span>--</span>
-              )}
+              {item.to ? <Link to={`/contract/${item.to}`}>{item.to}</Link> : <span>--</span>}
             </td>
-            <td className="text_overflow">
-              {item.tags["tx.to"] ? (
-                <Link to={`/contract/${item.tags["tx.to"]}`}>
-                  {item.tags["tx.to"]}
-                </Link>
-              ) : (
-                <span>--</span>
-              )}
+            <td>
+              <span>{toTEA(item.gasused)} TEA</span>
             </td>
-            <td>{item.tx.value ? item.tx.value : 0} TEA</td>
           </tr>
         );
       });
     }
-    return this.listTxs;
   }
 
   render() {
-    return (
-      <Layout>
-        <div className="block_page mt_50 mb_30">
-          <div className="container">
-            <div className="block_page page_info_header">
-              <h3>Transactions</h3>
-              <span
-                className="sub-tilter"
-                style={{ display: this.state.show_paging ? "none" : "block" }}
-              >
-                {" "}
-                For Block #{this.state.height}
-              </span>
-              <div className="breadcrumb">
-                <ul>
-                  <li>
-                    <Link to="/">Home</Link>
-                  </li>
-                  <li>
-                    <Link to="/txs">Transactions</Link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="table_data">
-              <table>
-                <thead>
-                  <tr>
-                    <th>TxHash</th>
-                    <th>Height</th>
-                    <th>Age</th>
-                    <th>Type</th>
-                    <th>From</th>
-                    <th>To</th>
-                    <th>Value</th>
-                  </tr>
-                </thead>
-                <tbody>{this.loadTransactions()}</tbody>
-              </table>
-            </div>
+    const { current, pageSize, isShowTxForBlock, height } = this.state;
+    const { totalTxs } = this.props;
 
-            <div
-              className="page-index"
-              style={{ display: this.state.show_paging ? "block" : "none" }}
-            >
-              <div className="paging">
-                <button
-                  className="btn-common"
-                  onClick={() => {
-                    this.getTransactionByBlock(1);
-                  }}
-                >
-                  First
-                </button>
-                <button
-                  className="btn-cusor"
-                  onClick={() => {
-                    this.getTransactionByBlock(this.state.pageIndex - 1);
-                  }}
-                >
-                  <MaterialIcon icon="keyboard_arrow_left" />
-                </button>
-                <span className="state">
-                  Page {this.state.pageIndex} of{" "}
-                  {this.props.pageState.pageTxsLimit}{" "}
-                </span>
-                <button
-                  className="btn-cusor"
-                  onClick={() => {
-                    this.getTransactionByBlock(this.state.pageIndex + 1);
-                  }}
-                >
-                  <MaterialIcon icon="keyboard_arrow_right" />
-                </button>
-                <button
-                  className="btn-common"
-                  onClick={() => {
-                    this.getTransactionByBlock(
-                      this.props.pageState.pageTxsLimit
-                    );
-                  }}
-                >
-                  Last
-                </button>
-              </div>
-            </div>
+    return (
+      <div className="transactions pc-container ">
+        {isShowTxForBlock ? (
+          <div className="flexBox flex-header">
+            <h3>Transactions</h3>
+            <span className="id_status">
+              <span>{`For Block #${height}`}</span>
+            </span>
+          </div>
+        ) : (
+          <h3>Transactions</h3>
+        )}
+        <div className="flexBox">
+          <div className="sub-title">
+            More than > <span>{totalTxs}</span> transactions found
+          </div>
+          <div className="breadcrumb">
+            <span className="breadcrumb-item">
+              <Link to="/">Home</Link>
+            </span>
+            <div className="breadcrumb-separator">/</div>
+            <span className="breadcrumb-item">
+              <Link to="/txs">Transactions</Link>
+            </span>
           </div>
         </div>
-      </Layout>
+
+        <div className="table_data">
+          <table>
+            <thead>{this.renderThead()}</thead>
+            <tbody>{this.renderTbody()}</tbody>
+          </table>
+        </div>
+        <PaginationPro
+          selectComponentClass={Select}
+          showQuickJumper={false}
+          showSizeChanger={false}
+          defaultPageSize={pageSize}
+          defaultCurrent={current}
+          onChange={this.paginationOnChange}
+          total={totalTxs}
+        />
+      </div>
     );
   }
 }
 
+const mapStateToProps = state => {
+  const { chainInfo } = state;
+  return {
+    transactionsInfo: chainInfo.transactions,
+    totalTxs: chainInfo.totalTxs,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setLoading: value => {
+      dispatch(actions.setLoading(value));
+    },
+  };
+};
+
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(Transactions);

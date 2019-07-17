@@ -1,10 +1,15 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
+// import "antd/lib/input/style/index.css";
+// import "antd/lib/button/style/index.css";
+// import "antd/lib/icon/style/index.css";
+// import "antd/dist/antd.css";
 import "./SearchBox.scss";
-import clear from "../../../assets/img/clear-icon.png";
 
-import * as findAsset from "../../../service/find-assets";
+import * as findAsset from "../../../service/blockchain/find-assets";
 import { checkScroll } from "../../../assets/js/hover";
+import { Input } from "antd";
+const { Search } = Input;
 
 let show_cb = null;
 class SearchBox extends Component {
@@ -142,13 +147,45 @@ class SearchBox extends Component {
     this.txs_data = [];
   };
 
+  searchAssets = value => {
+    // console.log(value);
+    const { history } = this.props;
+    if (!isNaN(value)) {
+      history.push("/block/" + value);
+    } else {
+      if (value.substring(0, 3) === "tea") {
+        history.push("/contract/" + value);
+      } else {
+        if (value.length === 64 && value === value.toUpperCase()) {
+          history.push("/tx/" + value);
+        } else {
+          history.push("/not-found");
+        }
+      }
+    }
+  };
+
   render() {
+    const { show_cb } = this.state;
+
     return (
       <div
         className="search-box_out-side"
         style={{ display: this.state.show_cb === true ? "block" : "none" }}
       >
-        <div className="search-icon phone" style={{ display: "none" }}>
+        <Search
+          placeholder="Search by block, transaction or address"
+          onSearch={value => {
+            this.searchAssets(value);
+          }}
+          onPressEnter={value => {
+            this.searchAssets(value.currentTarget.value);
+          }}
+          style={{ width: "100%" }}
+          allowClear={true}
+        />
+
+        {/* <div className="search-icon phone" style={{ display: "none" }}>
           <i className="fa fa-search" />{" "}
         </div>
         <div className="search_box_container">
@@ -185,10 +222,11 @@ class SearchBox extends Component {
         >
           {this.blocks_data}
           {this.txs_data}
-        </div>
+        </div> */}
       </div>
     );
   }
 }
 
-export default SearchBox;
+// export default SearchBox;
+export default withRouter(SearchBox);

@@ -10,7 +10,6 @@ import TabContent from 'rc-tabs/lib/TabContent';
 import ScrollableInkTabBar from 'rc-tabs/lib/ScrollableInkTabBar';
 import 'rc-tabs/assets/index.css';
 import { getAccountInfo, getMetadataContract } from '../../service/blockchain/get-single-data';
-const defaultTabKey = '2';
 class Contract extends Component {
   constructor(props) {
     super(props);
@@ -146,7 +145,7 @@ class Contract extends Component {
                   <ContractDetail address={address} state={!show_call} />
                 )} */}
             <Tabs
-              defaultActiveKey={defaultTabKey}
+              defaultActiveKey={'1'}
               destroyInactiveTabPane
               renderTabBar={() => <ScrollableInkTabBar />}
               renderTabContent={() => <TabContent />}

@@ -1,27 +1,23 @@
-import React, { Component } from "react";
-import Layout from "../Layout/Layout";
-import { Link } from "react-router-dom";
-import CallContract from "./elements/CallContract";
-import ContractDetail from "./elements/ContractDetail";
-import "./Contract.scss";
-import Tabs, { TabPane } from "rc-tabs";
-import TabContent from "rc-tabs/lib/TabContent";
-import ScrollableInkTabBar from "rc-tabs/lib/ScrollableInkTabBar";
-import "rc-tabs/assets/index.css";
-import {
-  getAccountInfo,
-  getMetadataContract
-} from "../../service/blockchain/get-single-data";
-const defaultTabKey = "2";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import CallContract from './elements/CallContract';
+import ContractDetail from './elements/ContractDetail';
+import './Contract.scss';
+import Tabs, { TabPane } from 'rc-tabs';
+import TabContent from 'rc-tabs/lib/TabContent';
+import ScrollableInkTabBar from 'rc-tabs/lib/ScrollableInkTabBar';
+import 'rc-tabs/assets/index.css';
+import { getAccountInfo, getMetadataContract } from '../../service/blockchain/get-single-data';
+const defaultTabKey = '2';
 class Contract extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isContractAddress: false,
-      address: "",
-      params_url: "",
+      address: '',
+      params_url: '',
       addresDetail: {},
-      metadata: {}
+      metadata: {},
     };
   }
 
@@ -48,7 +44,7 @@ class Contract extends Component {
     this.setState({
       isContractAddress: isContract,
       addresDetail: addressInfoResp.data || {},
-      metadata: metadataResp.data || {}
+      metadata: metadataResp.data || {},
     });
 
     // console.log("response", addressInfoResp);
@@ -82,39 +78,32 @@ class Contract extends Component {
   };
 
   render() {
-    const {
-      show_call,
-      params_url,
-      isContractAddress,
-      addresDetail,
-      metadata
-    } = this.state;
+    const { show_call, params_url, isContractAddress, addresDetail, metadata } = this.state;
     const address = this.props.match.params.address;
     // console.log("isContractAddress", isContractAddress);
 
     return (
-      <Layout>
-        <div className="block_info mt_50">
-          <div className="container">
-            <div className="block_info_header page_info_header">
-              <div className="wrap">
-                <span className="wrap-title">Contract</span>
-                <span className="id_code">{address}</span>
-              </div>
-              <div className="breadcrumb">
-                <ul>
-                  <li>
-                    <Link to="/">Home</Link>
-                  </li>
-                  <li>
-                    <Link to="/contracts">Contract</Link>
-                  </li>
-                </ul>
-              </div>
+      <div className="block_info mt_50">
+        <div className="container">
+          <div className="block_info_header page_info_header">
+            <div className="wrap">
+              <span className="wrap-title">Contract</span>
+              <span className="id_code">{address}</span>
             </div>
+            <div className="breadcrumb">
+              <ul>
+                <li>
+                  <Link to="/">Home</Link>
+                </li>
+                <li>
+                  <Link to="/contracts">Contract</Link>
+                </li>
+              </ul>
+            </div>
+          </div>
 
-            <div className="block_content page_info_content">
-              {/* <div className="title">
+          <div className="block_content page_info_content">
+            {/* <div className="title">
                 <i className="fa fa-cube" />
                 <span id="detail">Contract Information</span>
                 <span
@@ -133,8 +122,8 @@ class Contract extends Component {
                 </span>
               </div> */}
 
-              <div className="info_body contract-content ">
-                {/* {show_call === true ? (
+            <div className="info_body contract-content ">
+              {/* {show_call === true ? (
                   <CallContract
                     address={address}
                     state={show_call}
@@ -143,40 +132,26 @@ class Contract extends Component {
                 ) : (
                   <ContractDetail address={address} state={!show_call} />
                 )} */}
-                <Tabs
-                  defaultActiveKey={defaultTabKey}
-                  destroyInactiveTabPane
-                  renderTabBar={() => <ScrollableInkTabBar />}
-                  renderTabContent={() => <TabContent />}
-                  onChange={this.tabOnChange}
-                >
-                  <TabPane tab="Detail" key="1" placeholder="loading Detail">
-                    <ContractDetail
-                      address={address}
-                      addresDetail={addresDetail}
-                      metadata={metadata}
-                    />
+              <Tabs
+                defaultActiveKey={defaultTabKey}
+                destroyInactiveTabPane
+                renderTabBar={() => <ScrollableInkTabBar />}
+                renderTabContent={() => <TabContent />}
+                onChange={this.tabOnChange}
+              >
+                <TabPane tab="Detail" key="1" placeholder="loading Detail">
+                  <ContractDetail address={address} addresDetail={addresDetail} metadata={metadata} />
+                </TabPane>
+                {isContractAddress && (
+                  <TabPane tab="Call Contract" key="2" placeholder="loading Call">
+                    <CallContract address={address} state={show_call} search={params_url} metadata={metadata} />
                   </TabPane>
-                  {isContractAddress && (
-                    <TabPane
-                      tab="Call Contract"
-                      key="2"
-                      placeholder="loading Call"
-                    >
-                      <CallContract
-                        address={address}
-                        state={show_call}
-                        search={params_url}
-                        metadata={metadata}
-                      />
-                    </TabPane>
-                  )}
-                </Tabs>
-              </div>
+                )}
+              </Tabs>
             </div>
           </div>
         </div>
-      </Layout>
+      </div>
     );
   }
 }

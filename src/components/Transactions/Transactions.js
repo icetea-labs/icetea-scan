@@ -1,18 +1,14 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import Layout from "../Layout/Layout";
-import { toTEA, convertTxType, diffTime } from "../../utils";
-import "./Transactions.scss";
-import moment from "moment";
-import Select from "rc-select";
-import PaginationPro from "../elements/PaginationPro";
-import {
-  getListTxApi,
-  getTotalTxsApi,
-  getTotalTxsByHeighApi
-} from "../../service/api/get-list-data";
-import * as actions from "../../store/actions";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import Layout from '../Layout/Layout';
+import { toTEA, convertTxType, diffTime } from '../../utils';
+import './Transactions.scss';
+import moment from 'moment';
+import Select from 'rc-select';
+import PaginationPro from '../elements/PaginationPro';
+import { getListTxApi, getTotalTxsApi, getTotalTxsByHeighApi } from '../../service/api/get-list-data';
+import * as actions from '../../store/actions';
 
 class Transactions extends Component {
   constructor(props) {
@@ -21,17 +17,17 @@ class Transactions extends Component {
       height: 1,
       isShowTxForBlock: false,
       pageIndex: 1,
-      to: "",
-      from: "",
+      to: '',
+      from: '',
       current: 1,
-      pageSize: 10
+      pageSize: 10,
     };
   }
 
   componentDidMount() {
     const { pageSize } = this.state;
     const search_params = new URLSearchParams(window.location.search);
-    const height = search_params.get("height");
+    const height = search_params.get('height');
 
     if (height) {
       getListTxApi({ height: height, page_size: pageSize });
@@ -93,18 +89,10 @@ class Transactions extends Component {
             <td>{diffTime(item.time)}</td>
             <td className="statusTx">{convertTxType(item.data_op)}</td>
             <td className="text_overflow">
-              {item.from ? (
-                <Link to={`/contract/${item.from}`}>{item.from}</Link>
-              ) : (
-                <span>--</span>
-              )}
+              {item.from ? <Link to={`/contract/${item.from}`}>{item.from}</Link> : <span>--</span>}
             </td>
             <td className="text_overflow">
-              {item.to ? (
-                <Link to={`/contract/${item.to}`}>{item.to}</Link>
-              ) : (
-                <span>--</span>
-              )}
+              {item.to ? <Link to={`/contract/${item.to}`}>{item.to}</Link> : <span>--</span>}
             </td>
             <td>
               <span>{toTEA(item.gasused)} TEA</span>
@@ -120,46 +108,41 @@ class Transactions extends Component {
     const { totalTxs } = this.props;
 
     return (
-      <Layout>
-        <div className="block_page mt_50 mb_30">
-          <div className="container">
-            <div className="block_page page_info_header">
-              <h3>Transactions</h3>
-              <span
-                className="sub-tilter"
-                style={{ display: isShowTxForBlock ? "block" : "none" }}
-              >
-                <span>{`For Block #${height}`}</span>
-              </span>
-              <div className="breadcrumb">
-                <ul>
-                  <li>
-                    <Link to="/">Home</Link>
-                  </li>
-                  <li>
-                    <Link to="/txs">Transactions</Link>
-                  </li>
-                </ul>
-              </div>
+      <div className="block_page mb_30">
+        <div className="container">
+          <div className="block_page page_info_header">
+            <h3>Transactions</h3>
+            <span className="sub-tilter" style={{ display: isShowTxForBlock ? 'block' : 'none' }}>
+              <span>{`For Block #${height}`}</span>
+            </span>
+            <div className="breadcrumb">
+              <ul>
+                <li>
+                  <Link to="/">Home</Link>
+                </li>
+                <li>
+                  <Link to="/txs">Transactions</Link>
+                </li>
+              </ul>
             </div>
-            <div className="table_data">
-              <table>
-                <thead>{this.renderThead()}</thead>
-                <tbody>{this.renderTbody()}</tbody>
-              </table>
-            </div>
-            <PaginationPro
-              selectComponentClass={Select}
-              showQuickJumper={false}
-              showSizeChanger={false}
-              defaultPageSize={pageSize}
-              defaultCurrent={current}
-              onChange={this.paginationOnChange}
-              total={totalTxs}
-            />
           </div>
+          <div className="table_data">
+            <table>
+              <thead>{this.renderThead()}</thead>
+              <tbody>{this.renderTbody()}</tbody>
+            </table>
+          </div>
+          <PaginationPro
+            selectComponentClass={Select}
+            showQuickJumper={false}
+            showSizeChanger={false}
+            defaultPageSize={pageSize}
+            defaultCurrent={current}
+            onChange={this.paginationOnChange}
+            total={totalTxs}
+          />
         </div>
-      </Layout>
+      </div>
     );
   }
 }
@@ -168,7 +151,7 @@ const mapStateToProps = state => {
   const { chainInfo } = state;
   return {
     transactionsInfo: chainInfo.transactions,
-    totalTxs: chainInfo.totalTxs
+    totalTxs: chainInfo.totalTxs,
   };
 };
 
@@ -176,7 +159,7 @@ const mapDispatchToProps = dispatch => {
   return {
     setLoading: value => {
       dispatch(actions.setLoading(value));
-    }
+    },
   };
 };
 

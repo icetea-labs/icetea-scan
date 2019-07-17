@@ -1,25 +1,26 @@
-import React, { Component } from "react";
-import Layout from "../Layout/Layout";
-import Banner from "./elements/Banner";
-import BlocksBox from "./elements/BlocksBox";
-import TransactionsBox from "./elements/TransactionsBox";
-import ChainInfo from "./elements/ChainInfo";
+import React, { Component } from 'react';
+// import Banner from './elements/Banner';
+import SearchBox from '../Layout/SearchBox/SearchBox';
+import BlocksBox from './elements/BlocksBox';
+import TransactionsBox from './elements/TransactionsBox';
+import ChainInfo from './elements/ChainInfo';
 
-import {
-  getListBlockApi,
-  getListTxApi
-} from "../../service//api/get-list-data";
-import { getAllContracts } from "../../service/blockchain/get-single-data";
+import { getListBlockApi, getListTxApi } from '../../service//api/get-list-data';
+import { getAllContracts } from '../../service/blockchain/get-single-data';
 
 let interval = null;
-class Home extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     is_loading: true
-  //   };
-  // }
 
+function Banner() {
+  return (
+    <div className="banner-container">
+      <h3>ICETEA CHAIN EXPLORER (TESTNET)</h3>
+      <div className="searh-box">
+        <SearchBox show_cb="banner" />
+      </div>
+    </div>
+  );
+}
+class Home extends Component {
   componentDidMount() {
     interval = setInterval(() => {
       getListBlockApi({ page_size: 10 });
@@ -35,22 +36,20 @@ class Home extends Component {
   render() {
     // const { blocksInfo, transactionsInfo, totalContract } = this.props;
     return (
-      <Layout>
-        <div className="home">
-          <Banner />
-          <div className="blocks_transactions_view">
-            <div className="container">
-              <div className="chain-value">
-                <ChainInfo />
-              </div>
-              <div className="flex">
-                <BlocksBox />
-                <TransactionsBox />
-              </div>
+      <React.Fragment>
+        <Banner />
+        <div className="blocks_transactions_view">
+          <div className="container">
+            <div className="chain-value">
+              <ChainInfo />
+            </div>
+            <div className="flex">
+              <BlocksBox />
+              <TransactionsBox />
             </div>
           </div>
         </div>
-      </Layout>
+      </React.Fragment>
     );
   }
 }

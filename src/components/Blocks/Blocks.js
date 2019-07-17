@@ -1,17 +1,13 @@
-import React, { PureComponent } from "react";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import moment from "moment";
-import Select from "rc-select";
-import PaginationPro from "../elements/PaginationPro";
-import Layout from "../Layout/Layout";
-import "./Blocks.scss";
-import { diffTime } from "../../utils";
-import {
-  getListBlockApi,
-  getTotalBlockApi
-} from "../../service/api/get-list-data";
-import * as actions from "../../store/actions";
+import React, { PureComponent } from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import moment from 'moment';
+import Select from 'rc-select';
+import PaginationPro from '../elements/PaginationPro';
+import './Blocks.scss';
+import { diffTime } from '../../utils';
+import { getListBlockApi, getTotalBlockApi } from '../../service/api/get-list-data';
+import * as actions from '../../store/actions';
 
 class Blocks extends PureComponent {
   constructor(props) {
@@ -19,7 +15,7 @@ class Blocks extends PureComponent {
     this.state = {
       current: 1,
       pageSize: 10,
-      blocksInfo: []
+      blocksInfo: [],
     };
   }
 
@@ -77,7 +73,7 @@ class Blocks extends PureComponent {
             <td>
               <Link to={`/block/${item.height}`}>{item.height}</Link>
             </td>
-            <td>{moment(item.time).format("MMMM-DD-YYYY h:mm:ss")}</td>
+            <td>{moment(item.time).format('MMMM-DD-YYYY h:mm:ss')}</td>
             <td>{diffTime(item.time)}</td>
             <td>
               <Link to={`/txs?height=${item.height}`}>{item.num_txs}</Link>
@@ -111,40 +107,38 @@ class Blocks extends PureComponent {
     const { totalBlocks } = this.props;
 
     return (
-      <Layout>
-        <div className="block_page mt_50 mb_30">
-          <div className="container">
-            <div className="block_page page_info_header">
-              <h3>Blocks</h3>
-              <div className="breadcrumb">
-                <ul>
-                  <li>
-                    <Link to="/">Home</Link>
-                  </li>
-                  <li>
-                    <Link to="/blocks">Blocks</Link>
-                  </li>
-                </ul>
-              </div>
+      <div className="block_page mb_30">
+        <div className="container">
+          <div className="block_page page_info_header">
+            <h3>Blocks</h3>
+            <div className="breadcrumb">
+              <ul>
+                <li>
+                  <Link to="/">Home</Link>
+                </li>
+                <li>
+                  <Link to="/blocks">Blocks</Link>
+                </li>
+              </ul>
             </div>
-            <div className="table_data">
-              <table>
-                <thead>{this.renderTHead()}</thead>
-                <tbody>{this.renderTbody()}</tbody>
-              </table>
-            </div>
-            <PaginationPro
-              selectComponentClass={Select}
-              showQuickJumper={false}
-              showSizeChanger={false}
-              defaultPageSize={pageSize}
-              defaultCurrent={current}
-              onChange={this.paginationOnChange}
-              total={totalBlocks}
-            />
           </div>
+          <div className="table_data">
+            <table>
+              <thead>{this.renderTHead()}</thead>
+              <tbody>{this.renderTbody()}</tbody>
+            </table>
+          </div>
+          <PaginationPro
+            selectComponentClass={Select}
+            showQuickJumper={false}
+            showSizeChanger={false}
+            defaultPageSize={pageSize}
+            defaultCurrent={current}
+            onChange={this.paginationOnChange}
+            total={totalBlocks}
+          />
         </div>
-      </Layout>
+      </div>
     );
   }
 }
@@ -153,7 +147,7 @@ const mapStateToProps = state => {
   const { chainInfo } = state;
   return {
     blocksInfo: chainInfo.blocks,
-    totalBlocks: chainInfo.totalBlocks
+    totalBlocks: chainInfo.totalBlocks,
   };
 };
 
@@ -161,7 +155,7 @@ const mapDispatchToProps = dispatch => {
   return {
     setLoading: value => {
       dispatch(actions.setLoading(value));
-    }
+    },
   };
 };
 

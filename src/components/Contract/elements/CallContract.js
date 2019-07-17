@@ -1,24 +1,25 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
+import { TxOp } from '@iceteachain/common';
 import Tabs, { TabPane } from 'rc-tabs';
 import TabContent from 'rc-tabs/lib/TabContent';
 import ScrollableInkTabBar from 'rc-tabs/lib/ScrollableInkTabBar';
 import 'rc-tabs/assets/index.css';
 import './CallContract.scss';
-import { Input } from 'antd';
-import { Button } from 'antd';
+import { Modal, Button, Input, Select } from 'antd';
 import { fmtType, formatResult, parseParamList, tryStringifyJson } from '../../../utils';
-// import "antd/dist/antd.css"
-
+// import 'antd/lib/modal/style/index.css';
+// import 'antd/lib/select/style/index.css';
 // import {
 //   getAccountInfo,
 //   getMetadataContract
 // } from "../../../service/blockchain/get-single-data";
 // import { ContractMode } from "@iceteachain/common";
-import { execContract, callWithWallet } from '../../../service/blockchain/exec-contract';
+// import { execContract, callWithWallet } from '../../../service/blockchain/exec-contract';
 import tweb3 from '../../../tweb3';
-import { createBankKey, createRegularKey } from '../../../service/wallet/create';
+import { createBankKey } from '../../../service/wallet/create';
 const { TextArea } = Input;
+const { Option } = Select;
 
 class CallContract extends Component {
   constructor(props) {
@@ -54,12 +55,15 @@ class CallContract extends Component {
       // show_method_wallet: true,
       // option_button: "Hidden",
       // param_url: "",
+      isIceteaWallet: false,
+      txSigned: '',
       account: {},
       metadataBase: {},
       metadata: {},
       selectedMeta: [],
       selectedFunc: '',
       params_value: {},
+      answers: {},
       loading: [],
       iconLoading: false,
     };
@@ -174,12 +178,18 @@ class CallContract extends Component {
   }
 
   componentDidMount() {
+    const search_params = new URLSearchParams(window.location.search);
+    let txSigned = search_params.get('txSigned');
+    if (txSigned) txSigned = JSON.parse(decodeURIComponent(txSigned));
+
+    console.log('txSigned', txSigned);
     // {privateKey, address}
     const tmpAccount = createBankKey();
     tweb3.wallet.importAccount(tmpAccount.privateKey);
     tweb3.wallet.defaultAccount = tmpAccount.address;
-    this.setState({ account: tmpAccount });
-    console.log('account', tmpAccount);
+
+    this.setState({ account: tmpAccount, txSigned });
+    // console.log('account', tmpAccount);
   }
 
   // _handleValue = event => {
@@ -537,7 +547,7 @@ class CallContract extends Component {
   };
 
   renderInforRightPanel = () => {
-    const { selectedMeta } = this.state;
+    const { selectedMeta, params_value, loading, answers } = this.state;
     const funcsInfo = {};
     // console.log("metadata1", selectedMeta);
 
@@ -572,8 +582,6 @@ class CallContract extends Component {
       }
     });
 
-    const { loading } = this.state;
-
     return selectedMeta.map((func, index) => {
       return (
         <div className="wrapper-func" key={index}>
@@ -605,17 +613,17 @@ class CallContract extends Component {
                 </React.Fragment>
               ) : (
                 func.params.map((param, paramIndex) => {
-                  const paramType = param.type.toString() === 'number' ? 'number' : '';
+                  const isNumber = param.type.toString() === 'number' ? 'number' : '';
                   // console.log("type", type, param.type.toString());
                   return (
                     <div key={paramIndex} className="wrapper-input">
                       <label>{`${param.name} (${param.type})`}</label>
                       <Input
-                        type={paramType}
-                        onChange={event => this.onChangeParam(event, func.name, paramType, paramIndex)}
+                        type={isNumber}
+                        value={params_value[func.name] && params_value[func.name][paramIndex]}
+                        onChange={event => this.onChangeParam(event, func.name, isNumber, paramIndex)}
                         placeholder={`${param.name} (${param.type})`}
                         allowClear
-                        r
                       />
                     </div>
                   );
@@ -624,7 +632,7 @@ class CallContract extends Component {
               <Button type="primary" loading={loading[func.name] === true} onClick={() => this.submitForm(func, index)}>
                 <span>{func.decorators[0] === 'transaction' || func.type === 'unknown' ? 'Send' : 'Querry'}</span>
               </Button>
-              {func.answer && (
+              {answers[func.name] && (
                 <div className="myanswer">
                   <span>
                     &nbsp;[&nbsp;
@@ -642,7 +650,7 @@ class CallContract extends Component {
                   &nbsp;
                   <span>
                     <pre>
-                      <code>{func.answer}</code>
+                      <code>{answers[func.name]}</code>
                     </pre>
                   </span>
                 </div>
@@ -654,24 +662,25 @@ class CallContract extends Component {
     });
   };
 
-  onChangeParam = (event, funcName, paramType, indexParam) => {
+  onChangeParam = (event, funcName, isNumber, paramIndex) => {
     const { params_value } = this.state;
     let value = event.currentTarget.value;
-    // JS
-    if (paramType) {
-      if (paramType === 'number') value = parseInt(value);
+    console.log('paramIndex', paramIndex, !params_value[funcName], isNumber);
+    // JavaScript
+    if (paramIndex) {
+      if (isNumber) value = parseInt(value);
       if (!params_value[funcName]) params_value[funcName] = [];
-      params_value[funcName][indexParam] = value;
+      params_value[funcName][paramIndex] = value;
     } else {
       //WebAssembly
       params_value[funcName] = parseParamList(value);
     }
-
-    // console.log("params_value", params_value);
+    console.log('params_value', params_value);
+    this.setState({ params_value });
   };
 
   submitForm = (func, indexFunc, typeCall) => {
-    const { loading } = this.state;
+    const { loading, isIceteaWallet } = this.state;
 
     if (typeCall) {
       loading[func.name] = [];
@@ -679,9 +688,11 @@ class CallContract extends Component {
     } else {
       loading[func.name] = true;
     }
-    console.log('loading', loading);
+    // console.log('loading', loading);
     if (typeCall || func.decorators[0] === 'view' || func.decorators[0] === 'pure') {
       this.callReadOrPure(func, indexFunc, typeCall);
+    } else if (isIceteaWallet) {
+      this.getSinatureFromIceteaWallet(func, indexFunc);
     } else {
       this.sendTransaction(func, indexFunc);
     }
@@ -691,7 +702,7 @@ class CallContract extends Component {
 
   callReadOrPure = async (func, index, typeCall) => {
     const { address } = this.props;
-    const { selectedMeta, loading } = this.state;
+    const { loading, answers } = this.state;
 
     try {
       const method =
@@ -699,37 +710,89 @@ class CallContract extends Component {
       console.log('method', method);
       const result = await tweb3[method](address, func.name, func.params);
       // console.log("result", result);
-      selectedMeta[index]['answer'] = result || '' + result;
+      answers[func.name] = result || '' + result;
     } catch (error) {
       console.log('error', error);
-      selectedMeta[index]['answer'] = tryStringifyJson(error, true);
+      answers[func.name] = tryStringifyJson(error, true);
     } finally {
       loading[func.name] = false;
-      this.setState({ selectedMeta, loading });
+      this.setState({ answers, loading });
     }
   };
 
   sendTransaction = async (func, index) => {
     const { address } = this.props;
-    const { selectedMeta, loading, params_value, account } = this.state;
+    const { answers, loading, params_value, account } = this.state;
     const signers = account.address;
     // console.log('params_value', params_value);
     try {
       const ct = tweb3.contract(address);
       const result = await ct.methods[func.name](...(params_value[func.name] || [])).sendCommit({ signers });
-      selectedMeta[index]['answer'] = formatResult(result);
+      answers[func.name] = formatResult(result);
     } catch (error) {
       console.log('error', error);
-      selectedMeta[index]['answer'] = formatResult(error, true);
+      answers[func.name] = formatResult(error, true);
     } finally {
       loading[func.name] = false;
-      this.setState({ selectedMeta, loading });
+      this.setState({ answers, loading });
     }
   };
 
-  enterIconLoading = () => {
-    const { iconLoading } = this.state;
-    this.setState({ iconLoading: !iconLoading });
+  getSinatureFromIceteaWallet = async (func, index) => {
+    const { address } = this.props;
+    const { params_value } = this.state;
+
+    let formData = {};
+    const txData = {
+      op: TxOp.CALL_CONTRACT,
+      name: func.name,
+      params: params_value[func.name],
+    };
+    formData.to = address;
+    formData.data = txData;
+
+    formData = encodeURIComponent(JSON.stringify(formData));
+    const url = encodeURIComponent('http://localhost:3006/contract/' + address + '?txSigned=');
+    window.location = 'https://wallet.icetea.io/signTransaction/' + formData + '/' + url;
+  };
+
+  sendTransactionWithIceteaWallet = async (func, index = 2) => {
+    console.log(index);
+    const { answers, txSigned, params_value } = this.state;
+    const funcName = txSigned.data.name;
+    const paramTmp = txSigned.data.params;
+    paramTmp.forEach((e, i) => {
+      if (!params_value[funcName]) params_value[funcName] = [];
+      params_value[funcName][i] = e;
+    });
+
+    try {
+      const result = await tweb3.sendRawTransaction(txSigned);
+      // console.log('txSigned', txSigned, '--', funcName);
+      answers[funcName] = formatResult(result);
+    } catch (error) {
+      console.log('error', error);
+      answers[funcName] = formatResult(error, true);
+    } finally {
+      this.setState({ answers, txSigned: '' });
+    }
+  };
+
+  handleChange = value => {
+    console.log(`selected ${value}`);
+    if (value === 'icetea') {
+      this.setState({ isIceteaWallet: true });
+    } else {
+      this.setState({ isIceteaWallet: false });
+    }
+  };
+
+  handleModalCancel = () => {
+    this.setState({ txSigned: '' });
+  };
+
+  handleModalSent = () => {
+    this.sendTransactionWithIceteaWallet();
   };
 
   render() {
@@ -744,7 +807,8 @@ class CallContract extends Component {
     //   data_func,
     //   metadata
     // } = this.state;
-
+    const { txSigned, isIceteaWallet } = this.state;
+    // console.log('txSigned', txSigned);
     return (
       <div className="container-call-contract">
         <div className="side-left">
@@ -752,8 +816,49 @@ class CallContract extends Component {
           {this.renderFuncLeftPanel()}
         </div>
         <div className="side-main">
-          <div className="contrainer-main">{this.renderInforRightPanel()}</div>
+          <div className="contrainer-main">
+            <div className="connector-wallet">
+              <i id="connector" className="fa fa-circle" />
+              <span> Connect to </span>
+              <Select
+                // size="small"
+                // value={(isIceteaWallet && 'icetea') || ''}
+                style={{ width: 300 }}
+                onChange={this.handleChange}
+                placeholder="Please select wallet"
+                animation="slide-up"
+              >
+                <Option value="random">Generate a random, throw-away account</Option>
+                <Option value="icetea">Sign with Icetea Wallet</Option>
+                <Option value="icetea1">Sign with Icetea Wallet</Option>
+                <Option value="icetea2">Sign with Icetea Wallet</Option>
+                <Option value="icetea3">Sign with Icetea Wallet</Option>
+                <Option value="icetea4">Sign with Icetea Wallet</Option>
+              </Select>
+            </div>
+            {this.renderInforRightPanel()}
+          </div>
         </div>
+        {!!txSigned && (
+          <Modal
+            title="Conffirm"
+            visible={!!txSigned}
+            footer={[
+              <Button key="back" onClick={this.handleModalCancel}>
+                <span>Cancel</span>
+              </Button>,
+              <Button key="submit" type="primary" onClick={this.handleModalSent}>
+                <span>Send</span>
+              </Button>,
+            ]}
+          >
+            <div className="modal-txSigned">
+              <pre>
+                <code>{tryStringifyJson(txSigned)}</code>
+              </pre>
+            </div>
+          </Modal>
+        )}
       </div>
       // <div className='tab-contract'>
       //     {/* Left SideBar */}

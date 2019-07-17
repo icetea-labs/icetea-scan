@@ -1,7 +1,6 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { getAccountInfo } from "../../service/blockchain/get-single-data";
-import Layout from "../Layout/Layout";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { getAccountInfo } from '../../service/blockchain/get-single-data';
 
 class Address extends Component {
   constructor(props) {
@@ -10,7 +9,7 @@ class Address extends Component {
       balance: 0,
       has_src: false,
       deploy_by: null,
-      mode: null
+      mode: null,
     };
   }
 
@@ -32,7 +31,7 @@ class Address extends Component {
     console.log(response);
 
     if (response.status !== 200) {
-      this.props.history.push("/not-found");
+      this.props.history.push('/not-found');
     } else {
       let mode = response.data.mode;
       // console.log(response)
@@ -40,7 +39,7 @@ class Address extends Component {
         balance: response.data.balance,
         deploy_by: response.data.deployedBy,
         has_src: response.data.hasSrc,
-        mode: mode === undefined ? "null" : mode
+        mode: mode === undefined ? 'null' : mode,
       });
     }
   }
@@ -48,61 +47,51 @@ class Address extends Component {
   render() {
     console.log(this.state);
     return (
-      <Layout>
-        <div className="block_info mt_50">
-          <div className="container">
-            <div className="block_info_header page_info_header">
-              <div className="wrap">
-                <span className="wrap-title">Address</span>
-                <span className="id_code">
-                  #{this.props.match.params.address}
-                </span>
-              </div>
-              <div className="breadcrumb">
-                <ul>
-                  <li>
-                    <Link to="/">Home</Link>
-                  </li>
-                  <li>
-                    <Link to="/blocks">Address</Link>
-                  </li>
-                </ul>
-              </div>
+      <div className="block_info mt_50">
+        <div className="container">
+          <div className="block_info_header page_info_header">
+            <div className="wrap">
+              <span className="wrap-title">Address</span>
+              <span className="id_code">#{this.props.match.params.address}</span>
             </div>
+            <div className="breadcrumb">
+              <ul>
+                <li>
+                  <Link to="/">Home</Link>
+                </li>
+                <li>
+                  <Link to="/blocks">Address</Link>
+                </li>
+              </ul>
+            </div>
+          </div>
 
-            <div className="block_content page_info_content">
-              <div className="title">
-                <i className="fa fa-cube" />
-                <span>Address Information</span>
+          <div className="block_content page_info_content">
+            <div className="title">
+              <i className="fa fa-cube" />
+              <span>Address Information</span>
+            </div>
+            <div className="info_body">
+              <div className="row_detail">
+                <span className="label">Address: </span>
+                <div className="text_wrap">{this.props.match.params.address}</div>
               </div>
-              <div className="info_body">
-                <div className="row_detail">
-                  <span className="label">Address: </span>
-                  <div className="text_wrap">
-                    {this.props.match.params.address}
-                  </div>
-                </div>
-                <div className="row_detail">
-                  <span className="label">Balance:</span>
-                  <div className="text_wrap">{this.state.balance}</div>
-                </div>
-                <div className="row_detail">
-                  <span className="label">Has Src:</span>
-                  <div className="text_wrap">
-                    {JSON.stringify(this.state.has_src, null, 2)}
-                  </div>
-                </div>
-                <div className="row_detail">
-                  <span className="label">Mode:</span>
-                  <div className="text_wrap">
-                    {JSON.stringify(this.state.mode, null, 2)}
-                  </div>
-                </div>
+              <div className="row_detail">
+                <span className="label">Balance:</span>
+                <div className="text_wrap">{this.state.balance}</div>
+              </div>
+              <div className="row_detail">
+                <span className="label">Has Src:</span>
+                <div className="text_wrap">{JSON.stringify(this.state.has_src, null, 2)}</div>
+              </div>
+              <div className="row_detail">
+                <span className="label">Mode:</span>
+                <div className="text_wrap">{JSON.stringify(this.state.mode, null, 2)}</div>
               </div>
             </div>
           </div>
         </div>
-      </Layout>
+      </div>
     );
   }
 }

@@ -74,12 +74,16 @@ export function fmtType(t, convert) {
 
 export function formatResult(r, isError) {
   const fail = isError || r.deliver_tx.code || r.check_tx.code;
+  if (isError) console.log('isError formatResult', tryStringifyJson(r));
   if (fail) {
     return (
       <React.Fragment>
         <b>Result</b>: <span className="error">ERROR</span>
         <br />
-        <b>Message</b>: <span className="error">{r.deliver_tx.log || r.check_tx.log || tryStringifyJson(r)}</span>
+        <b>Message</b>:{' '}
+        <span className="error">
+          {(r.deliver_tx && r.deliver_tx.log) || (r.check_tx && r.check_tx.log) || tryStringifyJson(r)}
+        </span>
         <br />
         <b>Hash</b>::&nbsp;
         {r.hash ? (

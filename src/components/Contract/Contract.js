@@ -14,6 +14,7 @@ class Contract extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      activeKey: '1',
       isContractAddress: false,
       address: '',
       params_url: '',
@@ -29,6 +30,12 @@ class Contract extends Component {
     // this.setState({ address });
     const address = this.props.match.params.address;
     this.loadData(address);
+
+    const search_params = new URLSearchParams(window.location.search);
+    let txSigned = search_params.get('txSigned');
+    if (txSigned) {
+      this.setState({ activeKey: '2' });
+    }
   }
 
   async loadData(address) {
@@ -76,12 +83,12 @@ class Contract extends Component {
 
   tabOnChange = value => {
     console.log(`selected ${value}`);
+    this.setState({ activeKey: value });
   };
 
   render() {
-    const { show_call, params_url, isContractAddress, addresDetail, metadata } = this.state;
+    const { show_call, params_url, isContractAddress, addresDetail, metadata, activeKey } = this.state;
     const address = this.props.match.params.address;
-    // console.log("isContractAddress", isContractAddress);
 
     return (
       <div className="viewcontact detailBlocks pc-container">
@@ -145,10 +152,10 @@ class Contract extends Component {
                   <ContractDetail address={address} state={!show_call} />
                 )} */}
             <Tabs
-              defaultActiveKey={'1'}
               destroyInactiveTabPane
               renderTabBar={() => <ScrollableInkTabBar />}
               renderTabContent={() => <TabContent />}
+              activeKey={activeKey}
               onChange={this.tabOnChange}
             >
               <TabPane tab="Detail" key="1" placeholder="loading Detail">

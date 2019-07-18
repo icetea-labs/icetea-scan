@@ -74,8 +74,6 @@ class Contract extends PureComponent {
 
   render() {
     const { addresDetail, metadata } = this.props;
-    console.log(addresDetail);
-    console.log(metadata);
 
     return (
       <div className="tab-contract">

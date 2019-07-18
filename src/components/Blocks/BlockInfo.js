@@ -26,6 +26,7 @@ class BlockInfo extends Component {
   componentDidMount() {
     const height = this.props.match.params.blockId;
     this.loadData(height);
+    console.log('componentDidMount');
   }
 
   async loadData(height) {

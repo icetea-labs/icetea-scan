@@ -8,7 +8,7 @@ import ScrollableInkTabBar from 'rc-tabs/lib/ScrollableInkTabBar';
 import 'rc-tabs/assets/index.css';
 import './CallContract.scss';
 import { Modal, Button, Input, Select } from 'antd';
-import { fmtType, formatResult, parseParamList, tryStringifyJson } from '../../../utils';
+import { fmtType, formatResult, parseParamList, tryStringifyJson, tryParseJson } from '../../../utils';
 // import 'antd/lib/modal/style/index.css';
 // import 'antd/lib/select/style/index.css';
 // import {
@@ -669,7 +669,7 @@ class CallContract extends Component {
   onChangeParam = (event, funcName, isNumber, paramIndex) => {
     const { params_value } = this.state;
     let value = event.currentTarget.value;
-    console.log('paramIndex', paramIndex, !params_value[funcName], isNumber);
+    console.log('value', value, isNumber);
     // JavaScript
     if (paramIndex) {
       if (isNumber) value = parseInt(value);
@@ -711,7 +711,7 @@ class CallContract extends Component {
     try {
       const method =
         func.decorators[0] === 'view' || typeCall === 'view' ? 'callReadonlyContractMethod' : 'callPureContractMethod';
-      console.log('method', method);
+      // console.log('method', method);
       const result = await tweb3[method](address, func.name, func.params);
       // console.log("result", result);
       answers[func.name] = result || '' + result;

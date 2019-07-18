@@ -1,22 +1,22 @@
-import React, { PureComponent } from "react";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { diffTime } from "../../../utils";
-import "./BlocksBox.scss";
+import React, { PureComponent } from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { diffTime } from '../../../utils';
+import './BlocksBox.scss';
 
 class BlocksBox extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      cssIcon: "fa bi-spin fa-cubes"
+      cssIcon: 'fa bi-spin fa-cubes',
     };
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (prevState.cssIcon.indexOf("bi-spin") === -1) {
-      return { cssIcon: "fa bi-spin fa-cubes" };
+    if (prevState.cssIcon.indexOf('bi-spin') === -1) {
+      return { cssIcon: 'fa bi-spin fa-cubes' };
     } else {
-      return { cssIcon: "fa fa-cubes" };
+      return { cssIcon: 'fa fa-cubes' };
     }
   }
 
@@ -25,25 +25,27 @@ class BlocksBox extends PureComponent {
 
     return blocksInfo.map((block, index) => {
       return (
-        <div className="row_blocks" key={index}>
-          <div className="title flex">
-            <div className="block_count">
-              <span>Blocks</span>
-              <Link to={`/block/${block.height}`}>{block.height}</Link>
+        <div className="wrapper-rowbox" key={index}>
+          <div className="row_blocks">
+            <div className="title flex">
+              <div className="block_count">
+                <span>Blocks</span>
+                <Link to={`/block/${block.height}`}>{block.height}</Link>
+              </div>
+              <div className="seconds_time">{diffTime(block.time)}</div>
             </div>
-            <div className="seconds_time">{diffTime(block.time)}</div>
-          </div>
-          <div className="includes flex">
-            <div className="in_detail">
-              <span>Includes</span>
-              <Link to={`/txs?height=${block.height}`}>
-                <span> {block.num_txs} Txns</span>
-              </Link>
-            </div>
-            <div className="node">
-              <span>
-                Node: <span>{block.chain_id}</span>
-              </span>
+            <div className="includes flex">
+              <div className="in_detail">
+                <span>Includes</span>
+                <Link to={`/txs?height=${block.height}`}>
+                  <span> {block.num_txs} Txns</span>
+                </Link>
+              </div>
+              <div className="node">
+                <span>
+                  Node: <span>{block.chain_id}</span>
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -72,7 +74,7 @@ class BlocksBox extends PureComponent {
 const mapStateToProps = state => {
   const { chainInfo } = state;
   return {
-    blocksInfo: chainInfo.blocks
+    blocksInfo: chainInfo.blocks,
   };
 };
 

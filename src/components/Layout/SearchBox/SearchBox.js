@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import { withRouter, Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { withRouter, Link } from 'react-router-dom';
 // import "antd/lib/input/style/index.css";
 // import "antd/lib/button/style/index.css";
 // import "antd/lib/icon/style/index.css";
 // import "antd/dist/antd.css";
-import "./SearchBox.scss";
+import './SearchBox.scss';
 
-import * as findAsset from "../../../service/blockchain/find-assets";
-import { checkScroll } from "../../../assets/js/hover";
-import { Input } from "antd";
+import * as findAsset from '../../../service/blockchain/find-assets';
+import { checkScroll } from '../../../assets/js/hover';
+import { Input } from 'antd';
 const { Search } = Input;
 
 let show_cb = null;
@@ -16,7 +16,7 @@ class SearchBox extends Component {
   constructor() {
     super();
     this.state = {
-      value: "",
+      value: '',
       isBlock: false,
       isTxs: false,
       isAddress: false,
@@ -26,7 +26,7 @@ class SearchBox extends Component {
       all_data: [],
       show_cb: true,
       hidden_searh: true,
-      show_clear: false
+      show_clear: false,
     };
 
     this.blocks_data = [];
@@ -36,27 +36,27 @@ class SearchBox extends Component {
   handleValue = event => {
     this.setState({
       value: event.target.value,
-      show_clear: true
+      show_clear: true,
     });
 
     this.setState({
       result_blocks: [],
-      result_txs: []
+      result_txs: [],
     });
 
-    if (event.target.value === "") {
+    if (event.target.value === '') {
       this.setState({
-        show_clear: false
+        show_clear: false,
       });
     }
 
-    if (event.target.value !== "") {
+    if (event.target.value !== '') {
       this.setState({
-        isSearching: true
+        isSearching: true,
       });
     } else {
       this.setState({
-        isSearching: false
+        isSearching: false,
       });
     }
 
@@ -66,11 +66,11 @@ class SearchBox extends Component {
   async findAsset(value) {
     this.setState({
       result_blocks: await findAsset.findBlocks(value),
-      result_txs: await findAsset.findTxs(value)
+      result_txs: await findAsset.findTxs(value),
     });
 
     this.blocks_data = this.state.result_blocks.map((item, index) => {
-      let cut_hash = "";
+      let cut_hash = '';
       let hash = item.block_meta.block_id.hash;
 
       for (let i = 0; i < 30; i++) {
@@ -95,7 +95,7 @@ class SearchBox extends Component {
     });
 
     this.txs_data = this.state.result_txs.map((item, index) => {
-      let cut_hash = "";
+      let cut_hash = '';
       for (let i = 0; i < 30; i++) {
         cut_hash += item.hash[i];
       }
@@ -118,15 +118,15 @@ class SearchBox extends Component {
   }
 
   componentDidMount() {
-    if (this.props.show_cb === "header" && window.location.pathname === "/") {
+    if (this.props.show_cb === 'header' && window.location.pathname === '/') {
       this.setState({
-        show_cb: false
+        show_cb: false,
       });
 
       show_cb = setInterval(() => {
-        if (this.props.show_cb === "header") {
+        if (this.props.show_cb === 'header') {
           this.setState({
-            show_cb: !checkScroll(window.innerHeight / 4)
+            show_cb: !checkScroll(135), //window.innerHeight / 3
           });
         }
       }, 100);
@@ -139,8 +139,8 @@ class SearchBox extends Component {
 
   clearValue = () => {
     this.setState({
-      value: "",
-      show_clear: false
+      value: '',
+      show_clear: false,
     });
 
     this.blocks_data = [];
@@ -151,15 +151,15 @@ class SearchBox extends Component {
     // console.log(value);
     const { history } = this.props;
     if (!isNaN(value)) {
-      history.push("/block/" + value);
+      history.push('/block/' + value);
     } else {
-      if (value.substring(0, 3) === "tea") {
-        history.push("/contract/" + value);
+      if (value.substring(0, 3) === 'tea') {
+        history.push('/contract/' + value);
       } else {
         if (value.length === 64 && value === value.toUpperCase()) {
-          history.push("/tx/" + value);
+          history.push('/tx/' + value);
         } else {
-          history.push("/not-found");
+          history.push('/not-found');
         }
       }
     }
@@ -169,10 +169,7 @@ class SearchBox extends Component {
     const { show_cb } = this.state;
 
     return (
-      <div
-        className="search-box_out-side"
-        style={{ display: this.state.show_cb === true ? "block" : "none" }}
-      >
+      <div className="search-box_out-side" style={{ display: this.state.show_cb === true ? 'block' : 'none' }}>
         <Search
           placeholder="Search by block, transaction or address"
           onSearch={value => {
@@ -181,7 +178,7 @@ class SearchBox extends Component {
           onPressEnter={value => {
             this.searchAssets(value.currentTarget.value);
           }}
-          style={{ width: "100%" }}
+          style={{ width: '100%' }}
           allowClear={true}
         />
 

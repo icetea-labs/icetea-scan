@@ -1,22 +1,22 @@
-import React, { PureComponent } from "react";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { diffTime, convertTxType } from "../../../utils";
-import "./TransactionsBox.scss";
+import React, { PureComponent } from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { diffTime, convertTxType } from '../../../utils';
+import './TransactionsBox.scss';
 
 class TransactionsBox extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      cssIcon: "fa bi-spin fa-list-alt"
+      cssIcon: 'fa bi-spin fa-list-alt',
     };
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (prevState.cssIcon.indexOf("bi-spin") === -1) {
-      return { cssIcon: "fa bi-spin fa-list-alt" };
+    if (prevState.cssIcon.indexOf('bi-spin') === -1) {
+      return { cssIcon: 'fa bi-spin fa-list-alt' };
     } else {
-      return { cssIcon: "fa fa-list-alt" };
+      return { cssIcon: 'fa fa-list-alt' };
     }
   }
 
@@ -25,30 +25,28 @@ class TransactionsBox extends PureComponent {
 
     return transactionsInfo.map((item, index) => {
       return (
-        <div className="row_transactions" key={index}>
-          <div className="info_tx flex">
-            <div className="tx">
-              <span>TX#:</span>
-              <Link to={`/tx/${item.hash}`}>{item.hash}</Link>
-            </div>
-            <div className="seconds_time">{diffTime(item.time)}</div>
-          </div>
-          <div className="transactions flex">
-            <div className="from_to">
-              <div className="from">
-                <span>From: </span>
-                <Link to={`/contract/${item.from}`}>
-                  {item.from ? item.from : "--"}
-                </Link>
+        <div className="wrapper-rowbox">
+          <div className="row_transactions" key={index}>
+            <div className="info_tx flex">
+              <div className="tx">
+                <span>TX#:</span>
+                <Link to={`/tx/${item.hash}`}>{item.hash}</Link>
               </div>
-              <div className="to">
-                <span>To: </span>
-                <Link to={`/contract/${item.to}`}>
-                  {item.to ? item.to : "--"}
-                </Link>
-              </div>
+              <div className="seconds_time">{diffTime(item.time)}</div>
             </div>
-            <div className="statusTx">{convertTxType(item.data_op)}</div>
+            <div className="transactions flex">
+              <div className="from_to">
+                <div className="from">
+                  <span>From: </span>
+                  <Link to={`/contract/${item.from}`}>{item.from ? item.from : '--'}</Link>
+                </div>
+                <div className="to">
+                  <span>To: </span>
+                  <Link to={`/contract/${item.to}`}>{item.to ? item.to : '--'}</Link>
+                </div>
+              </div>
+              <div className="statusTx">{convertTxType(item.data_op)}</div>
+            </div>
           </div>
         </div>
       );
@@ -76,7 +74,7 @@ class TransactionsBox extends PureComponent {
 const mapStateToProps = state => {
   const { chainInfo } = state;
   return {
-    transactionsInfo: chainInfo.transactions
+    transactionsInfo: chainInfo.transactions,
   };
 };
 

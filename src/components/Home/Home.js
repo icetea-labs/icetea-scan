@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import Banner from './elements/Banner';
 import SearchBox from '../Layout/SearchBox/SearchBox';
 import BlocksBox from './elements/BlocksBox';
 import TransactionsBox from './elements/TransactionsBox';

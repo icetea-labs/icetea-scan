@@ -25,8 +25,8 @@ class BlocksBox extends PureComponent {
 
     return blocksInfo.map((block, index) => {
       return (
-        <div className="wrapper-rowbox">
-          <div className="row_blocks" key={index}>
+        <div className="wrapper-rowbox" key={index}>
+          <div className="row_blocks">
             <div className="title flex">
               <div className="block_count">
                 <span>Blocks</span>

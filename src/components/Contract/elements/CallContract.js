@@ -706,20 +706,21 @@ class CallContract extends Component {
 
   callReadOrPure = async (func, index, typeCall) => {
     const { address } = this.props;
-    const { loading, answers } = this.state;
+    const { loading, answers, params_value } = this.state;
 
     try {
       const method =
         func.decorators[0] === 'view' || typeCall === 'view' ? 'callReadonlyContractMethod' : 'callPureContractMethod';
-      // console.log('method', method);
-      const result = await tweb3[method](address, func.name, func.params);
+      // console.log('params_value', params_value);
+      const result = await tweb3[method](address, func.name, params_value[func.name] || []);
       // console.log("result", result);
-      answers[func.name] = result || '' + result;
+      answers[func.name] = tryStringifyJson(result || '' + result);
     } catch (error) {
       console.log(error);
       answers[func.name] = tryStringifyJson(error, true);
     } finally {
       loading[func.name] = false;
+      console.log(answers);
       this.setState({ answers, loading });
     }
   };

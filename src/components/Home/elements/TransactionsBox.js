@@ -25,8 +25,8 @@ class TransactionsBox extends PureComponent {
 
     return transactionsInfo.map((item, index) => {
       return (
-        <div className="wrapper-rowbox">
-          <div className="row_transactions" key={index}>
+        <div className="wrapper-rowbox" key={index}>
+          <div className="row_transactions">
             <div className="info_tx flex">
               <div className="tx">
                 <span>TX#:</span>

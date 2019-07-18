@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import { Link } from "react-router-dom";
-import { diffTime } from "../../../utils";
+import { connect } from "react-redux";
+import { diffTime, convertTxType } from "../../../utils";
 import "./TransactionsBox.scss";
 
 class TransactionsBox extends PureComponent {
@@ -17,15 +18,6 @@ class TransactionsBox extends PureComponent {
     } else {
       return { cssIcon: "fa fa-list-alt" };
     }
-  }
-
-  convertDataOp(op) {
-    if (op === 0) {
-      return "deploy";
-    } else if (op === 1) {
-      return "call";
-    }
-    return "transfer";
   }
 
   renderTransactions = () => {
@@ -45,21 +37,18 @@ class TransactionsBox extends PureComponent {
             <div className="from_to">
               <div className="from">
                 <span>From: </span>
-                <Link to={`/address/${item.from}`}>
+                <Link to={`/contract/${item.from}`}>
                   {item.from ? item.from : "--"}
                 </Link>
               </div>
               <div className="to">
                 <span>To: </span>
-                <Link to={`/address/${item.to}`}>
+                <Link to={`/contract/${item.to}`}>
                   {item.to ? item.to : "--"}
                 </Link>
               </div>
             </div>
-            <div className="status_order">
-              <i className="fa fa-circle" />
-              <span>{this.convertDataOp(item.data_op)}</span>
-            </div>
+            <div className="statusTx">{convertTxType(item.data_op)}</div>
           </div>
         </div>
       );
@@ -84,4 +73,14 @@ class TransactionsBox extends PureComponent {
   }
 }
 
-export default TransactionsBox;
+const mapStateToProps = state => {
+  const { chainInfo } = state;
+  return {
+    transactionsInfo: chainInfo.transactions
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(TransactionsBox);

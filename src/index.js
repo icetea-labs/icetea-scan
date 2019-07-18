@@ -6,7 +6,7 @@ import * as serviceWorker from "./serviceWorker";
 // Provider
 import { Provider } from "react-redux";
 // import { store } from "./service/blockchain/init-store";
-import store from "./service/store";
+import store from "./store";
 // import { getRealTimeData } from "./service/blockchain/get-realtime-data";
 // import { env } from "./evironment/env";
 

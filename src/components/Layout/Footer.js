@@ -3,10 +3,15 @@ import React, { Component } from 'react';
 class Footer extends Component {
   render() {
     return (
-      <footer className="footer">
+      <footer className="footer pc-footer">
         <div className="container">
           <div className="infomation">
-            © 2018 - 2019 TradaTech All rights reserved
+            <p>
+              © 2019 &nbsp;
+              <a href="https://trada.tech/team.html" target="_blank" rel="noopener noreferrer">
+                TradaTech
+              </a>
+            </p>
             <a href="http://trada.tech" rel="noopener noreferrer" target="_blank">
               <i className="fa fa-paper-plane" />
             </a>

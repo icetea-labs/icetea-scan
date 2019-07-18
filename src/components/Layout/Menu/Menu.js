@@ -11,10 +11,10 @@ class Menu extends Component {
             <li className="nav_items">Home</li>
           </Link>
           <Link to="/blocks">
-            <li className="nav_items">View Blocks</li>
+            <li className="nav_items">Blocks</li>
           </Link>
           <Link to="/txs">
-            <li className="nav_items">View Transactions</li>
+            <li className="nav_items">Transactions</li>
           </Link>
           <Link to="/contracts">
             <li className="nav_items">Contracts</li>

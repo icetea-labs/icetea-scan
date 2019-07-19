@@ -5,7 +5,7 @@ import moment from 'moment';
 import Select from 'rc-select';
 import PaginationPro from '../elements/PaginationPro';
 import './Blocks.scss';
-import { diffTime } from '../../utils';
+import { diffTime, formatNumber } from '../../utils';
 import { getListBlockApi, getTotalBlockApi } from '../../service/api/get-list-data';
 import * as actions from '../../store/actions';
 
@@ -54,7 +54,7 @@ class Blocks extends PureComponent {
 
   renderTbody() {
     const { blocksInfo } = this.props;
-    // console.log("renderTbody");
+    // console.log('renderTbody', blocksInfo);
     if (blocksInfo.length === 0) {
       return (
         <tr className="no_data">
@@ -114,7 +114,8 @@ class Blocks extends PureComponent {
         <h3>Blocks</h3>
         <div className="flexBox">
           <div className="sub-title">
-            Block <span>#{form}</span> to <span>#{to}</span> (Total of<span> {totalBlocks} </span>blocks)
+            Block <span>#{formatNumber(form)}</span> to <span>#{formatNumber(to)}</span> (Total of
+            <span> {formatNumber(totalBlocks)} </span>blocks)
           </div>
           <div className="breadcrumb">
             <span className="breadcrumb-item">

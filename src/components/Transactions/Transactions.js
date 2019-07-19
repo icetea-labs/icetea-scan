@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { toTEA, convertTxType, diffTime } from '../../utils';
+import { toTEA, convertTxType, diffTime, formatNumber } from '../../utils';
 import './Transactions.scss';
 // import moment from 'moment';
 import Select from 'rc-select';
@@ -134,7 +134,7 @@ class Transactions extends Component {
         )}
         <div className="flexBox">
           <div className="sub-title">
-            More than > <span>{totalTxs}</span> transactions found
+            More than > <span>{formatNumber(totalTxs)}</span> transactions found
           </div>
           <div className="breadcrumb">
             <span className="breadcrumb-item">

@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import 'font-awesome/css/font-awesome.min.css';
 import './sass/app.scss';
-import './sass/_responsive.scss';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap-theme.css';
+
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from './components/Home/Home';
-import TransactionsInfo from './components/Transactions/TransactionsInfo';
-import BlockInfo from './components/Blocks/BlockInfo';
+import TransactionsInfo from './components/TransactionInfo/TransactionInfo';
+import BlockInfo from './components/BlockInfo/BlockInfo';
 import Blocks from './components/Blocks/Blocks';
 import Transactions from './components/Transactions/Transactions';
 import NotFound from './components/NotFound/NotFound';

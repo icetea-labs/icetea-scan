@@ -1,0 +1,61 @@
+.page-index {
+  align-self: right;
+  height: 80px;
+  position: relative;
+
+  .paging {
+    position: absolute;
+    padding: 10px;
+    width: auto;
+    display: flex;
+    right: 0px;
+
+    button {
+      background: rgb(255, 255, 255);
+      margin: 0px 4px 0px 4px;
+      border-radius: 3px;
+      border: none;
+      :hover {
+        color: khaki;
+      }
+
+      border: solid gray 1px;
+    }
+
+    .btn-common {
+      height: 30px;
+      width: auto;
+      line-height: 1;
+      padding: 10px;
+      font-weight: 600;
+    }
+
+    .btn-common:hover {
+      background: rgba(97, 192, 207, 0.625);
+      transition: 0.3s;
+      color: whitesmoke;
+    }
+
+    .state {
+      line-height: 30px;
+      width: 90px !important;
+      text-align: center;
+      color: brown;
+      background: rgb(255, 255, 255);
+      border: solid gray 1px;
+      border-radius: 3px;
+    }
+
+    i {
+      float: center;
+    }
+
+    label {
+      color: blue !important;
+    }
+
+    label:hover {
+      text-decoration: blue !important;
+    }
+  }
+}

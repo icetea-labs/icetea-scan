@@ -2,50 +2,14 @@
 @import "./common";
 @import "./responsive";
 
-.header {
-  width: 100%;
-  background: rgb(206, 206, 206);
-  height: 50px;
-  padding: 0 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid rgba(132, 132, 0, 0.442);
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 3;
-
-  .search_box_container {
-    position: absolute;
-    left: 25%;
-  }
-
-  .logo {
-    position: relative;
-    top: 0px;
-    width: 40px;
-    height: 40px;
-  }
-
-  a {
-    color: black;
-  }
-}
-
-.content {
-  min-height: 50pc;
-  margin-bottom: 50px;
-}
-
 // home container
 .home {
   margin-top: 50px;
 }
 
 .chain-value {
-  height: 100px;
-  width: 80pc;
+  width: 100%;
+  height: auto;
   margin: 20px 0px;
 }
 
@@ -55,21 +19,23 @@
   margin: 0px auto;
   padding: 1.875rem 1rem;
   display: block;
-  .container {
-    display: flex;
-    justify-content: space-between;
+  width: 100%;
+  
+  .header_top{
+    a{
+      color:gray;
+      font-size: 14px;
+    }
   }
-  .flex {
-    display: flex;
-    justify-content: space-between;
-  }
+  
   .blocks_box {
-    width: 40%;
+    margin: 0px 5px;
     .row_blocks {
       margin: 0 15px;
       padding: 10px 0;
       box-sizing: border-box;
       border-bottom: 1px solid rgba($color_grey_athens, 0.5);
+
       .title {
         margin-bottom: 8px;
       }
@@ -96,33 +62,37 @@
   }
 
   .transactions_box {
-    width: calc(100% - 40% - 20px);
-    margin-left: 20px;
+    margin: 0px 5px;
     .row_transactions {
       margin: 0 15px;
       padding: 10px 0;
       box-sizing: border-box;
       border-bottom: 1px solid rgba($color_grey_athens, 0.5);
+
       .info_tx {
         margin-bottom: 8px;
         .tx {
           font-weight: 500;
-          width: 70%;
           text-overflow: ellipsis;
           white-space: nowrap;
           overflow: hidden;
         }
       }
+      
       a {
         margin-left: 5px;
+        font-size: $font_size_base;
       }
+
       .transactions {
         font-size: $font_size_small;
         color: $color_secondary;
+
         .from_to {
           width: 70%;
           display: flex;
           align-items: center;
+
           .from {
             margin-right: 10px;
             width: 50%;
@@ -130,6 +100,7 @@
             text-overflow: ellipsis;
             overflow: hidden;
           }
+
           .to {
             margin-right: 10px;
             width: 50%;
@@ -137,6 +108,7 @@
             text-overflow: ellipsis;
             overflow: hidden;
           }
+
           a {
             width: 70%;
             text-overflow: ellipsis;
@@ -144,6 +116,7 @@
             overflow: hidden;
           }
         }
+
         .status_order {
           color: $color_primary;
           text-transform: capitalize;
@@ -160,50 +133,9 @@
       }
     }
   }
-  .box_wrap {
-    height: 360px;
-    overflow-y: scroll;
-    background: $color_white;
-    box-shadow: rgba(90, 102, 124, 0.1) 0px 2px 10px 0px;
-    .seconds_time {
-      color: $color_secondary;
-    }
-  }
-  .header_top {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
-    .title {
-      font-size: $font_size_above_medium;
-      font-weight: normal;
-      i {
-        font-size: $font_size_medium;
-        margin-right: 10px;
-      }
-    }
-  }
 }
 
-// footer
-.footer {
-  width: 100%;
-  line-height: 50px;
-  background: rgb(228, 228, 228);
-  z-index: 10;
-  position: fixed;
-  bottom: 0;
-  // left: 0;
-  .container {
-    display: flex;
-    justify-content: flex-end;
-  }
-  .infomation {
-    a {
-      padding: 0 7px;
-      cursor: pointer;
-    }
-  }
-}
+
 
 // page_info_common
 .page_info_header {
@@ -214,11 +146,14 @@
   align-content: center;
 
   .wrap {
+    font-size: 23px;
+    font-weight: 500;
     .id_code {
       font-size: $font_size_medium;
       color: $color_secondary;
       margin-left: 15px;
     }
+
     .copy_id {
       margin: 0;
       width: 26px;
@@ -234,8 +169,9 @@
   }
 }
 
+// Page_Info
 .page_info_content {
-  margin-bottom: 30px;
+  margin-bottom: 50px;
   background: $color_white;
   box-shadow: #5a667c1a 0px 2px 10px 0px;
   border-radius: 3px;
@@ -278,7 +214,8 @@
   .info_body {
     padding: 20px;
     margin-bottom: 50px;
-    height: 80pc;
+    height: auto;
+
     .row_detail {
       padding: 8px 0;
       margin-bottom: 12px;
@@ -289,18 +226,21 @@
   }
 }
 
+//Row detail
 .row_detail {
   span.label {
     color: $color_primary;
     display: block;
     width: 14%;
   }
+
   .text_wrap {
     width: calc(100% - 14%);
     font-weight: 500;
     .fa-clipboard {
       margin-left: 15px;
     }
+
     .datacode {
       display: inline-block;
       font-size: $font_size_small;
@@ -311,9 +251,11 @@
       color: $color_secondary;
       padding: 5px;
     }
+
     .success_color {
       color: $color_green;
     }
+
     .error_color {
       color: $color_red;
     }
@@ -323,37 +265,29 @@
   }
 }
 
-.breadcrumb {
-  li {
-    float: left;
-    line-height: 24px;
-    a {
-      padding: 0 5px;
-      font-size: $font_size_small;
-      color: $color_secondary;
-      position: relative;
-      &:after {
-        content: "/";
-        position: absolute;
-        right: -3px;
-      }
-    }
-  }
-}
+//Bread Cumb
+
 
 // .table_data
 .table_data {
+  padding:10px 5px;
+  font-family: $font_root;
+  font-weight: 500;
   table {
     width: 100%;
     display: table;
     border-spacing: 0 5px;
     table-layout: fixed;
   }
+
   th {
     padding: 11px 16px;
     text-align: left;
     color: $color_secondary;
+    font-weight: 600;
+    font-size: 16px;
   }
+
   tbody {
     tr {
       background: $color_white;
@@ -365,17 +299,18 @@
         box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 10px 0px;
         transition: all 0.3s ease;
       }
-    }
-  }
-  td {
-    padding: 11px 16px;
-    &.tx_type {
-      text-transform: capitalize;
-    }
-    &.text_overflow {
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
+
+      td {
+        padding: 12px;
+        &.tx_type {
+          text-transform: capitalize;
+        }
+        &.text_overflow {
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+      }
     }
   }
 }

@@ -11,13 +11,11 @@ class Contract extends Component {
         this.state = {
             show_call: false,
             address: false,
-            params_url: '',
         }
     }
 
     componentWillMount() {
         let address = this.props.match.params.address;
-        let {param_url}= this.state;
 
         this._checkTxSigned();
         this.setState({
@@ -48,11 +46,8 @@ class Contract extends Component {
         // this.setState({param_url, show_call})
     }
 
-
     render() {
-
         let { show_call, address, params_url } = this.state;
-
         return (
             <Layout>
                 <div className="block_info mt_50">

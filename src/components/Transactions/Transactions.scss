@@ -21,6 +21,11 @@ h3 {
   font-size: 800;
 }
 
-.name_type {
-  padding-bottom: 5px;
+.name-type {
+  height: 14px;
+  position: relative;
+  top: -6px;
+  label {
+    padding-top: -6px;
+  }
 }

@@ -1,0 +1,150 @@
+@import "../../../../sass/variables";
+
+.search-box_out-side {
+  position: relative;
+  width: 440px;
+  height: 40px;
+  border-radius: 5px;
+  padding: 1px;
+  
+  &:placeholder-shown{
+    font-family: $font_root;
+    font-size: $font_size_medium;
+  }
+
+  //search-icon
+  .search-icon{
+    position: fixed;
+    top: 15px;
+    right: 80px;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    color: #5a5a5a;
+  }
+
+  // input box
+  .search_box_container {
+    position: absolute;
+    top: 4px;
+    left: 0px;
+    display: flex;
+    align-items: center;
+    width: 440px;
+    height: 36px;
+    border-radius: 3px !important;
+    overflow: hidden;
+    background: $color_white;
+    border: solid rgb(5, 83, 5) 2px;
+
+    &:hover {
+      transition: all 0.3s ease;
+    }
+
+    .search_input {
+      position: absolute;
+      left: 0px;
+      width: 350px;
+      height: 40px;
+      padding: 0 10px;
+      border: none;
+      font-size: 12px;
+      background: $color_white;
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .delete-value{
+      position: absolute;
+      right: 50px;
+      font-size: 30px;
+      width: 50px;
+      top: 0px;
+      color: rgba(0, 0, 0, 0.456);
+      font-weight: 200;
+
+      cursor: pointer;
+      .btn-clear {
+        border: none;
+        background-color: white;
+        img{
+          color: rgba(0, 0, 0, 0.53);
+          position: absolute;
+          right: 0px;
+        }
+      }
+    }
+
+    .btn_search {
+      position: absolute;
+      right: 0px;
+      width: 51px;
+      height: 40px;
+      text-align: center;
+      border: none;
+      cursor: pointer;
+      background: rgb(4, 92, 4);
+ 
+      i {
+        font-size: 20px;
+        color: $color_white;
+      }
+      &:hover {
+        background: rgba(157, 240, 34, 0.632);
+      }
+    }
+  
+  }
+}
+
+.search-result {
+  position: absolute;
+  bottom: -210px;
+  z-index: 2;
+  height: 200px;
+  width:390px;
+  background-color: white;
+  border-radius: 3px;
+  color: rgba(0, 0, 0, 0.802);
+  overflow-y: auto;
+  box-shadow: rgba(86, 98, 121, 0.2) 0px 2px 10px 0px;
+
+  .result {
+    height: 60px;
+    padding: 10px;
+    display: flex;
+    border-bottom: solid rgba(128, 128, 128, 0.142) 1px;
+    border-width: 80%;
+
+    .img {
+      position: absolute;
+      left: 0px;
+      width: 40px;
+      height: 40px;
+
+      i {
+        position: absolute;
+        left: 20%;
+        top: 20%;
+        font-size: 25px;
+        color: rgba(59, 59, 59, 0.224);
+      }
+    }
+
+    .info {
+      position: absolute;
+      left: 60px;
+      height: 40px;
+      text-align: left;
+      color: rgb(132, 142, 156);
+      font-family: ProximaNova-Regular;
+      font-size: 12px;
+      cursor: pointer;
+
+      #block {
+        width: 50px;
+      }
+    }
+  }
+}

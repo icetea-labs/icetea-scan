@@ -11,6 +11,7 @@ import diffTime from '../../service/blockchain/find-time-return';
 // import { _get } from '../../service/api/base-api';
 // import { listBlocks } from '../../service/api/list-api';
 import { getListBlockApi } from '../../service/api/get-list-data';
+import Paging from './../Layout/elements/Paging/Paging';
 
 const mapStateToProps = (state) => {
   return {
@@ -70,7 +71,6 @@ class Blocks extends Component {
         </tr>
       )
     })
-
     return blocks
   }
 
@@ -80,7 +80,6 @@ class Blocks extends Component {
     if (pageIndex <= 0) {
       pageIndex = 1;
     }
-    console.log(pageIndex)
 
     if (pageIndex >= this.props.pageState.pageBlockLimit) {
       pageIndex = this.props.pageState.pageBlockLimit
@@ -100,8 +99,8 @@ class Blocks extends Component {
       <Layout>
         <div className="block_page mt_50 mb_30">
           <div className="container">
-            <div className="block_page page_info_header">
-              <h3>Blocks</h3>
+            <div className="page_info_header">
+              <h2>Blocks</h2>
               <div className="breadcrumb">
                 <ul>
                   <li><Link to="/">Home</Link></li>
@@ -109,6 +108,7 @@ class Blocks extends Component {
                 </ul>
               </div>
             </div>
+
             <div className="table_data">
               <table>
                 <thead>
@@ -131,21 +131,7 @@ class Blocks extends Component {
                 <li></li>
               </ul>
             </div>
-            <div className="page-index">
-              <div className="paging">
-                <button className="btn-common" onClick={() => { this.getBlocksByPageIndex(1) }}>First</button>
-                <button className="btn-cusor" onClick={() => { this.getBlocksByPageIndex(this.state.pageIndex - 1) }} >
-                  <MaterialIcon icon="keyboard_arrow_left" />
-                </button>
-                <span className="state">Page {this.state.pageIndex} of {this.props.pageState.pageBlockLimit} </span>
-                <button className="btn-cusor" onClick={() => { this.getBlocksByPageIndex(this.state.pageIndex + 1) }}>
-                  <MaterialIcon icon="keyboard_arrow_right" />
-                </button>
-                <button className="btn-common" onClick={() => { this.getBlocksByPageIndex(this.props.pageState.pageBlockLimit) }}>
-                  Last
-                </button>
-              </div>
-            </div>
+            <Paging data={'block'} />
           </div>
         </div>
       </Layout >

@@ -1,0 +1,32 @@
+.search-box{
+    position: absolute;
+    left: 30%;
+    height: 100%;
+    width: 30%;
+}
+
+.header {
+    width: 100%;
+    background: rgb(235, 235, 235);
+    height: 50px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 3;
+  
+    .search_box_container {
+      position: absolute;
+      left: 25%;
+    }
+  
+    .logo {
+      position: relative;
+      top: 0px;
+      width: 40px;
+      height: 40px;
+    }
+}

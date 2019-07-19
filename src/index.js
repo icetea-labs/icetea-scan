@@ -10,10 +10,11 @@ import { getRealTimeData } from './service/blockchain/get-realtime-data';
 import { env } from './evironment/env';
 
 
+
 if (env === "testing") {
   setTimeout(() => {
     getRealTimeData();
-  }, 1000);
+  }, 5000);
 } else {
   setTimeout(()=>{getRealTimeData(); }, 1);
   setInterval(() => { getRealTimeData(); }, 1000);

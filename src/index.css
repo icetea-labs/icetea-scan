@@ -9,6 +9,10 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+  font-family:  "Courier New",
     monospace;
+}
+
+@font-face{
+  src: url('./assets//font//DINPro-Regular_13937.ttf');
 }

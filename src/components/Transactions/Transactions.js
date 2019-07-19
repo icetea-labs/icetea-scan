@@ -10,6 +10,7 @@ import { getFirstTxsData } from "../../service/blockchain/init-store";
 import { setPageSate } from "../../service/blockchain/get-realtime-data";
 import { getListTxApi } from "../../service/api/get-list-data";
 import moment from 'moment';
+import Paging from "../Layout/elements/Paging/Paging";
 
 const mapStateToProps = state => {
   return {
@@ -102,13 +103,13 @@ class Transactions extends Component {
     if (this.props.transactions.length === 0) {
       return (
         <tr className="no_data">
-          <th />
-          <th />
-          <th />
-          <th>No Data</th>
-          <th />
-          <th />
-          <th />
+          <td />
+          <td />
+          <td />
+          <td>No Data</td>
+          <td />
+          <td />
+          <td />
         </tr>
       );
     } else {
@@ -123,15 +124,15 @@ class Transactions extends Component {
 
         let to = item.to;
         let head_to = "";
-        let end_to ="";
+        let end_to = "";
         let from = item.from;
         let head_from = "";
         let end_from = "";
         let hash = item.hash;
         let head_hash = "";
-        let end_hash= "";
+        let end_hash = "";
 
-        for ( let i = 0 ; i < 10; i ++){
+        for (let i = 0; i < 10; i++) {
           head_to += to[i];
           head_from += from[i];
           head_hash += hash[i];
@@ -143,33 +144,36 @@ class Transactions extends Component {
         // diffTime
         return (
           <tr key={index}>
-            <td className="text_overflow">
+            {/* hash */}
+            <td >
               {" "}
-              <Link to={`/tx/${item.hash}`}>{head_hash +  "..." + end_hash}</Link>
+              <Link to={`/tx/${item.hash}`}>{head_hash + "..." + end_hash}</Link>
             </td>
+            {/* height */}
             <td>
               <Link to={`/block/${item.height}`} title={item.height}>
                 {item.height}
               </Link>
             </td>
-            <td>{moment(item.time).format("MMMM-DD-YYYY h:mm:ss")}</td>
-            <td className="tx_type">
-              <div className="name_type">
-                <div className="circle-span" style={{ background: item.data_op === 0 ? "green" : "blue" }} />
-                {txType}
+            {/* time */}
+            <td>
+              {moment(item.time).format("MMMM-DD-YYYY h:mm:ss")}
+            </td>
+            {/* type */}
+            <td >
+              <div className='name-type'>
+                <div className="circle-span" style={{ background: item.data_op === 0 ? "green" : "blue" }}></div>
+                <span>{txType}</span>
               </div>
             </td>
-
             {/* from */}
-            <td className="text_overflow">
+            <td>
               {item.from ? (<Link to={`/address/${item.from}`}>{head_from + "..." + end_from}</Link>) : (<span>--</span>)}
             </td>
-
             {/* to */}
-            <td className="text_overflow">
+            <td >
               {item.to ? (<Link to={`/address/${item.to}`}>{head_to + "..." + end_to}</Link>) : (<span>--</span>)}
             </td>
-
             {/* Gas */}
             <td>{item.gasused ? item.gasused : 0} TEA</td>
           </tr>
@@ -182,14 +186,11 @@ class Transactions extends Component {
   render() {
     return (
       <Layout>
-        <div className="block_page mt_50 mb_30">
+        <div className="block_page mt_50 mb_50">
           <div className="container">
             <div className="block_page page_info_header">
-              <h3>Transactions</h3>
-              <span
-                className="sub-tilter"
-                style={{ display: this.state.show_paging ? "none" : "block" }}
-              >
+              <h2>Transactions</h2>
+              <span className="sub-tilter" style={{ display: this.state.show_paging ? "none" : "block" }}>
                 {" "}
                 For Block #{this.state.height}
               </span>
@@ -208,60 +209,20 @@ class Transactions extends Component {
               <table>
                 <thead>
                   <tr>
-                    <th>TxHash</th>
+                    <th width="200">TxHash</th>
                     <th width="90">Height</th>
-                    <th>Age</th>
-                    <th width="70">Type</th>
+                    <th width="180">Age</th>
+                    <th width="80">Type</th>
                     <th width="220">From</th>
                     <th width="220">To</th>
-                    <th width="140">Value</th>
+                    <th width="120">Value</th>
                   </tr>
                 </thead>
                 <tbody>{this.loadTransactions()}</tbody>
               </table>
             </div>
-
-            <div
-              className="page-index"
-              style={{ display: this.state.show_paging ? "block" : "none" }}>
-              <div className="paging">
-                <button
-                  className="btn-common"
-                  onClick={() => {
-                    this.getTransaction(1);
-                  }}>
-                  First
-                </button>
-                <button
-                  className="btn-cusor"
-                  onClick={() => {
-                    this.getTransaction(this.state.pageIndex - 1);
-                  }}>
-                  <MaterialIcon icon="keyboard_arrow_left" />
-                </button>
-                <span className="state">
-                  Page {this.state.pageIndex} of{" "}
-                  {this.props.pageState.pageTxsLimit}{" "}
-                </span>
-                <button
-                  className="btn-cusor"
-                  onClick={() => {
-                    this.getTransaction(this.state.pageIndex + 1);
-                  }}>
-                  <MaterialIcon icon="keyboard_arrow_right" />
-                </button>
-                <button
-                  className="btn-common"
-                  onClick={() => {
-                    this.getTransaction(
-                      this.props.pageState.pageTxsLimit
-                    );
-                  }}>
-                  Last
-                </button>
-              </div>
-            </div>
           </div>
+          <Paging data={'txs'}/>
         </div>
       </Layout>
     );

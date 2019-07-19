@@ -1,7 +1,8 @@
-import React, { PureComponent } from "react";
-import { connect } from "react-redux";
-import "./ChainInfo.scss";
-import moment from "moment";
+import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
+import './ChainInfo.scss';
+import moment from 'moment';
+import { formatNumber } from '../../../utils';
 
 class ChainInfo extends PureComponent {
   constructor(props) {
@@ -10,20 +11,17 @@ class ChainInfo extends PureComponent {
       time: null,
       height: 0,
       total_txs: 0,
-      total_accounts: 0
+      total_accounts: 0,
     };
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (
-      nextProps.blocksInfo.length > 0 &&
-      nextProps.blocksInfo !== prevState.blocksInfo
-    ) {
+    if (nextProps.blocksInfo.length > 0 && nextProps.blocksInfo !== prevState.blocksInfo) {
       return {
         time: nextProps.blocksInfo[0].time,
         height: nextProps.blocksInfo[0].height,
         total_txs: nextProps.blocksInfo[0].total_txs,
-        total_accounts: nextProps.totalContract
+        total_accounts: nextProps.totalContract,
       };
     } else {
       return null;
@@ -38,9 +36,7 @@ class ChainInfo extends PureComponent {
       <div className="total-chain">
         <ul>
           <li>
-            <p className="info-stamp">
-              {moment(time).format("DD/MM/YYYY HH:mm:ss")}
-            </p>
+            <p className="info-stamp">{moment(time).format('DD/MM/YYYY HH:mm:ss')}</p>
             <p>Time of last block</p>
           </li>
           <li>
@@ -48,11 +44,11 @@ class ChainInfo extends PureComponent {
             <p>Height Block</p>
           </li>
           <li>
-            <p className="info-stamp">{total_txs}</p>
+            <p className="info-stamp">{formatNumber(total_txs)}</p>
             <p>Total Transactions Counter</p>
           </li>
           <li>
-            <p className="info-stamp">{total_accounts}</p>
+            <p className="info-stamp">{formatNumber(total_accounts)}</p>
             <p>Total Accounts</p>
           </li>
         </ul>
@@ -65,7 +61,7 @@ const mapStateToProps = state => {
   const { chainInfo } = state;
   return {
     blocksInfo: chainInfo.blocks,
-    totalContract: chainInfo.totalContract
+    totalContract: chainInfo.totalContract,
   };
 };
 

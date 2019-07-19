@@ -151,3 +151,7 @@ export function tryParseJson(p) {
 export function replaceAll(text, search, replacement) {
   return text.split(search).join(replacement);
 }
+
+export function formatNumber(num) {
+  return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+}

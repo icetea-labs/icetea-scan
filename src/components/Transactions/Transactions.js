@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { toTEA, convertTxType, diffTime } from '../../utils';
+import { toTEA, convertTxType, diffTime, formatNumber } from '../../utils';
 import './Transactions.scss';
 // import moment from 'moment';
 import Select from 'rc-select';
@@ -48,9 +48,10 @@ class Transactions extends Component {
       <tr>
         <th width="20%">TxHash</th>
         <th width="7%">Height</th>
-        <th width="15%">Age</th>
+        <th width="12%">Age</th>
         <th width="8%">Type</th>
         <th width="20%">From</th>
+        <th width="3%" />
         <th width="20%">To</th>
         <th width="10%">Value</th>
       </tr>
@@ -71,10 +72,12 @@ class Transactions extends Component {
           <th />
           <th />
           <th />
+          <th />
         </tr>
       );
     } else {
       return transactionsInfo.map((item, index) => {
+        // console.log('transactionsInfo', transactionsInfo);
         return (
           <tr key={index}>
             <td className="text_overflow">
@@ -89,6 +92,17 @@ class Transactions extends Component {
             <td className="statusTx">{convertTxType(item.data_op)}</td>
             <td className="text_overflow">
               {item.from ? <Link to={`/contract/${item.from}`}>{item.from}</Link> : <span>--</span>}
+            </td>
+            <td className="text-center">
+              {item.result_code === 0 ? (
+                <span className="btn-success">
+                  <i className="fa fa-long-arrow-right" aria-hidden="true" />
+                </span>
+              ) : (
+                <span className="btn-error">
+                  <i className="fa fa-times-circle" aria-hidden="true" />
+                </span>
+              )}
             </td>
             <td className="text_overflow">
               {item.to ? <Link to={`/contract/${item.to}`}>{item.to}</Link> : <span>--</span>}
@@ -120,7 +134,7 @@ class Transactions extends Component {
         )}
         <div className="flexBox">
           <div className="sub-title">
-            More than > <span>{totalTxs}</span> transactions found
+            More than > <span>{formatNumber(totalTxs)}</span> transactions found
           </div>
           <div className="breadcrumb">
             <span className="breadcrumb-item">

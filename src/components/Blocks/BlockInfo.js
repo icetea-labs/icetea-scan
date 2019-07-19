@@ -130,10 +130,6 @@ class BlockInfo extends Component {
               <span className="label">Node:</span>
               <div className="text_wrap transaction_type">{node}</div>
             </div>
-            <div className="row_detail">
-              <span className="label">RewardedTo / Fee:</span>
-              <div className="text_wrap">--</div>
-            </div>
           </div>
         </div>
       </div>

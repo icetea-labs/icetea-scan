@@ -104,9 +104,15 @@ class ListContracts extends Component {
       <div className="listContract pc-container">
         <h3>Contract</h3>
         <div className="flexBox">
-          <div className="sub-title">
-            More than > <span>{total}</span> contracts found
-          </div>
+          {total > 0 ? (
+            <div className="sub-title">
+              More than > <span>{total}</span> contracts found
+            </div>
+          ) : (
+            <div className="sub-title">
+              <span>{total}</span> contract found
+            </div>
+          )}
           <div className="breadcrumb">
             <span className="breadcrumb-item">
               <Link to="/">Home</Link>
@@ -124,7 +130,7 @@ class ListContracts extends Component {
                 <th width="35%">Address</th>
                 <th width="15%">Balance</th>
                 <th width="35%">Deployed by</th>
-                <th width="15%">Type</th>
+                <th width="15%">Language</th>
               </tr>
             </thead>
             <tbody>{this.renderTbody()}</tbody>

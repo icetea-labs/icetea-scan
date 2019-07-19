@@ -133,9 +133,15 @@ class Transactions extends Component {
           <h3>Transactions</h3>
         )}
         <div className="flexBox">
-          <div className="sub-title">
-            More than > <span>{formatNumber(totalTxs)}</span> transactions found
-          </div>
+          {totalTxs > 0 ? (
+            <div className="sub-title">
+              More than > <span>{formatNumber(totalTxs)}</span> transactions found
+            </div>
+          ) : (
+            <div className="sub-title">
+              <span>{formatNumber(totalTxs)}</span> transaction found
+            </div>
+          )}
           <div className="breadcrumb">
             <span className="breadcrumb-item">
               <Link to="/">Home</Link>

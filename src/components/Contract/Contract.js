@@ -159,11 +159,16 @@ class Contract extends Component {
               activeKey={activeKey}
               onChange={this.tabOnChange}
             >
-              <TabPane tab="Detail" key="1" placeholder="loading Detail">
-                <DetailContract address={address} addresDetail={addresDetail} metadata={metadata} />
+              <TabPane tab="Details" key="1" placeholder="loading details">
+                <DetailContract
+                  address={address}
+                  addresDetail={addresDetail}
+                  metadata={metadata}
+                  isContractAddress={isContractAddress}
+                />
               </TabPane>
               {isContractAddress && (
-                <TabPane tab="Call Contract" key="2" placeholder="loading Call">
+                <TabPane tab="Call Contract" key="2" placeholder="loading call">
                   <CallContract address={address} state={show_call} search={params_url} metadata={metadata} />
                 </TabPane>
               )}

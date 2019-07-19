@@ -113,7 +113,7 @@ class ListContracts extends Component {
             </span>
             <div className="breadcrumb-separator">/</div>
             <span className="breadcrumb-item">
-              <Link to="/contracts">Addresses</Link>
+              <Link to="/contracts">Contracts</Link>
             </span>
           </div>
         </div>

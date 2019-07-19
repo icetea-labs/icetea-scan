@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import notifi from '../elements/Notification';
 import CallContract from './elements/CallContract';
-import ContractDetail from './elements/ContractDetail';
+import DetailContract from './elements/DetailContract';
 import './Contract.scss';
 import Tabs, { TabPane } from 'rc-tabs';
 import TabContent from 'rc-tabs/lib/TabContent';
@@ -14,6 +14,7 @@ class Contract extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      activeKey: '2',
       isContractAddress: false,
       address: '',
       params_url: '',
@@ -29,6 +30,12 @@ class Contract extends Component {
     // this.setState({ address });
     const address = this.props.match.params.address;
     this.loadData(address);
+
+    // const search_params = new URLSearchParams(window.location.search);
+    // let txSigned = search_params.get('txSigned');
+    // if (txSigned) {
+    //   this.setState({ activeKey: '2' });
+    // }
   }
 
   async loadData(address) {
@@ -46,6 +53,7 @@ class Contract extends Component {
       isContractAddress: isContract,
       addresDetail: addressInfoResp.data || {},
       metadata: metadataResp.data || {},
+      activeKey: isContract ? '2' : '1',
     });
 
     // console.log("response", addressInfoResp);
@@ -76,12 +84,12 @@ class Contract extends Component {
 
   tabOnChange = value => {
     console.log(`selected ${value}`);
+    this.setState({ activeKey: value });
   };
 
   render() {
-    const { show_call, params_url, isContractAddress, addresDetail, metadata } = this.state;
+    const { show_call, params_url, isContractAddress, addresDetail, metadata, activeKey } = this.state;
     const address = this.props.match.params.address;
-    // console.log("isContractAddress", isContractAddress);
 
     return (
       <div className="viewcontact detailBlocks pc-container">
@@ -105,11 +113,11 @@ class Contract extends Component {
               </span>
               <div className="breadcrumb-separator">/</div>
               <span className="breadcrumb-item">
-                <Link to="/contracts">Addresses</Link>
+                <Link to="/contracts">Contracts</Link>
               </span>
               <div className="breadcrumb-separator">/</div>
               <span className="breadcrumb-item">
-                <Link to={`/contracts/${address}`}>Address Info</Link>
+                <Link to={`/contract/${address}`}>{isContractAddress ? 'Contract Info' : 'Address Info'}</Link>
               </span>
             </div>
           </div>
@@ -142,17 +150,17 @@ class Contract extends Component {
                     search={params_url}
                   />
                 ) : (
-                  <ContractDetail address={address} state={!show_call} />
+                  <DetailContract address={address} state={!show_call} />
                 )} */}
             <Tabs
-              defaultActiveKey={'1'}
               destroyInactiveTabPane
               renderTabBar={() => <ScrollableInkTabBar />}
               renderTabContent={() => <TabContent />}
+              activeKey={activeKey}
               onChange={this.tabOnChange}
             >
               <TabPane tab="Detail" key="1" placeholder="loading Detail">
-                <ContractDetail address={address} addresDetail={addresDetail} metadata={metadata} />
+                <DetailContract address={address} addresDetail={addresDetail} metadata={metadata} />
               </TabPane>
               {isContractAddress && (
                 <TabPane tab="Call Contract" key="2" placeholder="loading Call">

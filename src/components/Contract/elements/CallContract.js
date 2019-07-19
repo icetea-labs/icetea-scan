@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Prism from 'prismjs';
 // import { Link } from 'react-router-dom';
 import { TxOp } from '@iceteachain/common';
 import Tabs, { TabPane } from 'rc-tabs';
@@ -7,7 +8,7 @@ import ScrollableInkTabBar from 'rc-tabs/lib/ScrollableInkTabBar';
 import 'rc-tabs/assets/index.css';
 import './CallContract.scss';
 import { Modal, Button, Input, Select } from 'antd';
-import { fmtType, formatResult, parseParamList, tryStringifyJson } from '../../../utils';
+import { fmtType, formatResult, parseParamList, tryStringifyJson, tryParseJson } from '../../../utils';
 // import 'antd/lib/modal/style/index.css';
 // import 'antd/lib/select/style/index.css';
 // import {
@@ -179,16 +180,20 @@ class CallContract extends Component {
 
   componentDidMount() {
     const tmpAccount = createBankKey();
-    tweb3.wallet.importAccount(tmpAccount.privateKey);
-    tweb3.wallet.defaultAccount = tmpAccount.address;
+    // tweb3.wallet.importAccount(tmpAccount.privateKey);
+    // tweb3.wallet.defaultAccount = tmpAccount.address;
 
     const search_params = new URLSearchParams(window.location.search);
     let txSigned = search_params.get('txSigned');
     if (txSigned) {
       txSigned = JSON.parse(decodeURIComponent(txSigned));
-      this.setState({ account: tmpAccount, txSigned, isIceteaWallet: true });
+      this.setState({ account: tmpAccount, txSigned, isIceteaWallet: true }, () => {
+        Prism.highlightAll();
+      });
     } else {
-      this.setState({ account: tmpAccount });
+      this.setState({ account: tmpAccount }, () => {
+        Prism.highlightAll();
+      });
     }
     console.log('txSigned', txSigned);
   }
@@ -587,9 +592,7 @@ class CallContract extends Component {
       return (
         <div className="wrapper-func" key={index}>
           <div className="info-box">
-            <code>
-              {index + 1}) {funcsInfo[func.name]}
-            </code>
+            <code className="language-js">{funcsInfo[func.name]}</code>
           </div>
           <div className="func-content">
             <form className="func-body">
@@ -602,14 +605,14 @@ class CallContract extends Component {
                     loading={(loading[func.name] && loading[func.name]['view']) || false}
                     onClick={() => this.submitForm(func, index, 'view')}
                   >
-                    <span>{'View'}</span>
+                    <span>View</span>
                   </Button>
                   <Button
                     type="primary"
                     loading={(loading[func.name] && loading[func.name]['pure']) || false}
                     onClick={() => this.submitForm(func, index, 'pure')}
                   >
-                    <span>{'Pure'}</span>
+                    <span>Pure</span>
                   </Button>
                 </React.Fragment>
               ) : (
@@ -666,7 +669,7 @@ class CallContract extends Component {
   onChangeParam = (event, funcName, isNumber, paramIndex) => {
     const { params_value } = this.state;
     let value = event.currentTarget.value;
-    console.log('paramIndex', paramIndex, !params_value[funcName], isNumber);
+    console.log('value', value, isNumber);
     // JavaScript
     if (paramIndex) {
       if (isNumber) value = parseInt(value);
@@ -703,20 +706,21 @@ class CallContract extends Component {
 
   callReadOrPure = async (func, index, typeCall) => {
     const { address } = this.props;
-    const { loading, answers } = this.state;
+    const { loading, answers, params_value } = this.state;
 
     try {
       const method =
         func.decorators[0] === 'view' || typeCall === 'view' ? 'callReadonlyContractMethod' : 'callPureContractMethod';
-      console.log('method', method);
-      const result = await tweb3[method](address, func.name, func.params);
+      // console.log('params_value', params_value);
+      const result = await tweb3[method](address, func.name, params_value[func.name] || []);
       // console.log("result", result);
-      answers[func.name] = result || '' + result;
+      answers[func.name] = tryStringifyJson(result || '' + result);
     } catch (error) {
-      console.log('error', error);
+      console.log(error);
       answers[func.name] = tryStringifyJson(error, true);
     } finally {
       loading[func.name] = false;
+      console.log(answers);
       this.setState({ answers, loading });
     }
   };
@@ -731,7 +735,7 @@ class CallContract extends Component {
       const result = await ct.methods[func.name](...(params_value[func.name] || [])).sendCommit({ signers });
       answers[func.name] = formatResult(result);
     } catch (error) {
-      console.log('error', error);
+      console.log(error);
       answers[func.name] = formatResult(error, true);
     } finally {
       loading[func.name] = false;
@@ -747,7 +751,7 @@ class CallContract extends Component {
     const txData = {
       op: TxOp.CALL_CONTRACT,
       name: func.name,
-      params: params_value[func.name],
+      params: params_value[func.name] || [],
     };
     formData.to = address;
     formData.data = txData;
@@ -764,17 +768,17 @@ class CallContract extends Component {
     const paramTmp = txSigned.data.params;
     const address = txSigned.to;
 
-    paramTmp.forEach((e, i) => {
-      if (!params_value[funcName]) params_value[funcName] = [];
-      params_value[funcName][i] = e;
-    });
-
     try {
+      paramTmp &&
+        paramTmp.forEach((e, i) => {
+          if (!params_value[funcName]) params_value[funcName] = [];
+          params_value[funcName][i] = e;
+        });
       const result = await tweb3.sendRawTransaction(txSigned);
       // console.log('txSigned', txSigned, '--', funcName);
       answers[funcName] = formatResult(result);
     } catch (error) {
-      console.log('error', error);
+      console.log(error);
       answers[funcName] = formatResult(error, true);
     } finally {
       this.setState({ answers, txSigned: '' });

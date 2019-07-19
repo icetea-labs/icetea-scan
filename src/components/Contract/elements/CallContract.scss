@@ -2,18 +2,13 @@
   position: relative;
   width: 100%;
   height: 650px; //100vh;
-  overflow: hidden;
   .side-left {
-    width: 25%;
-    min-width: 300px;
-    display: flex;
-    flex-direction: column;
     position: absolute;
     top: 0;
     left: 0;
     bottom: 0;
-    overflow: hidden;
-    overflow-y: auto;
+    width: 25%;
+    min-width: 300px;
     .rc-tabs-tab {
       padding: 18px;
       margin-right: 10px;
@@ -25,37 +20,34 @@
       font-size: 14px;
     }
     .wrapper-funcs {
-      display: flex;
-      flex-direction: column;
-      // margin-top: 28px;
-      // padding-right: 40px;
-      // border-right: 1px solid rgb(234, 236, 239);
+      height: 585px;
+      overflow-x: hidden;
+      ul {
+        padding: 1px;
+        // overflow-x: hidden;
+      }
       li {
+        display: flex;
+        justify-content: space-between;
         margin: 10px;
+        padding: 0 20px;
         height: 40px;
         line-height: 40px;
         cursor: pointer;
-        // width: 200px;
-        padding-left: 20px;
-        padding-right: 10px;
         // margin-bottom: 20px;
-        display: flex;
-        justify-content: space-between;
-        -webkit-box-align: center;
         align-items: center;
-        font-size: inherit;
-        position: relative;
-        box-sizing: border-box;
+        // position: relative;
+        // box-sizing: border-box;
         color: rgb(38, 49, 71);
         font-weight: 400;
         border-radius: 3px;
         // border-left: 4px solid rgb(255, 255, 255);
-        border-left: 4px solidf #eee;
+        // border-left: 4px solidf #eee;
         // box-shadow: rgba(223, 226, 231, 0.5) 0px 0px 5px 0px;
         background: #eee;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        // white-space: nowrap;
+        // overflow: hidden;
+        // text-overflow: ellipsis;
       }
       li:hover {
         font-weight: 600;
@@ -77,54 +69,41 @@
       }
       .typeFunc {
         font-size: 0.9em;
-        width: 35%;
-        text-align: left;
+        width: 50%;
+        text-align: center;
       }
     }
   }
   .dragbar {
     position: absolute;
     top: 0px;
-    // width: 0.5em;
     right: 0;
     bottom: 0;
-    cursor: col-resize;
     z-index: 999;
     border-right: 1px solid #f3f3f3;
   }
+
   .side-main {
-    // [tabindex='-1']:focus {
-    //   outline: none !important;
-    // }
-    left: 300px;
-    width: 75%;
-    min-width: 800px;
-    display: flex;
-    flex-direction: column;
     position: absolute;
+    right: 0;
     top: 0;
     bottom: 0;
+    width: 74%;
+    min-width: 800px;
     overflow: hidden;
-    // .anticon-spin::before {
-    //   display: inline-block;
-    //   -webkit-animation: loadingCircle 1s infinite linear;
-    //   animation: loadingCircle 1s infinite linear;
-    // }
-    // .anticon-spin {
-    //   display: inline-block;
-    //   -webkit-animation: loadingCircle 1s infinite linear;
-    //   animation: loadingCircle 1s infinite linear;
-    // }
     .contrainer-main {
+      overflow-x: hidden;
       padding: 10px 50px;
-      width: 100%;
+      // width: 100%;
       height: 100%;
-      overflow-x: scroll;
       .connector-wallet {
         padding: 10px 0 20px;
         #connector {
           font-size: 12px;
           color: #28a745 !important;
+        }
+        & > span {
+          margin-right: 15px;
         }
       }
       .wrapper-func {
@@ -142,7 +121,7 @@
       .info-box {
         line-height: 1;
         font-size: 90%;
-        background-color: #eee;
+        background: #f5f2f0;
         padding: 10px 12px;
         margin-bottom: 0;
         border-bottom: 1px solid rgba(0, 0, 0, 0.125);

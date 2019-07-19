@@ -2,7 +2,7 @@ import React from 'react';
 import { ContractMode } from '@iceteachain/common';
 import { toTEA } from '../../../utils';
 
-function Contract(props) {
+function DetailContract(props) {
   const { addresDetail, metadata } = props;
   return (
     <div className="tab-contract">
@@ -23,7 +23,7 @@ function Contract(props) {
           <div className="row_detail">
             <span className="label">Metadata:</span>
             <div className="text_wrap">
-              <pre className="result_string language-javascript">{JSON.stringify(metadata, null, 2)}</pre>
+              <pre className="result_string language-js">{JSON.stringify(metadata, null, 2)}</pre>
             </div>
           </div>
         </React.Fragment>
@@ -32,4 +32,4 @@ function Contract(props) {
   );
 }
 
-export default Contract;
+export default DetailContract;

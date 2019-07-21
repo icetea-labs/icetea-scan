@@ -4,13 +4,14 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import notifi from '../elements/Notification';
 import CallContract from './elements/CallContract';
 import DetailContract from './elements/DetailContract';
-import './Contract.scss';
+import './ContractInfo.scss';
 import Tabs, { TabPane } from 'rc-tabs';
 import TabContent from 'rc-tabs/lib/TabContent';
 import ScrollableInkTabBar from 'rc-tabs/lib/ScrollableInkTabBar';
 import 'rc-tabs/assets/index.css';
 import { getAccountInfo, getMetadataContract } from '../../service/blockchain/get-single-data';
-class Contract extends Component {
+
+class ContractInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -66,7 +67,6 @@ class Contract extends Component {
   }
 
   tabOnChange = value => {
-    console.log(`selected ${value}`);
     this.setState({ activeKey: value });
   };
 
@@ -163,4 +163,4 @@ class Contract extends Component {
   }
 }
 
-export default Contract;
+export default ContractInfo;

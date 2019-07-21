@@ -8,7 +8,7 @@ import ScrollableInkTabBar from 'rc-tabs/lib/ScrollableInkTabBar';
 import 'rc-tabs/assets/index.css';
 import './CallContract.scss';
 import { Modal, Button, Input, Select } from 'antd';
-import { fmtType, formatResult, parseParamList, tryStringifyJson, tryParseJson } from '../../../utils';
+import { fmtType, formatResult, parseParamList, tryStringifyJson } from '../../../utils';
 // import 'antd/lib/modal/style/index.css';
 // import 'antd/lib/select/style/index.css';
 // import {

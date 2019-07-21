@@ -15,18 +15,36 @@ class Transactions extends Component {
     this.state = {
       height: 1,
       isShowTxForBlock: false,
-      pageIndex: 1,
-      to: '',
-      from: '',
       current: 1,
       pageSize: 15,
+      value: '',
     };
   }
 
-  componentDidMount() {
-    const { pageSize } = this.state;
-    const search_params = new URLSearchParams(window.location.search);
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const search_params = new URLSearchParams(nextProps.location.search);
     const height = search_params.get('height');
+
+    if (height !== prevState.height) {
+      return { height };
+    }
+    return null;
+  }
+
+  componentDidMount() {
+    this.loadTransactions();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { height } = this.state;
+
+    if (prevState.height !== height) {
+      this.loadTransactions();
+    }
+  }
+
+  loadTransactions = () => {
+    const { pageSize, height } = this.state;
 
     if (height) {
       getListTxApi({ height: height, page_size: pageSize });
@@ -35,8 +53,9 @@ class Transactions extends Component {
     } else {
       getListTxApi({ page_size: pageSize });
       getTotalTxsApi();
+      this.setState({ isShowTxForBlock: false });
     }
-  }
+  };
 
   paginationOnChange = current => {
     const { pageSize } = this.state;
@@ -77,7 +96,6 @@ class Transactions extends Component {
       );
     } else {
       return transactionsInfo.map((item, index) => {
-        // console.log('transactionsInfo', transactionsInfo);
         return (
           <tr key={index}>
             <td className="text_overflow">

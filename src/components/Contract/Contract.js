@@ -23,64 +23,47 @@ class Contract extends Component {
     };
   }
 
-  componentDidMount() {
-    // const address = this.props.match.params.address;
-    // let { param_url } = this.state;
-    // this._checkTxSigned();
-    // this.setState({ address });
-    const address = this.props.match.params.address;
-    this.loadData(address);
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const address = nextProps.match.params.address;
 
-    // const search_params = new URLSearchParams(window.location.search);
-    // let txSigned = search_params.get('txSigned');
-    // if (txSigned) {
-    //   this.setState({ activeKey: '2' });
-    // }
+    if (address !== prevState.address) {
+      return { address };
+    }
+    return null;
   }
 
-  async loadData(address) {
-    const addressInfoResp = await getAccountInfo(address);
-    let isContract = false;
-    let metadataResp = {};
-    // console.log("addressInfoResp", addressInfoResp);
-    if (addressInfoResp && addressInfoResp.data.deployedBy) {
-      metadataResp = await getMetadataContract(address);
-      isContract = true;
+  componentDidMount() {
+    this.loadContractInfo();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { address } = this.state;
+
+    if (prevState.address !== address) {
+      this.loadContractInfo();
+    }
+  }
+
+  async loadContractInfo() {
+    const { address } = this.state;
+
+    const accountInfo = await getAccountInfo(address);
+    let isCt = false;
+    let metadataCt = {};
+
+    if (accountInfo && accountInfo.data.deployedBy) {
+      isCt = true;
+      metadataCt = await getMetadataContract(address);
     } else {
-      isContract = false;
+      isCt = false;
     }
     this.setState({
-      isContractAddress: isContract,
-      addresDetail: addressInfoResp.data || {},
-      metadata: metadataResp.data || {},
-      activeKey: isContract ? '2' : '1',
+      isContractAddress: isCt,
+      addresDetail: accountInfo.data || {},
+      metadata: metadataCt.data || {},
+      activeKey: isCt ? '2' : '1',
     });
-
-    // console.log("response", addressInfoResp);
-    // console.log("res_metadata", metadataContractResp);
   }
-  // _ChangeDetail = () => {
-  //   this.setState({
-  //     show_call: true
-  //   });
-  // };
-
-  // _ChangeCall = () => {
-  //   this.setState({
-  //     show_call: false
-  //   });
-  // };
-
-  _checkTxSigned = () => {
-    // let {param_url, show_call} = this.state;
-    // let search = this.props.location.search.split("?txSigned=");
-    // if (search !== ""){
-    //     show_call = true;
-    //     param_url = JSON.parse(decodeURIComponent(search[1]))
-    //     console.log(param_url)
-    // }
-    // this.setState({param_url, show_call})
-  };
 
   tabOnChange = value => {
     console.log(`selected ${value}`);

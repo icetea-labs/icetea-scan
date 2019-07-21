@@ -23,45 +23,61 @@ class BlockInfo extends Component {
     };
   }
 
-  componentDidMount() {
-    const height = this.props.match.params.blockId;
-    this.loadData(height);
-    console.log('componentDidMount');
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const height = nextProps.match.params.blockId;
+    if (height !== prevState.height) {
+      return { height };
+    }
+    return null;
   }
 
-  async loadData(height) {
+  componentDidMount() {
+    this.loadBlockInfo();
+  }
+
+  componentDidUpdate(prevProp, prevState) {
+    const { height } = this.state;
+    if (prevState.height !== height) {
+      this.loadBlockInfo();
+    }
+  }
+
+  async loadBlockInfo() {
+    const { height } = this.state;
+
     const response = await _get(null, singleBlock + '/' + height);
-    if (response.status === 200) {
+    if (response.status === 200 && response.data[0]) {
       const { data } = response;
       const blockInfo = data[0];
-      blockInfo &&
-        this.setState({
-          height: blockInfo.height,
-          blockInfo: blockInfo,
-          blockHash: blockInfo.hash,
-          num_txs: blockInfo.num_txs,
-          node: blockInfo.chain_id,
-          time: blockInfo.time,
-          diff_time: diffTime(blockInfo.time),
-        });
+      this.setState({
+        height: blockInfo.height,
+        blockInfo: blockInfo,
+        blockHash: blockInfo.hash,
+        num_txs: blockInfo.num_txs,
+        node: blockInfo.chain_id,
+        time: blockInfo.time,
+        diff_time: diffTime(blockInfo.time),
+      });
+      await this.loadParentHeight(height);
     } else {
-      this.props.history.push('/not-found');
+      this.props.history.push('/exception');
     }
+  }
 
+  async loadParentHeight(height) {
     let parentHeight = 1;
     if (height - 2 > 0) {
       parentHeight = height - 2;
     }
     const resp = await _get(null, singleBlock + '/' + parentHeight);
 
-    if (resp.status === 200) {
+    if (resp.status === 200 && resp.data[0]) {
       const { data } = resp;
       const parentBlockInfo = data[0];
-      parentBlockInfo &&
-        this.setState({
-          parentHash: parentBlockInfo.hash,
-          parentHeight: parentHeight,
-        });
+      this.setState({
+        parentHash: parentBlockInfo.hash,
+        parentHeight: parentHeight,
+      });
     } else {
       this.setState({
         parentHash: 'N/A',
@@ -121,7 +137,7 @@ class BlockInfo extends Component {
             <div className="row_detail">
               <span className="label">ParentHash:</span>
               <div className="text_wrap">
-                <Link to={`/block/${parentHeight}`} onClick={() => this.loadData(parentHeight)}>
+                <Link to={`/block/${parentHeight}`} onClick={() => this.loadBlockInfo(parentHeight)}>
                   {parentHash}
                 </Link>
               </div>

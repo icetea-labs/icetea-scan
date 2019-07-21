@@ -159,7 +159,7 @@ class SearchBox extends Component {
         if (value.length === 64 && value === value.toUpperCase()) {
           history.push('/tx/' + value);
         } else {
-          history.push('/not-found');
+          history.push('/exception');
         }
       }
     }

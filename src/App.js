@@ -12,7 +12,7 @@ import TransactionsInfo from './components/Transactions/TransactionsInfo';
 import BlockInfo from './components/Blocks/BlockInfo';
 import Blocks from './components/Blocks/Blocks';
 import Transactions from './components/Transactions/Transactions';
-import NotFound from './components/NotFound/NotFound';
+import { NotFound, Exception } from './components/NotFound/NotFound';
 import Contract from './components/Contract/Contract';
 import ListContracts from './components/Contract/ListContracts';
 import Address from './components/Address/Address';
@@ -38,6 +38,7 @@ class App extends Component {
             <RouteWithLayout layout={Layout} exact path={'/contract/:address'} component={Contract} />;
             <RouteWithLayout layout={Layout} exact path={`/contracts`} component={ListContracts} />
             <RouteWithLayout exact path={'/address/:address'} component={Address} />
+            <RouteWithLayout layout={Layout} exact path={`/exception`} component={Exception} />
             <Route component={NotFound} />
           </Switch>
         </Router>

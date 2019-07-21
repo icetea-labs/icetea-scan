@@ -757,7 +757,7 @@ class CallContract extends Component {
     formData.data = txData;
 
     formData = encodeURIComponent(JSON.stringify(formData));
-    const url = encodeURIComponent('http://localhost:3006/contract/' + address + '?txSigned=');
+    const url = encodeURIComponent('http://localhost:3006/address/' + address + '?txSigned=');
     window.location = 'https://wallet.icetea.io/signTransaction/' + formData + '/' + url;
   };
 
@@ -782,7 +782,7 @@ class CallContract extends Component {
       answers[funcName] = formatResult(error, true);
     } finally {
       this.setState({ answers, txSigned: '' });
-      window.history.pushState({}, document.title, '/contract/' + address);
+      window.history.pushState({}, document.title, '/address/' + address);
     }
   };
 

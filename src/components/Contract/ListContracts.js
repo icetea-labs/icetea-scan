@@ -70,13 +70,13 @@ class ListContracts extends Component {
       return (
         <tr key={index}>
           <td>
-            <Link to={`/contract/${item.address}`}>{item.address}</Link>
+            <Link to={`/address/${item.address}`}>{item.address}</Link>
           </td>
           <td>
             <span>{toTEA(item.balance)}</span>
           </td>
           <td>
-            <Link to={`/contract/${item.deployedBy}`}>{item.deployedBy}</Link>
+            <Link to={`/address/${item.deployedBy}`}>{item.deployedBy}</Link>
           </td>
           <td>
             <span>{item.mode === ContractMode.WASM ? 'WebAssembly' : 'JavaScript'}</span>

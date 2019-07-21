@@ -37,7 +37,7 @@ export const callWithWallet = async (from, to, value, fee, data) => {
         data,
     }
     formData = encodeURIComponent(JSON.stringify(formData));
-    let url = encodeURIComponent('http://localhost:3006/contract/'+ from +'?txSigned=');
+    let url = encodeURIComponent('http://localhost:3006/address/'+ from +'?txSigned=');
     let result;
     if (formData) {
         window.location = "https://wallet.icetea.io/signTransaction/" + formData + "/" + url;

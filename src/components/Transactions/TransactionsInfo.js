@@ -155,7 +155,7 @@ class TransactionsInfo extends Component {
             <div className="row_detail">
               <span className="label">From:</span>
               <div className="text_wrap">
-                {txInfo.from ? <Link to={`/contract/${txInfo.from}`}>{txInfo.from}</Link> : <span>--</span>}
+                {txInfo.from ? <Link to={`/address/${txInfo.from}`}>{txInfo.from}</Link> : <span>--</span>}
                 <CopyToClipboard
                   text={txInfo.from}
                   onCopy={() => {
@@ -169,7 +169,7 @@ class TransactionsInfo extends Component {
             <div className="row_detail">
               <span className="label">To:</span>
               <div className="text_wrap">
-                {txInfo.to ? <Link to={`/contract/${txInfo.to}`}>{txInfo.to}</Link> : <span>--</span>}
+                {txInfo.to ? <Link to={`/address/${txInfo.to}`}>{txInfo.to}</Link> : <span>--</span>}
                 <CopyToClipboard
                   text={txInfo.to}
                   onCopy={() => {
@@ -183,7 +183,7 @@ class TransactionsInfo extends Component {
             <div className="row_detail">
               <span className="label">Payer:</span>
               <div className="text_wrap">
-                {txInfo.payer ? <Link to={`/contract/${txInfo.payer}`}>{txInfo.payer}</Link> : <span>--</span>}
+                {txInfo.payer ? <Link to={`/address/${txInfo.payer}`}>{txInfo.payer}</Link> : <span>--</span>}
                 <CopyToClipboard
                   text={txInfo.payer}
                   onCopy={() => {

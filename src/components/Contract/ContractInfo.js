@@ -100,7 +100,7 @@ class ContractInfo extends Component {
               </span>
               <div className="breadcrumb-separator">/</div>
               <span className="breadcrumb-item">
-                <Link to={`/contract/${address}`}>{isContractAddress ? 'Contract Info' : 'Address Info'}</Link>
+                <Link to={`/address/${address}`}>{isContractAddress ? 'Contract Info' : 'Address Info'}</Link>
               </span>
             </div>
           </div>

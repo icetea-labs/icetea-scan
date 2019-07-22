@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Select from 'rc-select';
 import PaginationPro from '../elements/PaginationPro';
-import { TotalInfo, HeaderMap, Balance, Address, Language } from '../common';
+import { TotalInfo, HeaderMap, Balance, Address, Language } from '../elements/Common';
 import { getAllContracts, getDataContract } from '../../service/blockchain/get-single-data';
 import * as actions from '../../store/actions';
 class ListContracts extends Component {

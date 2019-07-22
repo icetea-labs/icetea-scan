@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { HeaderMap, Age, Block, TimeWithFormat, TxType, Balance, Address } from '../common';
+import { HeaderMap, Age, Block, TimeWithFormat, TxType, Balance, Address } from '../elements/Common';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import './TransactionsInfo.scss';
 import notifi from '../elements/Notification';

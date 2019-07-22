@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { HeaderMap, Age, Block, TimeWithFormat } from '../common';
+import { HeaderMap, Age, Block, TimeWithFormat } from '../elements/Common';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Select from 'rc-select';

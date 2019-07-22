@@ -15,7 +15,6 @@ import Transactions from './components/Transactions/Transactions';
 import { NotFound, Exception } from './components/NotFound/NotFound';
 import ContractInfo from './components/Contract/ContractInfo';
 import ListContracts from './components/Contract/ListContracts';
-import Address from './components/Address/Address';
 import GlobaLoading from './components/elements/GlobaLoading';
 
 function RouteWithLayout({ layout, component, ...rest }) {

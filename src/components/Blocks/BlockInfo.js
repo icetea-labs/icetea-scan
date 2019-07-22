@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { HeaderMap, Age, Block, TimeWithFormat } from '../common';
-// import { getDataBlock } from '../../service/get-single-data';
-// import diffTime from "../../service/blockchain/find-time-return";
-import { diffTime } from '../../utils';
+import { HeaderMap, Age, Block, TimeWithFormat } from '../elements/Common';
 import { _get } from '../../service/api/base-api';
 import { singleBlock } from '../../service/api/list-api';
 
@@ -19,7 +16,6 @@ class BlockInfo extends Component {
       blockHash: '',
       parentHash: '',
       node: '',
-      diff_time: '',
     };
   }
 
@@ -56,7 +52,6 @@ class BlockInfo extends Component {
         num_txs: blockInfo.num_txs,
         node: blockInfo.chain_id,
         time: blockInfo.time,
-        diff_time: diffTime(blockInfo.time),
       });
       await this.loadParentHeight(height);
     } else {
@@ -86,7 +81,7 @@ class BlockInfo extends Component {
   }
 
   render() {
-    const { height, parentHeight, time, diff_time, num_txs, blockHash, parentHash, node } = this.state;
+    const { height, parentHeight, time, num_txs, blockHash, parentHash, node } = this.state;
 
     return (
       <div className="detailBlocks">

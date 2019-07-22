@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { TotalInfo, HeaderMap, Hash, Age, Block, Address, Balance, TxType } from '../common';
+import { TotalInfo, HeaderMap, Hash, Age, Block, Address, Balance, TxType } from '../elements/Common';
 import './Transactions.scss';
-// import moment from 'moment';
 import Select from 'rc-select';
 import PaginationPro from '../elements/PaginationPro';
 import { getListTxApi, getTotalTxsApi, getTotalTxsByHeighApi } from '../../service/api/get-list-data';

@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
+import { HeaderMap, Age, Block, TimeWithFormat } from '../common';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import moment from 'moment';
 import Select from 'rc-select';
 import PaginationPro from '../elements/PaginationPro';
 import './Blocks.scss';
-import { diffTime, formatNumber } from '../../utils';
+import { formatNumber } from '../../utils';
 import { getListBlockApi, getTotalBlockApi } from '../../service/api/get-list-data';
 import * as actions from '../../store/actions';
 
@@ -58,12 +58,9 @@ class Blocks extends PureComponent {
     if (blocksInfo.length === 0) {
       return (
         <tr className="no_data">
-          <th />
-          <th />
-          <th />
-          <th>No Data</th>
-          <th />
-          <th />
+          <td colSpan="6">
+            <span>No Data</span>
+          </td>
         </tr>
       );
     } else {
@@ -71,10 +68,14 @@ class Blocks extends PureComponent {
         return (
           <tr key={index}>
             <td>
-              <Link to={`/block/${item.height}`}>{item.height}</Link>
+              <Block value={item.height} />
             </td>
-            <td>{moment(item.time).format('MMMM-DD-YYYY h:mm:ss')}</td>
-            <td>{diffTime(item.time)}</td>
+            <td>
+              <TimeWithFormat value={item.time} />
+            </td>
+            <td>
+              <Age value={item.time} />
+            </td>
             <td>
               <Link to={`/txs?height=${item.height}`}>{item.num_txs}</Link>
             </td>
@@ -117,15 +118,7 @@ class Blocks extends PureComponent {
             Block <span>#{formatNumber(form)}</span> to <span>#{formatNumber(to)}</span> (Total of
             <span> {formatNumber(totalBlocks)} </span>blocks)
           </div>
-          <div className="breadcrumb">
-            <span className="breadcrumb-item">
-              <Link to="/">Home</Link>
-            </span>
-            <div className="breadcrumb-separator">/</div>
-            <span className="breadcrumb-item">
-              <Link to="/blocks">Blocks</Link>
-            </span>
-          </div>
+          <HeaderMap value={[{ path: '/', text: 'Home' }, { path: '/blocks', text: 'Blocks' }]} />
         </div>
         <div className="table_data">
           <table>

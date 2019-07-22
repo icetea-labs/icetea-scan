@@ -9,7 +9,9 @@ import Tabs, { TabPane } from 'rc-tabs';
 import TabContent from 'rc-tabs/lib/TabContent';
 import ScrollableInkTabBar from 'rc-tabs/lib/ScrollableInkTabBar';
 import 'rc-tabs/assets/index.css';
-import { getAccountInfo, getMetadataContract } from '../../service/blockchain/get-single-data';
+import { getAccountInfo, getMetadataContract, getTxHistoryByAddress } from '../../service/blockchain/get-single-data';
+
+import { toTEA, tryParseJson } from '../../utils';
 
 class ContractInfo extends Component {
   constructor(props) {
@@ -21,6 +23,7 @@ class ContractInfo extends Component {
       params_url: '',
       addresDetail: {},
       metadata: {},
+      txHistory: [],
     };
   }
 
@@ -35,6 +38,7 @@ class ContractInfo extends Component {
 
   componentDidMount() {
     this.loadContractInfo();
+    this.loadTxHistory();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -42,6 +46,7 @@ class ContractInfo extends Component {
 
     if (prevState.address !== address) {
       this.loadContractInfo();
+      this.loadTxHistory();
     }
   }
 
@@ -66,12 +71,52 @@ class ContractInfo extends Component {
     });
   }
 
+  async loadTxHistory() {
+    const { address } = this.state;
+    const resp = await getTxHistoryByAddress(address);
+
+    if (resp.status === 200 && resp.data) {
+      const { data } = resp;
+      data.forEach(x => {
+        x.from = x.tx.from || x.tags['tx.from'];
+        x.fromText = x.from;
+        x.to = x.tx.to || x.tags['tx.to'];
+        x.toText = x.to;
+        x.payer = x.tx.payer || x.tags['tx.payer'];
+        x.payerText = x.payer;
+        x.tx.data = x.tx.data ? tryParseJson(x.tx.data) || {} : {};
+
+        x.status = x.tx_result.code ? 'Error' : 'Success';
+        x.inOut = x.to === address ? 'IN' : 'OUT';
+        x.shash = x.hash;
+        x.blockHeight = +x.height;
+        x.value = x.tx.value || 0;
+        x.valueText = toTEA(x.value).toLocaleString() + ' TEA';
+
+        x.txType = 'transfer';
+        const op = x.tx.data.op;
+        if (op === 0) {
+          x.txType = 'deploy';
+        } else if (op === 1) {
+          x.txType = 'call';
+        }
+      });
+      // console.log('loadTxHistory2', data);
+      const sorted = data.sort((a, b) => {
+        const delta = b.blockHeight - a.blockHeight;
+        if (delta) return delta;
+        return b.index - a.index;
+      });
+      this.setState({ txHistory: sorted });
+    }
+  }
+
   tabOnChange = value => {
     this.setState({ activeKey: value });
   };
 
   render() {
-    const { show_call, params_url, isContractAddress, addresDetail, metadata, activeKey } = this.state;
+    const { show_call, params_url, isContractAddress, addresDetail, metadata, activeKey, txHistory } = this.state;
     const address = this.props.match.params.address;
 
     return (
@@ -148,6 +193,7 @@ class ContractInfo extends Component {
                   addresDetail={addresDetail}
                   metadata={metadata}
                   isContractAddress={isContractAddress}
+                  txHistory={txHistory}
                 />
               </TabPane>
               {isContractAddress && (

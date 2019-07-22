@@ -1,6 +1,6 @@
-import tweb3 from "../../tweb3";
-import store from "../../store";
-import * as actions from "../../store/actions";
+import tweb3 from '../../tweb3';
+import store from '../../store';
+import * as actions from '../../store/actions';
 /**
  *
  * @param {string || number} getDataBlock get data of a single block
@@ -13,16 +13,16 @@ export const getDataBlock = async height => {
     let max_height = parseInt(max_block.block_meta.header.height);
 
     if (height > max_height) {
-      return { msg: "too_high", data: "false", status: 400 };
+      return { msg: 'too_high', data: 'false', status: 400 };
     }
 
     if (height < 1) {
-      return { msg: "too_low", data: "false", status: 400 };
+      return { msg: 'too_low', data: 'false', status: 400 };
     }
 
     let block_data = await tweb3.getBlock({ height });
 
-    return { msg: "ok", data: block_data.block_meta, status: 200 };
+    return { msg: 'ok', data: block_data.block_meta, status: 200 };
   } catch (err) {
     throw err;
   }
@@ -38,9 +38,9 @@ export const getDataContract = async address => {
   let contract_data = await tweb3.getAccountInfo(address);
 
   if (contract_data !== null) {
-    return { msg: "ok", data: contract_data, status: 200 };
+    return { msg: 'ok', data: contract_data, status: 200 };
   }
-  return { msg: "can`t get data", data: false, status: 400 };
+  return { msg: 'can`t get data', data: false, status: 400 };
 };
 
 /**
@@ -54,10 +54,30 @@ export const getAllContracts = async alias => {
 
   if (all_contract !== null) {
     store.dispatch(actions.setTotalContract(all_contract.length || 0));
-    return { msg: "ok", data: all_contract, status: 200 };
+    return { msg: 'ok', data: all_contract, status: 200 };
   }
 
-  return { msg: "can`t get data", data: false, status: 400 };
+  return { msg: 'can`t get data', data: false, status: 400 };
+};
+
+export const getTxHistoryByAddress = async address => {
+  try {
+    const fromList = await tweb3.searchTransactions("tx.from='" + address + "'", { per_page: 100 });
+    const toList = await tweb3.searchTransactions("tx.to='" + address + "'", { per_page: 100 });
+    const payerList = await tweb3.searchTransactions("tx.payer='" + address + "'", { per_page: 100 });
+    const all = fromList.txs
+      .concat(toList.txs)
+      .concat(payerList.txs)
+      .map(tweb3.utils.decodeTxResult);
+
+    if (all) {
+      return { msg: 'ok', data: all, status: 200 };
+    }
+  } catch (err) {
+    throw err;
+  }
+
+  return { msg: 'can`t get data', data: false, status: 400 };
 };
 
 /**
@@ -75,10 +95,10 @@ export const getMetadataContract = async address => {
   }
 
   if (metadata === null) {
-    return { msg: "error in address", data: false, status: 404 };
+    return { msg: 'error in address', data: false, status: 404 };
   }
 
-  return { msg: "success", data: metadata, status: 200 };
+  return { msg: 'success', data: metadata, status: 200 };
 };
 
 /**
@@ -92,12 +112,12 @@ export const getAccountInfo = async address => {
   try {
     info = await tweb3.getAccountInfo(address);
     if (info !== null) {
-      return { msg: "ok", data: info, status: 200 };
+      return { msg: 'ok', data: info, status: 200 };
     }
   } catch (err) {
     throw err;
   }
-  return { msg: "can`t get data", data: false, status: 404 };
+  return { msg: 'can`t get data', data: false, status: 404 };
 };
 
 /**
@@ -108,14 +128,14 @@ export const getDataTransaction = async hash => {
   let info = null;
 
   try {
-    info = await tweb3.getTransaction(hash, "hex");
+    info = await tweb3.getTransaction(hash, 'hex');
 
     if (info !== null) {
-      return { msg: "ok", data: info, status: 200 };
+      return { msg: 'ok', data: info, status: 200 };
     }
   } catch (err) {
     throw err;
   }
 
-  return { msg: "can`t get data", data: false, status: 404 };
+  return { msg: 'can`t get data', data: false, status: 404 };
 };

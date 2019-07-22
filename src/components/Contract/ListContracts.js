@@ -1,11 +1,8 @@
-/* eslint-disable no-undef */
 import React, { Component } from 'react';
-import { ContractMode } from '@iceteachain/common';
 import { connect } from 'react-redux';
 import Select from 'rc-select';
 import PaginationPro from '../elements/PaginationPro';
-import { Link } from 'react-router-dom';
-import { toTEA } from '../../utils';
+import { TotalInfo, HeaderMap, Balance, Address, Language } from '../common';
 import { getAllContracts, getDataContract } from '../../service/blockchain/get-single-data';
 import * as actions from '../../store/actions';
 class ListContracts extends Component {
@@ -70,16 +67,16 @@ class ListContracts extends Component {
       return (
         <tr key={index}>
           <td>
-            <Link to={`/address/${item.address}`}>{item.address}</Link>
+            <Address value={item.address} />
           </td>
           <td>
-            <span>{toTEA(item.balance)}</span>
+            <Balance value={item.balance} />
           </td>
           <td>
-            <Link to={`/address/${item.deployedBy}`}>{item.deployedBy}</Link>
+            <Address value={item.deployedBy} />
           </td>
           <td>
-            <span>{item.mode === ContractMode.WASM ? 'WebAssembly' : 'JavaScript'}</span>
+            <Language value={item.mode} />
           </td>
         </tr>
       );
@@ -104,24 +101,8 @@ class ListContracts extends Component {
       <div className="listContract pc-container">
         <h3>Contract</h3>
         <div className="flexBox">
-          {total > 0 ? (
-            <div className="sub-title">
-              More than > <span>{total}</span> contracts found
-            </div>
-          ) : (
-            <div className="sub-title">
-              <span>{total}</span> contract found
-            </div>
-          )}
-          <div className="breadcrumb">
-            <span className="breadcrumb-item">
-              <Link to="/">Home</Link>
-            </span>
-            <div className="breadcrumb-separator">/</div>
-            <span className="breadcrumb-item">
-              <Link to="/contracts">Contracts</Link>
-            </span>
-          </div>
+          <TotalInfo total={total} text={['contracts', ['contract']]} />
+          <HeaderMap value={[{ text: 'Home', path: '/' }, { text: 'Contracts', path: '/contracts' }]} />
         </div>
         <div className="table_data">
           <table>

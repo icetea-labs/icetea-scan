@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import moment from 'moment';
 import { Link } from 'react-router-dom';
+import { HeaderMap, Age, Block, TimeWithFormat } from '../common';
 // import { getDataBlock } from '../../service/get-single-data';
 // import diffTime from "../../service/blockchain/find-time-return";
 import { diffTime } from '../../utils';
@@ -95,19 +95,13 @@ class BlockInfo extends Component {
             <h3>Block</h3>
             <span className="id_status">#{height}</span>
           </div>
-          <div className="breadcrumb">
-            <span className="breadcrumb-item">
-              <Link to="/">Home</Link>
-            </span>
-            <div className="breadcrumb-separator">/</div>
-            <span className="breadcrumb-item">
-              <Link to="/blocks">Blocks</Link>
-            </span>
-            <div className="breadcrumb-separator">/</div>
-            <span className="breadcrumb-item">
-              <Link to={`/block/${height}`}>Block</Link>
-            </span>
-          </div>
+          <HeaderMap
+            value={[
+              { path: '/', text: 'Home' },
+              { path: '/blocks', text: 'Blocks' },
+              { path: `/block/${height}`, text: 'Block' },
+            ]}
+          />
         </div>
 
         <div className="block_content page_info_content">
@@ -119,8 +113,10 @@ class BlockInfo extends Component {
             <div className="row_detail">
               <span className="label">TimeStamp: </span>
               <div className="text_wrap">
-                {diff_time}
-                {' [ ' + moment(time).format('MMMM-DD-YYYY h:mm:ss') + ' ]'}
+                <Age value={time} />
+                &nbsp;[&nbsp;
+                <TimeWithFormat value={time} />
+                &nbsp;]&nbsp;
               </div>
             </div>
             <div className="row_detail">
@@ -137,9 +133,9 @@ class BlockInfo extends Component {
             <div className="row_detail">
               <span className="label">ParentHash:</span>
               <div className="text_wrap">
-                <Link to={`/block/${parentHeight}`} onClick={() => this.loadBlockInfo(parentHeight)}>
+                <Block value={parentHeight} onClick={() => this.loadBlockInfo(parentHeight)}>
                   {parentHash}
-                </Link>
+                </Block>
               </div>
             </div>
             <div className="row_detail">

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { diffTime, convertTxType } from '../../utils';
+import { HeaderMap, Age, Block, TimeWithFormat, TxType, Balance, Address } from '../common';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import './TransactionsInfo.scss';
 import notifi from '../elements/Notification';
@@ -99,19 +98,13 @@ class TransactionsInfo extends Component {
             </CopyToClipboard>
           </div>
           <div className="flexBox">
-            <div className="breadcrumb">
-              <span className="breadcrumb-item">
-                <Link to="/">Home</Link>
-              </span>
-              <div className="breadcrumb-separator">/</div>
-              <span className="breadcrumb-item">
-                <Link to="/txs">Transactions</Link>
-              </span>
-              <div className="breadcrumb-separator">/</div>
-              <span className="breadcrumb-item">
-                <Link to={`/tx/${txInfo.hash}`}>Tx Info</Link>
-              </span>
-            </div>
+            <HeaderMap
+              value={[
+                { path: '/', text: 'Home' },
+                { path: '/txs', text: 'Transactions' },
+                { path: `/tx/${txInfo.hash}`, text: 'Tx Info' },
+              ]}
+            />
           </div>
         </div>
 
@@ -136,26 +129,35 @@ class TransactionsInfo extends Component {
             <div className="row_detail">
               <span className="label">Block Height:</span>
               <div className="text_wrap">
-                <Link to={`/block/${txInfo.height}`}>{`# ${txInfo.height}`}</Link>
+                <Block value={txInfo.height}>{`# ${txInfo.height}`}</Block>
               </div>
             </div>
             <div className="row_detail">
               <span className="label">TimeStamp:</span>
-              <div className="text_wrap">{diffTime(txInfo.timeStamp) + ' [ ' + txInfo.timeStamp + ' ]'}</div>
+              <div className="text_wrap">
+                <Age value={txInfo.timeStamp} />
+                &nbsp;[&nbsp;
+                <TimeWithFormat value={txInfo.timeStamp} />
+                &nbsp;]&nbsp;
+              </div>
             </div>
             <div className="row_detail">
               <span className="label">Transaction Type:</span>
-              <div className="text_wrap statusTx">{convertTxType(txInfo.txType)}</div>
+              <div className="text_wrap statusTx">
+                <TxType value={txInfo.txType} />
+              </div>
             </div>
             <div className="row_detail">
               <span className="label">Gas Used:</span>
-              <div className="text_wrap">{`${txInfo.gasused} TEA`}</div>
+              <div className="text_wrap">
+                <Balance value={txInfo.gasused} />
+              </div>
             </div>
 
             <div className="row_detail">
               <span className="label">From:</span>
               <div className="text_wrap">
-                {txInfo.from ? <Link to={`/address/${txInfo.from}`}>{txInfo.from}</Link> : <span>--</span>}
+                <Address value={txInfo.from} />
                 <CopyToClipboard
                   text={txInfo.from}
                   onCopy={() => {
@@ -169,7 +171,7 @@ class TransactionsInfo extends Component {
             <div className="row_detail">
               <span className="label">To:</span>
               <div className="text_wrap">
-                {txInfo.to ? <Link to={`/address/${txInfo.to}`}>{txInfo.to}</Link> : <span>--</span>}
+                <Address value={txInfo.to} />
                 <CopyToClipboard
                   text={txInfo.to}
                   onCopy={() => {
@@ -183,7 +185,7 @@ class TransactionsInfo extends Component {
             <div className="row_detail">
               <span className="label">Payer:</span>
               <div className="text_wrap">
-                {txInfo.payer ? <Link to={`/address/${txInfo.payer}`}>{txInfo.payer}</Link> : <span>--</span>}
+                <Address value={txInfo.payer} />
                 <CopyToClipboard
                   text={txInfo.payer}
                   onCopy={() => {

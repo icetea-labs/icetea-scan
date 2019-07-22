@@ -291,9 +291,11 @@
     }
     .success_color {
       color: $color_green;
+      font-weight: 600;
     }
     .error_color {
       color: $color_red;
+      font-weight: 600;
     }
   }
 }

@@ -1,40 +1,37 @@
 import React, { PureComponent } from 'react';
-import { Link } from 'react-router-dom';
-import { ContractMode, codec } from '@iceteachain/common';
+import { codec } from '@iceteachain/common';
 import Select from 'rc-select';
 import PaginationPro from '../../elements/PaginationPro';
-import { toTEA } from '../../../utils';
+import { Balance, Language, Address, Block, TxType } from '../../elements/Common';
 
 class DetailContract extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       current: 1,
-      pageSize: 15,
+      pageSize: 10,
       total: 0,
       baseTxHistory: [],
-      txHistory: [],
+      txOnPage: [],
     };
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { txHistory } = nextProps;
     if (txHistory !== prevState.baseTxHistory) {
-      // console.log('txHistory', txHistory);
-      return { baseTxHistory: txHistory };
+      return { baseTxHistory: txHistory, txOnPage: txHistory };
     }
     return null;
   }
 
   componentDidMount() {
-    console.log('componentDidMount');
     this.loadTxHistory();
   }
 
   componentDidUpdate(prevProp, prevState) {
-    const { txHistory } = this.state;
-    if (prevState.txHistory !== txHistory) {
-      // this.loadTxHistory();
+    const { txOnPage } = this.state;
+    if (JSON.stringify(prevState.txOnPage) !== JSON.stringify(txOnPage)) {
+      this.loadTxHistory();
     }
   }
 
@@ -45,7 +42,7 @@ class DetailContract extends PureComponent {
         <th width="10%">Block</th>
         <th width="8%">Status</th>
         <th width="20%">From</th>
-        <th width="6%"></th>
+        <th width="6%" />
         <th width="20%">To</th>
         <th width="20%">Payer</th>
         <th width="8%">Value</th>
@@ -54,9 +51,9 @@ class DetailContract extends PureComponent {
   }
 
   renderTbody() {
-    const { txHistory } = this.state;
-    console.log('renderTbody', txHistory.length);
-    if (txHistory.length === 0) {
+    const { txOnPage } = this.state;
+    // console.log('renderTbody', txOnPage.length);
+    if (txOnPage.length === 0) {
       return (
         <tr className="no_data">
           <td colSpan="8">
@@ -65,32 +62,36 @@ class DetailContract extends PureComponent {
         </tr>
       );
     } else {
-      return txHistory.map((tx, index) => {
+      return txOnPage.map((tx, index) => {
         return (
           <tr key={index}>
-            <td>{tx.txType}</td>
             <td>
-              <Link to={`/block/${tx.blockHeight}`} title={tx.blockHeight}>
-                {tx.blockHeight}
-              </Link>
+              <TxType value={tx.txType} />
+            </td>
+            <td>
+              <Block value={tx.blockHeight} />
             </td>
             <td>{tx.status}</td>
             <td className="text_overflow">
-              {tx.to ? <Link to={`/address/${tx.from}`}>{tx.from}</Link> : <span>--</span>}
+              <Address value={tx.from} />
             </td>
             <td>{tx.inOut}</td>
-            <td className="text_overflow">{tx.to ? <Link to={`/address/${tx.to}`}>{tx.to}</Link> : <span>--</span>}</td>
             <td className="text_overflow">
-              {tx.to ? <Link to={`/address/${tx.payer}`}>{tx.payer}</Link> : <span>--</span>}
+              <Address value={tx.to} />
             </td>
-            <td>{`${toTEA(tx.value)} TEA`}</td>
+            <td className="text_overflow">
+              <Address value={tx.payer} />
+            </td>
+            <td>
+              <Balance value={tx.value} />
+            </td>
           </tr>
         );
       });
     }
   }
 
-  async loadTxHistory() {
+  loadTxHistory() {
     const { current, pageSize, baseTxHistory } = this.state;
 
     const total = baseTxHistory.length;
@@ -100,13 +101,12 @@ class DetailContract extends PureComponent {
     let txHistoryTmp = [];
 
     if (baseTxHistory) {
-      console.log('baseTxHistory', baseTxHistory);
       txHistoryTmp = baseTxHistory.filter((item, index) => {
         return index >= from && index < to;
       });
     }
-    console.log('txHistoryTmp', txHistoryTmp);
-    this.setState({ txHistory: txHistoryTmp });
+
+    this.setState({ txOnPage: txHistoryTmp, total });
   }
 
   paginationOnChange = current => {
@@ -126,7 +126,9 @@ class DetailContract extends PureComponent {
         </div>
         <div className="row_detail">
           <span className="label">Balance:</span>
-          <div className="text_wrap">{`${toTEA(addresDetail.balance || 0)} TEA`}</div>
+          <div className="text_wrap">
+            <Balance value={addresDetail.balance} />
+          </div>
         </div>
         <div className="row_detail">
           <span className="label">Is Contract:</span>
@@ -136,11 +138,15 @@ class DetailContract extends PureComponent {
           <React.Fragment>
             <div className="row_detail">
               <span className="label">Deployed By:</span>
-              <div className="text_wrap">{`${addresDetail.deployedBy}`}</div>
+              <div className="text_wrap">
+                <Address value={addresDetail.deployedBy} />
+              </div>
             </div>
             <div className="row_detail">
               <span className="label">Language:</span>
-              <div className="text_wrap">{addresDetail.mode === ContractMode.WASM ? 'WebAssembly' : 'JavaScript'}</div>
+              <div className="text_wrap">
+                <Language value={addresDetail.mode} />
+              </div>
             </div>
             <div className="row_detail">
               <span className="label">Metadata:</span>

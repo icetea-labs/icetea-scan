@@ -46,9 +46,18 @@ export function TxType(props) {
 
   return (
     <React.Fragment>
-      <i className={typeColor} />
-      <span>{txType}</span>
+      <span className="statusTx">
+        <i className={typeColor} />
+        <span>{txType}</span>
+      </span>
     </React.Fragment>
+  );
+}
+export function NumTxs(props) {
+  return (
+    <Link to={`/txs?height=${props.height}`}>
+      <span> {props.value} Txns</span>
+    </Link>
   );
 }
 export function Age(props) {

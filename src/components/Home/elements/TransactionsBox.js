@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { diffTime, convertTxType } from '../../../utils';
 import './TransactionsBox.scss';
+import { TxType, Address, Hash, TimeWithFormat } from '../../elements/Common';
 
 class TransactionsBox extends PureComponent {
   constructor(props) {
@@ -30,22 +30,26 @@ class TransactionsBox extends PureComponent {
             <div className="info_tx flex">
               <div className="tx">
                 <span>TX#:</span>
-                <Link to={`/tx/${item.hash}`}>{item.hash}</Link>
+                <Hash value={item.hash} />
               </div>
-              <div className="seconds_time">{diffTime(item.time)}</div>
+              <div className="seconds_time">
+                <TimeWithFormat value={item.time} />
+              </div>
             </div>
             <div className="transactions flex">
               <div className="from_to">
                 <div className="from">
                   <span>From: </span>
-                  <Link to={`/address/${item.from}`}>{item.from ? item.from : '--'}</Link>
+                  <Address value={item.from} />
                 </div>
                 <div className="to">
                   <span>To: </span>
-                  <Link to={`/address/${item.to}`}>{item.to ? item.to : '--'}</Link>
+                  <Address value={item.to} />
                 </div>
               </div>
-              <div className="statusTx">{convertTxType(item.data_op)}</div>
+              <div className="statusTx">
+                <TxType value={item.data_op} />
+              </div>
             </div>
           </div>
         </div>
@@ -63,7 +67,7 @@ class TransactionsBox extends PureComponent {
             <i className={cssIcon} />
             <span>Transactions</span>
           </div>
-          <Link to="/txs">View All →</Link>
+          <Link to="/txs">View All >></Link>
         </div>
         <div className="box_wrap">{this.renderTransactions()}</div>
       </div>

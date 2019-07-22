@@ -87,19 +87,13 @@ class ContractInfo extends Component {
         x.tx.data = x.tx.data ? tryParseJson(x.tx.data) || {} : {};
 
         x.status = x.tx_result.code ? 'Error' : 'Success';
-        x.inOut = x.to === address ? 'IN' : 'OUT';
+        x.inOut = x.to === address ? 'In' : 'Out';
         x.shash = x.hash;
         x.blockHeight = +x.height;
         x.value = x.tx.value || 0;
         x.valueText = toTEA(x.value).toLocaleString() + ' TEA';
 
-        x.txType = 'transfer';
-        const op = x.tx.data.op;
-        if (op === 0) {
-          x.txType = 'deploy';
-        } else if (op === 1) {
-          x.txType = 'call';
-        }
+        x.txType = x.tx.data.op;
       });
       // console.log('loadTxHistory2', data);
       const sorted = data.sort((a, b) => {

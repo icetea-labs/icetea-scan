@@ -100,7 +100,7 @@ class Transactions extends Component {
             <td>
               <Age value={item.time} />
             </td>
-            <td className="statusTx">
+            <td>
               <TxType value={item.data_op} />
             </td>
             <td className="text_overflow">

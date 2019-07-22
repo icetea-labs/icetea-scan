@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
-import { HeaderMap, Age, Block, TimeWithFormat } from '../elements/Common';
-import { Link } from 'react-router-dom';
+import { HeaderMap, Age, Block, TimeWithFormat, NumTxs } from '../elements/Common';
 import { connect } from 'react-redux';
 import Select from 'rc-select';
 import PaginationPro from '../elements/PaginationPro';
@@ -77,7 +76,7 @@ class Blocks extends PureComponent {
               <Age value={item.time} />
             </td>
             <td>
-              <Link to={`/txs?height=${item.height}`}>{item.num_txs}</Link>
+              <NumTxs value={item.num_txs} height={item.height} />
             </td>
             <td>
               <span>{item.chain_id}</span>

@@ -154,12 +154,12 @@ class SearchBox extends Component {
       history.push('/block/' + value);
     } else {
       if (value.substring(0, 3) === 'tea') {
-        history.push('/contract/' + value);
+        history.push('/address/' + value);
       } else {
         if (value.length === 64 && value === value.toUpperCase()) {
           history.push('/tx/' + value);
         } else {
-          history.push('/not-found');
+          history.push('/exception');
         }
       }
     }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import 'font-awesome/css/font-awesome.min.css';
 import './sass/app.scss';
 import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/css/bootstrap-theme.css';
+import './sass/_responsive.scss';
 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from './components/Home/Home';

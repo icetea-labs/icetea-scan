@@ -2,13 +2,12 @@
 
 .main_nav {
   position: absolute;
-  right: 50px;
-
+  right: 30px;
   display: flex;
   align-items: center;
   .nav_items {
     padding: 0 15px;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 50px;
 
     &:hover {
@@ -55,55 +54,9 @@
     }
   }
 
-  .nav_choose_items {
-    padding: 0 15px;
-    font-weight: 500;
-    line-height: 50px;
-    color: rgb(43, 127, 195) !important;
-    text-decoration-color: rgb(43, 127, 195);
-
-    &:hover {
-      background-color: rgba(185, 185, 185, 0.578);
-      transition: 0.5s;
-    }
-
-    &.sub {
-      position: relative;
-      cursor: pointer;
-      &:hover {
-        .sub_child {
-          transition: all 0.5s ease;
-          visibility: visible;
-          transform: translateY(-1px);
-          height: 90px;
-        }
-      }
-
-      :not(:hover) {
-        .sub_child {
-          transition: 0.5s;
-        }
-      }
-
-      .sub_child {
-        position: absolute;
-        border: 1px solid $color_grey_athens;
-        padding: 15px;
-        left: 1px;
-        background: $color_white;
-        width: 110px;
-        visibility: hidden;
-        height: 0px;
-        // transform: translateY(-15px);
-        .sub_child_items {
-          line-height: 30px;
-          :hover {
-            background-color: gray;
-            color: white;
-          }
-        }
-      }
-    }
+  .choose{
+    text-decoration: underline;
+    color: rgb(210, 226, 63);
   }
 }
 

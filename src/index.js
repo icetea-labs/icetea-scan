@@ -7,9 +7,7 @@ import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import { store } from "./service/blockchain/init-store";
 import { getRealTimeData } from './service/blockchain/get-realtime-data';
-import { env } from './evironment/env';
-
-
+import { env } from './environment/env';
 
 if (env === "testing") {
   setTimeout(() => {

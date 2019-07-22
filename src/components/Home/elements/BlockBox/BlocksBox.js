@@ -3,14 +3,11 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import diffTime from "../../../../service/blockchain/find-time-return";
 import "./BlocksBox.scss";
-import Animation from "../../../Layout/elements/Animation/Animation";
-import Paging from "../../../Layout/elements/Paging/Paging";
 
 // get data block
-const mapStateToProps = state => {
-  // console.log(state)
+const mapStateToProps = (state) => {
   return {
-    allBlocks: state.getRealTimeData.blocks
+    allBlocks: state.handleRealtimeData.blocks
   };
 };
 
@@ -19,28 +16,26 @@ class BlocksBox extends Component {
 
   constructor() {
     super();
-
-    this.state = {
-      list_time: [],
-      list_blocks: []
-    };
+    this.listDiffTime = [];
+    this.listType = [];
   }
 
-  async componentWillReceiveProps() {
-    this.loadBlocksData();
-  }
+  async componentWillReceiveProps(nextProps) {
+    if (this.props.allBlocks !== null) {
+      for (let i = 0; i < this.props.allBlocks.length; i++) {
+        let item = this.props.allBlocks[i];
+        let time = await diffTime(item.header.height);
+        this.listDiffTime.push(time);
+      }
 
-  async loadBlocksData() {
-    this._isMounted = true;
-    let list_time = [];
-    for (let i = 0; i < this.props.allBlocks.length; i++) {
-      let item = this.props.allBlocks[i];
-      let time = await diffTime(item.header.height);
-      list_time.push(time);
+      this.loadBlocksData();
     }
+  }
 
-    let list_blocks = this.props.allBlocks.map((item, index) => {
-      // diffTime
+  loadBlocksData = () => {
+    this._isMounted = true;
+    this.list_blocks = this.props.allBlocks.map((item, index) => {
+      let diffTime = this.listDiffTime[index]
       return (
         <div className="row_blocks" key={index}>
           <div className="title flex">
@@ -50,9 +45,9 @@ class BlocksBox extends Component {
                 {item.header.height}
               </Link>
             </div>
-            <div className="seconds_time">{this.state.list_time[index]}</div>
+            <div className="seconds_time">{diffTime}</div>
           </div>
-          <div className="includes flex">
+          <div className="includes">
             <div className="in_detail">
               Includes
               <Link to={`/txs?block=${item.header.height}`}>
@@ -68,12 +63,7 @@ class BlocksBox extends Component {
       );
     });
 
-    if (this._isMounted) {
-      this.setState({
-        list_time,
-        list_blocks
-      });
-    }
+    return this.list_blocks
   }
 
   componentWillUnmount() {
@@ -85,15 +75,14 @@ class BlocksBox extends Component {
       <div className="blocks_box">
         <div className="header_top">
           <h3 className="title">
-            <Animation />
+            <i className="fa fa-cube"></i>
             Blocks
           </h3>
           <Link className="view-all" to="/blocks/">
             View All >>
           </Link>
         </div>
-        <div className="box_wrap">{this.state.list_blocks}</div>
-        <Paging api='blocks' />
+        <div className="box_wrap">{this.loadBlocksData()}</div>
       </div>
     );
   }

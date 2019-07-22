@@ -6,7 +6,7 @@ import './TransactionsBox.scss';
 
 const mapStateToProps = (state) => {
   return {
-    allTransactions: state.getRealTimeData.transactions,
+    allTransactions: state.handleRealtimeData.transactions,
     hashId: state.HashIdChange,
   }
 }
@@ -26,7 +26,7 @@ class TransactionsBox extends Component {
 
   async componentWillReceiveProps() {
     if (this.props.allTransactions !== null) {
-      for (let i = 0; i < this.props.allTransactions.length ; i++) {
+      for (let i = 0; i < this.props.allTransactions.length; i++) {
         let item = this.props.allTransactions[i];
         let txType = 'transfer';
         const txdata = JSON.parse(item.tx.data) || {};
@@ -49,6 +49,7 @@ class TransactionsBox extends Component {
     if (this.props.allTransactions !== null) {
       this.listTxs = this.props.allTransactions.map((item, index) => {
         let diffTime = this.listDiffTime[index];
+        let type = this.listType[index];
         return (
           <div className="row_transactions" key={index}>
             <div className="info_tx flex">
@@ -61,14 +62,14 @@ class TransactionsBox extends Component {
             <div className="transactions flex">
               <div className="from_to">
                 <div className="from">
-                  From: <Link to={`/address/${item.tags['tx.from'] }`}>{item.tags['tx.from'] ? item.tags['tx.from'] : '--'}</Link>
+                  From: <Link to={`/address/${item.tags['tx.from']}`}>{item.tags['tx.from'] ? item.tags['tx.from'] : '--'}</Link>
                 </div>
                 <div className="to">
-                  To: <Link to={`/address/${item.tags['tx.to'] }`}>{item.tags['tx.to'] ? item.tags['tx.to'] : '--'}</Link>
+                  To: <Link to={`/address/${item.tags['tx.to']}`}>{item.tags['tx.to'] ? item.tags['tx.to'] : '--'}</Link>
                 </div>
               </div>
               <div className="status_order">
-                <div className='circle-span'></div>{this.listType[index]}
+                <div className='circle-span' style={{ background: type === 'Deploy' ? 'blue' : 'green' }}></div>{type}
               </div>
             </div>
           </div>

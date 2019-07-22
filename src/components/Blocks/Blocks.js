@@ -4,13 +4,11 @@ import { connect } from 'react-redux';
 import Layout from '../Layout/Layout';
 import moment from 'moment';
 // import * as handledata from '../../service/handle-data';
-import MaterialIcon from 'material-icons-react';
 import './Blocks.scss';
 import { setPageSate } from '../../service/blockchain/get-realtime-data';
 import diffTime from '../../service/blockchain/find-time-return';
 // import { _get } from '../../service/api/base-api';
 // import { listBlocks } from '../../service/api/list-api';
-import { getListBlockApi } from '../../service/api/get-list-data';
 import Paging from './../Layout/elements/Paging/Paging';
 
 const mapStateToProps = (state) => {
@@ -48,10 +46,6 @@ class Blocks extends Component {
         let time = await diffTime(item);
         this.state.list_time.push(time);
       }
-
-      if (this.state.pageIndex === 1) {
-        this.getBlocksByPageIndex(1);
-      }
     }
   }
 
@@ -71,34 +65,27 @@ class Blocks extends Component {
         </tr>
       )
     })
-    return blocks
+    if (blocks.length === 0) {
+      return (<tr className="no_data">
+        <td />
+        <td />
+        <td />
+        <td>No Data</td>
+        <td />
+        <td />
+        <td />
+      </tr>)
+    } else return blocks;
   }
 
   // Set Data By Page Index
-  async getBlocksByPageIndex(pageIndex) {
 
-    if (pageIndex <= 0) {
-      pageIndex = 1;
-    }
-
-    if (pageIndex >= this.props.pageState.pageBlockLimit) {
-      pageIndex = this.props.pageState.pageBlockLimit
-    }
-
-    this.setState({
-      pageIndex
-    })
-
-    // return handledata.getBlocks(maxheight, pageIndex, 20);
-    getListBlockApi({ page_index: this.state.pageIndex, page_size: this.props.pageState.pageSize });
-
-  }
 
   render() {
     return (
       <Layout>
         <div className="block_page mt_50 mb_30">
-          <div className="container">
+          <div className="blocks_transactions_view">
             <div className="page_info_header">
               <h2>Blocks</h2>
               <div className="breadcrumb">

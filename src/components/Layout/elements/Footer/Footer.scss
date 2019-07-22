@@ -1,12 +1,13 @@
 // footer
 .footer {
   width: 100%;
-  line-height: 50px;
-  height: 50px;
+  height: auto;
+  min-height: 50px;
   background: rgb(228, 228, 228);
   z-index: 10;
-  position: fixed;
-  bottom: 0;
+  position: relative ;
+  margin: 0px;
+  
   // left: 0;
   .container {
     display: flex;
@@ -14,10 +15,32 @@
   }
   .infomation {
     position: absolute;
-    right: 0px;
-    a {
-      padding: 0 7px;
+    right: 10px;
+    height: auto;
+
+    p{
+      margin-bottom: 3px;
+    }
+
+    i{
+      font-size: 16px;
+      width: 26px;
+      height: 26px;
       cursor: pointer;
+      border-radius: 50%;
+      background-color: rgb(192, 192, 192);
+      margin: 0px 6px 0px 8px;
+      padding: 5px;
+      float: center;
+
+      &:hover{
+        color: rgba(214, 245, 14, 0.904);
+      }
+    }
+
+    span{
+      width: 30px;
+      height: 30px;
     }
   }
 }

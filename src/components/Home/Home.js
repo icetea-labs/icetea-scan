@@ -23,10 +23,10 @@ class Home extends Component {
           <div className="blocks_transactions_view">
             <ChainValue />
             <Row>
-              <Col xs={12} sm={12} md={5} lg={5} xl={5}>
+              <Col xs={12} sm={12} md={12} lg={5} xl={5}>
                 <BlocksBox />
               </Col>
-              <Col xs={12} sm={12} md={5} lg={7} xl={7}>
+              <Col xs={12} sm={12} md={12} lg={7} xl={7}>
                 <TransactionsBox />
               </Col>
             </Row>

@@ -7,7 +7,7 @@ import {Row, Col} from 'react-bootstrap';
 
 const mapStateToProps = (state) => {
     return {
-        blocks: state.getRealTimeData.blocks,
+        blocks: state.handleRealtimeData.blocks,
     }
 }
 
@@ -54,19 +54,19 @@ class TotalChain extends Component {
     render() {
         return (
             <Row className="total-chain">
-                <Col sm={12} md={6} lg={12} className='properties'>
+                <Col sm={12} md={3} lg={3} className='properties'>
                     <span>Time of last block:</span>
                     <span className="info-stamp">&nbsp;{moment(this.state.time).format("DD/MM/YYYY HH:mm:ss")}</span>
                 </Col>
-                <Col sm={12} md={6} lg={12} className='properties'>
+                <Col sm={12} md={3} lg={3} className='properties'>
                     <span>Height Block:</span>
                     <span className="info-stamp">&nbsp;#{this.state.height}</span>
                 </Col>
-                <Col sm={12} md={6} lg={12} className='properties'>
+                <Col sm={12} md={3} lg={3} className='properties'>
                     <span>Total Transactions Counter:</span>
                     <span className="info-stamp">&nbsp;{this.state.total_txs}</span>
                 </Col>
-                <Col sm={12} md={6} lg={12} className='properties'>
+                <Col sm={12} md={3} lg={3} className='properties'>
                     <span>Total Contracts:</span>
                     <span className="info-stamp">&nbsp;{this.state.total_accounts}</span>
                 </Col>

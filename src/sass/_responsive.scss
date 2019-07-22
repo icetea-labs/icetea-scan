@@ -1,18 +1,12 @@
-
-
 @media only screen {
   [class*="col-"] {
     padding: none;
   }
-
-  .row {
-    display: flex;
-  }
 }
 
-@media (max-width: 950px) and (min-width: 260){
+@media  (min-width: 0px ) and (max-width: 1000px) {
   .nf {
-    display: none !important;
+    display: none;
   }
 }
 
@@ -20,8 +14,4 @@
   .phone {
     display: none;
   }
-}
-
-@media (min-width: 0px) and (max-width: 560px) {
- 
 }

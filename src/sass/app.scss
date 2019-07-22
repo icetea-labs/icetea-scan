@@ -5,6 +5,7 @@
 // home container
 .home {
   margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 .chain-value {
@@ -20,14 +21,16 @@
   padding: 1.875rem 1rem;
   display: block;
   width: 100%;
-  
-  .header_top{
-    a{
-      color:gray;
+
+  .header_top {
+    margin-top: 30px;
+    font-weight: 500;
+    a {
+      color: gray;
       font-size: 14px;
     }
   }
-  
+
   .blocks_box {
     margin: 0px 5px;
     .row_blocks {
@@ -39,7 +42,9 @@
       .title {
         margin-bottom: 8px;
       }
+
       .block_count {
+        width: 70%;
         font-weight: 500;
         a {
           margin-left: 5px;
@@ -48,14 +53,26 @@
           }
         }
       }
+
+      .seconds_time {
+        position: relative;
+      }
+
       .includes {
+        display: flex;
         font-size: $font_size_small;
         color: $color_secondary;
         i {
           font-style: normal;
         }
+
+        .in_detail{
+          width: 70%
+        }
+
         .node {
           color: $color_primary;
+          margin-bottom: 5px;
         }
       }
     }
@@ -72,13 +89,14 @@
       .info_tx {
         margin-bottom: 8px;
         .tx {
+          margin-right: 20px;
           font-weight: 500;
           text-overflow: ellipsis;
           white-space: nowrap;
           overflow: hidden;
         }
       }
-      
+
       a {
         margin-left: 5px;
         font-size: $font_size_base;
@@ -89,12 +107,13 @@
         color: $color_secondary;
 
         .from_to {
+          margin-right: 60px;
           width: 70%;
           display: flex;
           align-items: center;
 
           .from {
-            margin-right: 10px;
+            margin-right: 30px;
             width: 50%;
             white-space: nowrap;
             text-overflow: ellipsis;
@@ -119,13 +138,12 @@
 
         .status_order {
           color: $color_primary;
+          font-size: 11px;
+          font-weight: 500;
           text-transform: capitalize;
-          span.fa-circle {
-            font-size: 7px;
-            vertical-align: middle;
-            margin-right: 5px;
-          }
+          margin-left: 15px;
         }
+
         a {
           color: $color_secondary;
           font-weight: 500;
@@ -134,8 +152,6 @@
     }
   }
 }
-
-
 
 // page_info_common
 .page_info_header {
@@ -267,10 +283,9 @@
 
 //Bread Cumb
 
-
 // .table_data
 .table_data {
-  padding:10px 5px;
+  padding: 10px 5px;
   font-family: $font_root;
   font-weight: 500;
   table {

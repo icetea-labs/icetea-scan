@@ -7,9 +7,12 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    font-weight: 500;
+    font-size: 12px;
     
     .properties{
         margin: auto;
+        text-align: center;
     }
 
     .info-stamp{

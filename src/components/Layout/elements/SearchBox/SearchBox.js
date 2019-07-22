@@ -113,19 +113,19 @@ class SearchBox extends Component {
   }
 
   componentDidMount() {
-    if (this.props.show_cb === "header" && window.location.pathname === "/") {
-      this.setState({
-        show_cb: false
-      });
+    // if (this.props.show_cb === "header" && window.location.pathname === "/") {
+    //   this.setState({
+    //     show_cb: false
+    //   });
 
-      show_cb = setInterval(() => {
-        if (this.props.show_cb === "header") {
-          this.setState({
-            show_cb: !checkScroll(window.innerHeight / 4)
-          });
-        }
-      }, 100);
-    }
+    //   show_cb = setInterval(() => {
+    //     if (this.props.show_cb === "header") {
+    //       this.setState({
+    //         show_cb: !checkScroll(window.innerHeight / 4)
+    //       });
+    //     }
+    //   }, 100);
+    // }
 
     document.addEventListener('Enter', this.handleValue)
   }
@@ -146,7 +146,7 @@ class SearchBox extends Component {
 
   render() {
     return (
-      <div className="search-box_out-side" style={{ display: this.state.show_cb === true ? "block" : "none" }} >
+      <div className="search-box_out-side nf" style={{ display: this.state.show_cb === true ? "block" : "none" }} >
         <div className="search-icon phone" style={{ display: "none" }}>
           <i className="fa fa-search" />{" "}
         </div>

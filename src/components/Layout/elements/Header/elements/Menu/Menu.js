@@ -40,10 +40,10 @@ class Menu extends Component {
     let { is_home, is_block, is_tx, is_contract } = this.state;
     return (
       <div className="main_nav nf">
-          <Link to="/"><li className='nav_choose_items' >Home</li></Link>
-          <Link to="/blocks"><li className='nav_items' >Blocks</li></Link>
-          <Link to="/txs"><li className='nav_items' >Transactions</li></Link>
-          <Link to="/contracts"><li className='nav_items' >Contracts</li></Link>
+          <Link to="/"><li className={ is_home=== true ? 'nav_items choose': 'nav_items'} >Home</li></Link>
+          <Link to="/blocks"><li className={ is_block=== true ? 'nav_items choose': 'nav_items'}  >Blocks</li></Link>
+          <Link to="/txs"><li className={ is_tx=== true ? 'nav_items choose': 'nav_items'} >Transactions</li></Link>
+          <Link to="/contracts"><li className={ is_contract=== true ? 'nav_items choose': 'nav_items'}>Contracts</li></Link>
       </div >
     );
   }

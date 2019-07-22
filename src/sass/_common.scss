@@ -8,6 +8,10 @@ body {
   background: $color_white_rgb;
 }
 
+.content{
+  min-height: 100pc;
+}
+
 a {
   text-decoration: none;
   &:hover {
@@ -102,6 +106,7 @@ pre {
 
 .breadcrumb {
   padding: 0px 5px;
+  background-color:  #00000000;
   li {
     float: left;
     line-height: 24px;
@@ -117,4 +122,8 @@ pre {
       }
     }
   }
+}
+
+.flex{
+  display: flex;
 }

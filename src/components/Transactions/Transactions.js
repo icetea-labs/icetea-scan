@@ -2,13 +2,10 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Layout from "../Layout/Layout";
-import MaterialIcon from "material-icons-react";
 import "./Transactions.scss";
-import * as handleData from "../../service/blockchain/handle-data";
 // import diffTime from "../../service/find-time-return";
 import { getFirstTxsData } from "../../service/blockchain/init-store";
 import { setPageSate } from "../../service/blockchain/get-realtime-data";
-import { getListTxApi } from "../../service/api/get-list-data";
 import moment from 'moment';
 import Paging from "../Layout/elements/Paging/Paging";
 
@@ -39,9 +36,7 @@ class Transactions extends Component {
 
   async componentWillReceiveProps(nextProps) {
     this._isMounted = true;
-
     let search = this.props.location.search;
-
     // Check is searching txs
     if (this.props !== nextProps) {
       if (this.props.location.search !== "") {
@@ -59,43 +54,12 @@ class Transactions extends Component {
         this.setState({
           show_paging: true
         });
-
-        if (this.state.pageIndex === 1) {
-          this.getTransaction(1);
-        }
       }
     }
   }
 
   componentWillUnmount() {
     this._isMounted = false;
-  }
-
-  getTransaction(pageIndex) {
-
-    if (pageIndex <= 1) {
-      pageIndex = 1;
-    }
-
-    if (pageIndex >= this.props.pageState.pageTxsLimit) {
-      pageIndex = this.props.pageState.pageTxsLimit;
-    }
-
-    this.setState({
-      pageIndex
-    });
-
-    getListTxApi({ page_index: this.state.pageIndex, page_size: this.props.pageState.page_size })
-  }
-
-  getTxsByHeight() {
-    handleData.getTransactions(
-      null,
-      null,
-      this.state.height,
-      this.props.pageState.total_blocks,
-      this.props.pageState.total_txs
-    );
   }
 
   loadTransactions() {
@@ -187,7 +151,7 @@ class Transactions extends Component {
     return (
       <Layout>
         <div className="block_page mt_50 mb_50">
-          <div className="container">
+          <div className="blocks_transactions_view">
             <div className="block_page page_info_header">
               <h2>Transactions</h2>
               <span className="sub-tilter" style={{ display: this.state.show_paging ? "none" : "block" }}>
@@ -222,7 +186,7 @@ class Transactions extends Component {
               </table>
             </div>
           </div>
-          <Paging data={'txs'}/>
+          <Paging data={'txs'} />
         </div>
       </Layout>
     );

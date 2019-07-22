@@ -23,7 +23,6 @@
     }
 
     .btn-common {
-      height: 30px;
       width: auto;
       line-height: 1;
       padding: 10px;
@@ -34,10 +33,12 @@
       background: rgba(97, 192, 207, 0.625);
       transition: 0.3s;
       color: whitesmoke;
+      cursor: pointer;
     }
 
     .state {
-      line-height: 30px;
+      line-height: 40px;
+      font-weight: 600;
       width: 90px !important;
       text-align: center;
       color: brown;
@@ -48,6 +49,7 @@
 
     i {
       float: center;
+      font-size: 20px;
     }
 
     label {

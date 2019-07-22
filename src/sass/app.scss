@@ -289,17 +289,28 @@
       color: $color_secondary;
       padding: 5px;
     }
-    .success_color {
-      color: $color_green;
-      font-weight: 600;
-    }
-    .error_color {
-      color: $color_red;
-      font-weight: 600;
-    }
   }
 }
-
+.success_color {
+  color: $color_green;
+  font-weight: 600;
+}
+.error_color {
+  color: $color_red;
+  font-weight: 600;
+}
+.TxDirection {
+  text-align: center;
+  width: 40px;
+  .Out {
+    color: #ea0070;
+    background: rgba(234, 0, 112, 0.1);
+  }
+  .In {
+    color: #00c087;
+    background: rgba(0, 192, 135, 0.1);
+  }
+}
 .breadcrumb {
   li {
     float: left;

@@ -53,6 +53,21 @@ export function TxType(props) {
     </React.Fragment>
   );
 }
+export function TxStatus(props) {
+  return <span className={props.value ? 'error_color' : 'success_color'}>{props.value ? 'Error' : 'Success'}</span>;
+}
+export function TxTypeTranfer(props) {
+  return (
+    <div className="TxDirection">
+      {props.txType === 0 || props.txType === 1 ? (
+        <span>--</span>
+      ) : (
+        <div className={props.value === 'IN' ? 'In' : 'Out'}> {props.value}</div>
+      )}
+    </div>
+  );
+}
+
 export function NumTxs(props) {
   return (
     <Link to={`/txs?height=${props.height}`}>

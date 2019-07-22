@@ -92,8 +92,8 @@ class ContractInfo extends Component {
         x.payerText = x.payer;
         x.tx.data = x.tx.data ? tryParseJson(x.tx.data) || {} : {};
 
-        x.status = x.tx_result.code ? 'Error' : 'Success';
-        x.inOut = x.to === address ? 'In' : 'Out';
+        x.status = x.tx_result.code;
+        x.inOut = x.from === address ? 'OUT' : x.to === address ? 'IN' : x.payer === address ? 'PAYER' : '--';
         x.shash = x.hash;
         x.blockHeight = +x.height;
         x.value = x.tx.value || 0;

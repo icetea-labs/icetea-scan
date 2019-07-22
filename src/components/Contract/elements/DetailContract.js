@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { codec } from '@iceteachain/common';
 import Select from 'rc-select';
 import PaginationPro from '../../elements/PaginationPro';
-import { Balance, Language, Address, Block, TxType } from '../../elements/Common';
+import { Balance, Language, Address, Block, TxType, TxStatus, TxTypeTranfer } from '../../elements/Common';
 
 class DetailContract extends PureComponent {
   constructor(props) {
@@ -38,10 +38,10 @@ class DetailContract extends PureComponent {
   renderTHead() {
     return (
       <tr>
-        <th width="8%">Type</th>
         <th width="10%">Block</th>
         <th width="8%">Status</th>
         <th width="20%">From</th>
+        <th width="8%">Type</th>
         <th width="6%" />
         <th width="20%">To</th>
         <th width="20%">Payer</th>
@@ -66,16 +66,20 @@ class DetailContract extends PureComponent {
         return (
           <tr key={index}>
             <td>
-              <TxType value={tx.txType} />
-            </td>
-            <td>
               <Block value={tx.blockHeight} />
             </td>
-            <td>{tx.status}</td>
+            <td>
+              <TxStatus value={tx.txStatus} />
+            </td>
             <td className="text_overflow">
               <Address value={tx.from} />
             </td>
-            <td>{tx.inOut}</td>
+            <td>
+              <TxType value={tx.txType} />
+            </td>
+            <td>
+              <TxTypeTranfer value={tx.inOut} txType={tx.txType} />
+            </td>
             <td className="text_overflow">
               <Address value={tx.to} />
             </td>

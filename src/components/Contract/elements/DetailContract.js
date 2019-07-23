@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { codec } from '@iceteachain/common';
 import Select from 'rc-select';
 import PaginationPro from '../../elements/PaginationPro';
-import { Balance, Language, Address, Block, TxType, TxStatus, TxTypeTranfer } from '../../elements/Common';
+import { Balance, Language, Address, Block, TxType, TxStatus, TxTypeTranfer, Hash } from '../../elements/Common';
 
 class DetailContract extends PureComponent {
   constructor(props) {
@@ -38,13 +38,14 @@ class DetailContract extends PureComponent {
   renderTHead() {
     return (
       <tr>
+        <th width="15%">Hash</th>
         <th width="10%">Block</th>
         <th width="8%">Status</th>
-        <th width="20%">From</th>
+        <th width="15%">From</th>
         <th width="8%">Type</th>
         <th width="6%" />
-        <th width="20%">To</th>
-        <th width="20%">Payer</th>
+        <th width="15%">To</th>
+        <th width="15%">Payer</th>
         <th width="8%">Value</th>
       </tr>
     );
@@ -56,7 +57,7 @@ class DetailContract extends PureComponent {
     if (txOnPage.length === 0) {
       return (
         <tr className="no_data">
-          <td colSpan="8">
+          <td colSpan="9">
             <span>No Data</span>
           </td>
         </tr>
@@ -65,6 +66,9 @@ class DetailContract extends PureComponent {
       return txOnPage.map((tx, index) => {
         return (
           <tr key={index}>
+            <td className="text_overflow">
+              <Hash value={tx.shash} />
+            </td>
             <td>
               <Block value={tx.blockHeight} />
             </td>

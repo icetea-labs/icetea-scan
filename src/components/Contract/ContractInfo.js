@@ -101,11 +101,18 @@ class ContractInfo extends Component {
 
         x.txType = x.tx.data.op;
       });
-      const sorted = data.sort((a, b) => {
+      const arrTmp = [];
+      const uniqueArray = data.filter((item, index) => {
+        arrTmp[index] = item.shash;
+        return arrTmp.indexOf(item.shash) === index;
+      });
+
+      const sorted = uniqueArray.sort((a, b) => {
         const delta = b.blockHeight - a.blockHeight;
         if (delta) return delta;
         return b.index - a.index;
       });
+
       this.setState({ txHistory: sorted });
     }
   }

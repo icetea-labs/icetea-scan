@@ -169,7 +169,7 @@ class SearchBox extends Component {
     const { show_cb } = this.state;
 
     return (
-      <div className="search-box_out-side" style={{ display: this.state.show_cb === true ? 'block' : 'none' }}>
+      <div className="search-box_out-side" style={{ display: show_cb === true ? 'block' : 'none' }}>
         <Search
           placeholder="Search by block, transaction or address"
           onSearch={value => {

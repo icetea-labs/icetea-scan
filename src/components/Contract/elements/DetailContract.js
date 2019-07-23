@@ -3,6 +3,7 @@ import { codec } from '@iceteachain/common';
 import Select from 'rc-select';
 import PaginationPro from '../../elements/PaginationPro';
 import { Balance, Language, Address, Block, TxType, TxStatus, TxTypeTranfer } from '../../elements/Common';
+import './DetailContract.scss';
 
 class DetailContract extends PureComponent {
   constructor(props) {
@@ -149,7 +150,7 @@ class DetailContract extends PureComponent {
             <div className="row_detail">
               <span className="label">Language:</span>
               <div className="text_wrap">
-                <Language value={addresDetail.mode} />
+                <Language value={addresDetail.mode} address={address} view={true}/>
               </div>
             </div>
             <div className="row_detail">

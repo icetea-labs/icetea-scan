@@ -16,6 +16,7 @@ import { NotFound, Exception } from './components/NotFound/NotFound';
 import ContractInfo from './components/Contract/ContractInfo';
 import ListContracts from './components/Contract/ListContracts';
 import GlobaLoading from './components/elements/GlobaLoading';
+import ViewSource from './components/Contract/ViewSource';
 
 function RouteWithLayout({ layout, component, ...rest }) {
   return (
@@ -24,7 +25,7 @@ function RouteWithLayout({ layout, component, ...rest }) {
 }
 class App extends Component {
   render() {
-    const { isLoading } = this.props;
+    const { isLoading } = this.props; 
     return (
       <div className="App">
         <Router>
@@ -38,6 +39,8 @@ class App extends Component {
             <RouteWithLayout layout={Layout} exact path={'/contract/:address'} component={ContractInfo} />;
             <RouteWithLayout layout={Layout} exact path={'/address/:address'} component={ContractInfo} />;
             <RouteWithLayout layout={Layout} exact path={`/exception`} component={Exception} />
+            <RouteWithLayout layout={Layout} exact path={`/src/:address`} component={ViewSource} />
+
             <Route component={NotFound} />
           </Switch>
         </Router>

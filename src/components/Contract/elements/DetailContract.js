@@ -122,6 +122,7 @@ class DetailContract extends PureComponent {
   render() {
     const { current, pageSize, total } = this.state;
     const { addresDetail, metadata, isContractAddress, address } = this.props;
+
     return (
       <div className="tab-contract">
         <div className="row_detail">

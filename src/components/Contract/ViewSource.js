@@ -23,7 +23,6 @@ class ViewSource extends Component {
   }
 
   componentDidMount() {
-    console.log('tweb3', tweb3);
     this.loadSource();
   }
 

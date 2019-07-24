@@ -14,7 +14,7 @@ function Banner() {
     <div className="banner-container">
       <h3>ICETEA CHAIN EXPLORER (TESTNET)</h3>
       <div className="searh-box">
-        <SearchBox show_cb="banner" />
+        <SearchBox />
       </div>
     </div>
   );

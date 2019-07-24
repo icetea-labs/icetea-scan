@@ -1,15 +1,7 @@
-import store from "../../store";
-import * as actions from "../../store/actions";
-import { _get } from "./base-api";
-import {
-  listBlocks,
-  listTxs,
-  countBlock,
-  countTxs,
-  singleBlock
-} from "./list-api";
-// import { getListBlocks } from "../../redux/actions/handleListBlocks";
-// import { getListTxs } from "../../redux/actions/handleTransactions";
+import store from '../../store';
+import * as actions from '../../store/actions';
+import { _get } from './base-api';
+import { listBlocks, listTxs, countBlock, countTxs, singleBlock } from './list-api';
 
 export const getListBlockApi = async params => {
   const response = await _get(params, listBlocks);
@@ -65,7 +57,7 @@ export const getTotalTxsApi = async params => {
   }
 };
 export const getTotalTxsByHeighApi = async height => {
-  const response = await _get(null, singleBlock + "/" + height);
+  const response = await _get(null, singleBlock + '/' + height);
   try {
     if (response.status === 200) {
       const { data } = response;

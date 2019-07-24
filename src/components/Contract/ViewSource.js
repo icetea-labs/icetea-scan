@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import tweb3 from '../../tweb3';
+import { tweb3 } from '../../service/tweb3';
 import Prism from 'prismjs';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
@@ -23,6 +23,7 @@ class ViewSource extends Component {
   }
 
   componentDidMount() {
+    console.log('tweb3', tweb3);
     this.loadSource();
   }
 

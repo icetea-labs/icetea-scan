@@ -1,4 +1,5 @@
-import tweb3 from '../../tweb3';
+import tweb3 from './tweb3';
+import { ecc, AccountType } from '@iceteachain/common';
 import store from '../../store';
 import * as actions from '../../store/actions';
 
@@ -57,4 +58,14 @@ export const getAccountInfo = async address => {
     throw err;
   }
   return { msg: 'can`t get data', data: false, status: 404 };
+};
+
+export const newBankAccount = () => {
+  const tmpAccount = ecc.newKeys(AccountType.BANK_ACCOUNT);
+  tweb3.wallet.importAccount(tmpAccount.privateKey);
+  tweb3.wallet.defaultAccount = tmpAccount.address;
+  return {
+    privateKey: tmpAccount.privateKey,
+    address: tmpAccount.address,
+  };
 };

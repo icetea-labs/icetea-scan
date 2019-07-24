@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Prism from 'prismjs';
+import { ecc, AccountType } from '@iceteachain/common';
 import { TxOp } from '@iceteachain/common';
 import Tabs, { TabPane } from 'rc-tabs';
 import TabContent from 'rc-tabs/lib/TabContent';
@@ -9,7 +10,6 @@ import './CallContract.scss';
 import { Modal, Button, Input, Select } from 'antd';
 import { fmtType, formatResult, parseParamList, tryStringifyJson } from '../../../utils';
 import tweb3 from '../../../tweb3';
-import { createBankKey } from '../../../service/wallet/create';
 const { TextArea } = Input;
 const { Option } = Select;
 
@@ -59,9 +59,9 @@ class CallContract extends Component {
   }
 
   componentDidMount() {
-    const tmpAccount = createBankKey();
-    // tweb3.wallet.importAccount(tmpAccount.privateKey);
-    // tweb3.wallet.defaultAccount = tmpAccount.address;
+    const tmpAccount = ecc.newKeys(AccountType.BANK_ACCOUNT);
+    tweb3.wallet.importAccount(tmpAccount.privateKey);
+    tweb3.wallet.defaultAccount = tmpAccount.address;
 
     const search_params = new URLSearchParams(window.location.search);
     let txSigned = search_params.get('txSigned');

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Select from 'rc-select';
 import PaginationPro from '../elements/PaginationPro';
 import { TotalInfo, HeaderMap, Balance, Address, Language } from '../elements/Common';
-import { getAllContracts, getDataContract } from '../../service/blockchain/get-single-data';
+import { getAllContracts, getDataContract } from '../../service/tweb3';
 import * as actions from '../../store/actions';
 class ListContracts extends Component {
   constructor(props) {

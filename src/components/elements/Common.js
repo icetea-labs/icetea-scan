@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ContractMode } from '@iceteachain/common';
 import moment from 'moment';
 import { toTEA, diffTime } from '../../utils';
+import { Button } from 'antd';
 
 export function Hash(props) {
   return (
@@ -86,7 +87,19 @@ export function Balance(props) {
   return <span>{`${toTEA(props.value)} TEA`}</span>;
 }
 export function Language(props) {
-  return <span>{props.value === ContractMode.WASM ? 'WebAssembly' : 'JavaScript'}</span>;
+  let { address, isContractAddress } = props;
+  return props.value === ContractMode.WASM ? (
+    <span>WebAssembly</span>
+  ) : (
+    <div className="viewSource">
+      <span>JavaScript</span>
+      {isContractAddress && (
+        <Button type="primary">
+          <Link to={`/src/${address}`}>View Source</Link>
+        </Button>
+      )}
+    </div>
+  );
 }
 export function HeaderMap(props) {
   return (

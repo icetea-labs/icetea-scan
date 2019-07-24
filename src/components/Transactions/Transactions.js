@@ -4,7 +4,7 @@ import { TotalInfo, HeaderMap, Hash, Age, Block, Address, Balance, TxType } from
 import './Transactions.scss';
 import Select from 'rc-select';
 import PaginationPro from '../elements/PaginationPro';
-import { getListTxApi, getTotalTxsApi, getTotalTxsByHeighApi } from '../../service/api/get-list-data';
+import { getListTxApi, getTotalTxsApi, getTotalTxsByHeighApi } from '../../service';
 import * as actions from '../../store/actions';
 
 class Transactions extends Component {

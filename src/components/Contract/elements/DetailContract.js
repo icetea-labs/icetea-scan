@@ -126,6 +126,7 @@ class DetailContract extends PureComponent {
   render() {
     const { current, pageSize, total } = this.state;
     const { addresDetail, metadata, isContractAddress, address } = this.props;
+
     return (
       <div className="tab-contract">
         <div className="row_detail">
@@ -140,7 +141,7 @@ class DetailContract extends PureComponent {
         </div>
         <div className="row_detail">
           <span className="label">Is Contract:</span>
-          <div className="text_wrap">{!!isContractAddress ? 'YES' : 'NO'}</div>
+          <div className="text_wrap">{!!isContractAddress ? 'Yes' : 'No'}</div>
         </div>
         {addresDetail.hasSrc && (
           <React.Fragment>
@@ -153,7 +154,7 @@ class DetailContract extends PureComponent {
             <div className="row_detail">
               <span className="label">Language:</span>
               <div className="text_wrap">
-                <Language value={addresDetail.mode} />
+                <Language value={addresDetail.mode} address={address} isContractAddress={isContractAddress} />
               </div>
             </div>
             <div className="row_detail">

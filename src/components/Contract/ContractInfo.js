@@ -8,7 +8,7 @@ import Tabs, { TabPane } from 'rc-tabs';
 import TabContent from 'rc-tabs/lib/TabContent';
 import ScrollableInkTabBar from 'rc-tabs/lib/ScrollableInkTabBar';
 import 'rc-tabs/assets/index.css';
-import { getAccountInfo, getMetadataContract, getTxHistoryByAddress } from '../../service/blockchain/get-single-data';
+import { getAccountInfo, getMetadataContract, getTxHistoryByAddress } from '../../service';
 import { HeaderMap } from '../elements/Common';
 
 import { toTEA, tryParseJson } from '../../utils';

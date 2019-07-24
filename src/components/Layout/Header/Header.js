@@ -16,7 +16,7 @@ class Header extends Component {
           </Link>
         </div>
         <div className="search-box">
-          <SearchBox show_cb="header" />
+          <SearchBox isHeader />
         </div>
         <Menu />
       </header>

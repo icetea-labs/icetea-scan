@@ -3,8 +3,7 @@ import { HeaderMap, Age, Block, TimeWithFormat, TxType, Balance, Address } from 
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import './TransactionsInfo.scss';
 import notifi from '../elements/Notification';
-import { _get } from '../../service/api/base-api';
-import { singleTx } from '../../service/api/list-api';
+import { singleTx, _get } from '../../service';
 
 class TransactionsInfo extends Component {
   constructor(props) {

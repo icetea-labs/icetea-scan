@@ -20,3 +20,23 @@
 .tx-history {
   padding-top: 20px;
 }
+.viewSource {
+  & button {
+    margin-left: 30px;
+  }
+  a {
+    text-decoration: none;
+  }
+}
+.src-container {
+  .src-header {
+    padding: 10px 0;
+    font-size: 14px;
+    & pre {
+      margin-top: 10px;
+    }
+  }
+  .src-content{
+    padding: 5px;
+  }
+}

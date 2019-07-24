@@ -4,8 +4,7 @@ import BlocksBox from './elements/BlocksBox';
 import TransactionsBox from './elements/TransactionsBox';
 import ChainInfo from './elements/ChainInfo';
 
-import { getListBlockApi, getListTxApi } from '../../service//api/get-list-data';
-import { getAllContracts } from '../../service/blockchain/get-single-data';
+import { getListBlockApi, getListTxApi, getAllContracts } from '../../service';
 
 let interval = null;
 
@@ -14,7 +13,7 @@ function Banner() {
     <div className="banner-container">
       <h3>ICETEA CHAIN EXPLORER (TESTNET)</h3>
       <div className="searh-box">
-        <SearchBox show_cb="banner" />
+        <SearchBox />
       </div>
     </div>
   );

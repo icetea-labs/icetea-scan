@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Select from 'rc-select';
 import PaginationPro from '../elements/PaginationPro';
 import { TotalInfo, HeaderMap, Balance, Address, Language } from '../elements/Common';
-import { getAllContracts, getDataContract } from '../../service';
+import { getAllContracts, getAccountInfo } from '../../service';
 import * as actions from '../../store/actions';
 class ListContracts extends Component {
   constructor(props) {
@@ -47,7 +47,7 @@ class ListContracts extends Component {
     // console.log("contract", contract);
     let tmp = [];
     for (let i = 0; i < contract.length; i++) {
-      let res = await getDataContract(contract[i]);
+      let res = await getAccountInfo(contract[i]);
       // console.log("res", res);
       res.data.address = contract[i];
       // if (res.status === 200) {

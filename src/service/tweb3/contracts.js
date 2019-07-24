@@ -4,21 +4,6 @@ import * as actions from '../../store/actions';
 
 /**
  *
- * @param {string} getDataContract get data of a single contract
- * @return {Object} data return a request, ex: { msg: string, data: object || boolean, status: number  }
- */
-
-export const getDataContract = async address => {
-  let contract_data = await tweb3.getAccountInfo(address);
-
-  if (contract_data !== null) {
-    return { msg: 'ok', data: contract_data, status: 200 };
-  }
-  return { msg: 'can`t get data', data: false, status: 400 };
-};
-
-/**
- *
  * @param {boolean} getAllContracts get list name of contract
  * @return {Object} data return a request, ex: { msg: string, data: object || boolean, status: number  }
  */

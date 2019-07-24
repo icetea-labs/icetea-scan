@@ -5,7 +5,7 @@ import Select from 'rc-select';
 import PaginationPro from '../elements/PaginationPro';
 import './Blocks.scss';
 import { formatNumber } from '../../utils';
-import { getListBlockApi, getTotalBlockApi } from '../../service/api/get-list-data';
+import { getListBlockApi, getTotalBlockApi } from '../../service';
 import * as actions from '../../store/actions';
 
 class Blocks extends PureComponent {

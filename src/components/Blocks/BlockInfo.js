@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { HeaderMap, Age, Block, TimeWithFormat } from '../elements/Common';
-import { _get } from '../../service/api/base-api';
-import { singleBlock } from '../../service/api/list-api';
+import { singleBlock, _get } from '../../service';
 
 class BlockInfo extends Component {
   constructor() {

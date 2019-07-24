@@ -4,8 +4,7 @@ import BlocksBox from './elements/BlocksBox';
 import TransactionsBox from './elements/TransactionsBox';
 import ChainInfo from './elements/ChainInfo';
 
-import { getListBlockApi, getListTxApi } from '../../service//api/get-list-data';
-import { getAllContracts } from '../../service/tweb3';
+import { getListBlockApi, getListTxApi, getAllContracts } from '../../service';
 
 let interval = null;
 

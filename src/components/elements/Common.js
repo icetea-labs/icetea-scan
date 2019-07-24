@@ -95,7 +95,9 @@ export function Language(props) {
       <span>JavaScript</span>
       {isContractAddress && (
         <Button type="primary">
-          <Link to={`/src/${address}`}>View Source</Link>
+          <Link to={`/src/${address}`} target="_blank">
+            View Source
+          </Link>
         </Button>
       )}
     </div>

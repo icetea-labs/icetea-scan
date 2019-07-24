@@ -8,17 +8,17 @@ class Footer extends Component {
           <div className="infomation">
             <p>
               © 2019 &nbsp;
-              <a href="https://trada.tech/team.html" target="_blank" rel="noopener noreferrer">
+              <a href={process.env.REACT_APP_TRADA} target="_blank" rel="noopener noreferrer">
                 TradaTech
               </a>
             </p>
-            <a href="http://trada.tech" rel="noopener noreferrer" target="_blank">
+            <a href={process.env.REACT_APP_TELE} rel="noopener noreferrer" target="_blank">
               <i className="fa fa-paper-plane" />
             </a>
-            <a href="http://trada.tech" rel="noopener noreferrer" target="_blank">
+            <a href={process.env.REACT_APP_FACE} rel="noopener noreferrer" target="_blank">
               <i className="fa fa-facebook" />
             </a>
-            <a href="http://trada.tech" rel="noopener noreferrer" target="_blank">
+            <a href={process.env.REACT_APP_TWITTER} rel="noopener noreferrer" target="_blank">
               <i className="fa fa-twitter" />
             </a>
           </div>

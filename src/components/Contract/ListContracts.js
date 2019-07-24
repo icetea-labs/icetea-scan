@@ -19,11 +19,6 @@ class ListContracts extends Component {
 
   async componentDidMount() {
     const res = await getAllContracts();
-    // console.log(res);
-    // if (res.status === 200) {
-    //   let data_res = res.data;
-    //   this.loadData(data_res);
-    // }
     const { setLoading } = this.props;
     setLoading(true);
     this.loadData(res.data);
@@ -44,7 +39,6 @@ class ListContracts extends Component {
       });
     }
 
-    // console.log("contract", contract);
     let tmp = [];
     for (let i = 0; i < contract.length; i++) {
       let res = await getAccountInfo(contract[i]);

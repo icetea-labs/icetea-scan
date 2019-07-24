@@ -28,7 +28,6 @@ class TransactionsInfo extends Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const hashId = nextProps.match.params.hashId;
-    console.log('getDerivedStateFromProps');
     if (hashId !== prevState.hashId) {
       return { hashId };
     }
@@ -41,7 +40,6 @@ class TransactionsInfo extends Component {
 
   componentDidUpdate(prevProp, prevState) {
     const { hashId } = this.state;
-    console.log('prevState.hashId !== hashId', prevState.hashId !== hashId);
     if (prevState.hashId !== hashId) {
       this.loadTransaction();
     }

@@ -99,7 +99,7 @@ class ListContracts extends Component {
 
     return (
       <div className="listContract pc-container">
-        <h3>Contract</h3>
+        <h3>Contracts</h3>
         <div className="flexBox">
           <TotalInfo total={total} text={['contracts', ['contract']]} />
           <HeaderMap value={[{ path: '/', text: 'Home' }, { path: '/contracts', text: 'Contracts' }]} />

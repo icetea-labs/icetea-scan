@@ -27,8 +27,8 @@ export function Address(props) {
           {props.children ? props.children : props.value}
         </Link>
       ) : (
-          <span>--</span>
-        )}
+        <span>--</span>
+      )}
     </React.Fragment>
   );
 }
@@ -63,8 +63,8 @@ export function TxTypeTranfer(props) {
       {props.txType === 0 || props.txType === 1 ? (
         <span>--</span>
       ) : (
-          <div className={props.value === 'IN' ? 'In' : 'Out'}> {props.value}</div>
-        )}
+        <div className={props.value === 'IN' ? 'In' : 'Out'}> {props.value}</div>
+      )}
     </div>
   );
 }
@@ -87,11 +87,19 @@ export function Balance(props) {
   return <span>{`${toTEA(props.value)} TEA`}</span>;
 }
 export function Language(props) {
-  let { address, view } = props;
-  return (
-    props.value === ContractMode.WASM ? (<span>WebAssembly</span>) : (<span>JavaScript{view ? <Button><Link to={`/src/${address}`}>View Source</Link></Button> : null}</span>)
-  )
-
+  let { address, isContractAddress } = props;
+  return props.value === ContractMode.WASM ? (
+    <span>WebAssembly</span>
+  ) : (
+    <div className="viewSource">
+      <span>JavaScript</span>
+      {isContractAddress && (
+        <Button type="primary">
+          <Link to={`/src/${address}`}>View Source</Link>
+        </Button>
+      )}
+    </div>
+  );
 }
 export function HeaderMap(props) {
   return (
@@ -117,10 +125,10 @@ export function TotalInfo(props) {
           More than > <span>{props.total}</span> {props.text[0]} found
         </div>
       ) : (
-          <div className="sub-title">
-            <span>{props.total}</span> {props.text[1]} found
+        <div className="sub-title">
+          <span>{props.total}</span> {props.text[1]} found
         </div>
-        )}
+      )}
     </React.Fragment>
   );
 }

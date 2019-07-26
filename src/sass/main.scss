@@ -202,6 +202,14 @@
       border-bottom: 0;
     }
   }
+  @include pc {
+    display: inline-flex;
+    justify-content: space-between;
+    .row {
+      height: rem(50);
+      border-bottom: 0;
+    }
+  }
 }
 .flex_header {
   display: flex;

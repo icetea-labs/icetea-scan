@@ -74,6 +74,39 @@ class CallContract extends Component {
       });
     }
     console.log('txSigned', txSigned);
+    var coll = document.getElementsByClassName('info-box');
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+      coll[i].addEventListener('click', function() {
+        this.classList.toggle('active');
+        var content = this.nextElementSibling;
+        var mHeight = window.getComputedStyle(content).maxHeight;
+        if (mHeight !== '0px') {
+          content.style.maxHeight = '0px';
+        } else {
+          content.style.maxHeight = content.scrollHeight;
+        }
+      });
+    }
+  }
+
+  toggleCollapsibleSectionWithAnimation() {
+    var coll = document.getElementsByClassName('info-box');
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+      coll[i].addEventListener('click', function() {
+        this.classList.toggle('active');
+        var content = this.nextElementSibling;
+        var mHeight = window.getComputedStyle(content).maxHeight;
+        if (mHeight !== '0px') {
+          content.style.maxHeight = '0px';
+        } else {
+          content.style.maxHeight = '100%';
+        }
+      });
+    }
   }
 
   onChangeTypeFunc = index => {
@@ -200,7 +233,7 @@ class CallContract extends Component {
           <div className="info-box">
             <code className="language-js">{funcsInfo[func.name]}</code>
           </div>
-          <div className="func-content">
+          <div className="func-content-shown-by-default">
             <form className="func-body">
               {func.type === 'unknown' ? (
                 <React.Fragment>

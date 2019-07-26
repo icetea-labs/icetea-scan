@@ -169,6 +169,29 @@
     overflow: auto;
   }
 }
+.chaininfo_box {
+  width: 100%;
+  .row {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: rem(60);
+    padding: 0px rem(16);
+    box-sizing: border-box;
+    .title {
+      color: #212833;
+      font-family: DINPro-Bold;
+      font-size: rem(14);
+    }
+    .desc {
+      color: #848e9c;
+      font-size: rem(12);
+    }
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+}
 .flex_header {
   display: flex;
   justify-content: space-between;

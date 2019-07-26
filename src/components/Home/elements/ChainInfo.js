@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import './ChainInfo.scss';
-import moment from 'moment';
 import { formatNumber } from '../../../utils';
+import { TimeWithFormat, ShadowBox } from '../../elements/Common';
 
 class ChainInfo extends PureComponent {
   constructor(props) {
@@ -33,26 +33,24 @@ class ChainInfo extends PureComponent {
     const { time, height, total_txs, total_accounts } = this.state;
 
     return (
-      <div className="total-chain">
-        <ul>
-          <li>
-            <p className="info-stamp">{moment(time).format('DD/MM/YYYY HH:mm:ss')}</p>
-            <p>Time of last block</p>
-          </li>
-          <li>
-            <p className="info-stamp"># {height}</p>
-            <p>Block Height </p>
-          </li>
-          <li>
-            <p className="info-stamp">{formatNumber(total_txs)}</p>
-            <p>Total Transactions</p>
-          </li>
-          <li>
-            <p className="info-stamp">{formatNumber(total_accounts)}</p>
-            <p>Total Accounts</p>
-          </li>
-        </ul>
-      </div>
+      <ShadowBox className="chaininfo_box">
+        <div className="row border-bottom ">
+          <TimeWithFormat className="title" value={time} />
+          <div className="desc">Time of last block</div>
+        </div>
+        <div className="row border-bottom ">
+          <div className="title"># {height}</div>
+          <div className="desc">Block Height</div>
+        </div>
+        <div className="row border-bottom ">
+          <div className="title">{formatNumber(total_txs)}</div>
+          <div className="desc">Total Transactions</div>
+        </div>
+        <div className="row border-bottom ">
+          <div className="title">{formatNumber(total_accounts)}</div>
+          <div className="desc">Total Accounts</div>
+        </div>
+      </ShadowBox>
     );
   }
 }

@@ -38,7 +38,9 @@ class Home extends Component {
         <Banner />
         <div className="home_content">
           <FlexBox wrap="wrap" className="home_topContainer">
-            <ChainInfo />
+            <FlexWidthBox width="100%">
+              <ChainInfo />
+            </FlexWidthBox>
           </FlexBox>
           <FlexBox wrap="wrap">
             <FlexWidthBox width="40%">

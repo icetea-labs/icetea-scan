@@ -82,7 +82,7 @@ export function Age(props) {
 }
 export function TimeWithFormat(props) {
   const formatValue = props.format ? props.format : 'MMMM-DD-YYYY h:mm:ss';
-  return <span>{moment(props.value).format(formatValue)}</span>;
+  return <span className={props.className}>{moment(props.value).format(formatValue)}</span>;
 }
 export function Balance(props) {
   return <span>{`${toTEA(props.value)} TEA`}</span>;

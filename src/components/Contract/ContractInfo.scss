@@ -4,7 +4,7 @@
   // position: absolute;
   margin-top: 10px !important;
   .row_detail {
-    padding: 5px 20px !important;
+    padding: 7px 20px !important;
     margin-bottom: 0 !important;
   }
 }
@@ -15,5 +15,28 @@
   padding: 8px 5px !important;
   .rc-tabs-nav-container {
     font-size: 15px;
+  }
+}
+.tx-history {
+  padding-top: 20px;
+}
+.viewSource {
+  & button {
+    margin-left: 30px;
+  }
+  a {
+    text-decoration: none;
+  }
+}
+.src-container {
+  .src-header {
+    padding: 10px 0;
+    font-size: 14px;
+    & pre {
+      margin-top: 10px;
+    }
+  }
+  .src-content{
+    padding: 5px;
   }
 }

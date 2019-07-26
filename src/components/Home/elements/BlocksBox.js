@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { diffTime } from '../../../utils';
 import './BlocksBox.scss';
+import { Block, Age, NumTxs } from '../../elements/Common';
 
 class BlocksBox extends PureComponent {
   constructor(props) {
@@ -30,16 +30,16 @@ class BlocksBox extends PureComponent {
             <div className="title flex">
               <div className="block_count">
                 <span>Blocks</span>
-                <Link to={`/block/${block.height}`}>{block.height}</Link>
+                <Block value={block.height} />
               </div>
-              <div className="seconds_time">{diffTime(block.time)}</div>
+              <div className="seconds_time">
+                <Age value={block.time} />
+              </div>
             </div>
             <div className="includes flex">
               <div className="in_detail">
                 <span>Includes</span>
-                <Link to={`/txs?height=${block.height}`}>
-                  <span> {block.num_txs} Txns</span>
-                </Link>
+                <NumTxs value={block.num_txs} height={block.height} />
               </div>
               <div className="node">
                 <span>
@@ -63,7 +63,7 @@ class BlocksBox extends PureComponent {
             <i className={cssIcon} />
             <span>Blocks</span>
           </div>
-          <Link to="/blocks/">View All →</Link>
+          <Link to="/blocks/">View All >></Link>
         </div>
         <div className="box_wrap">{this.renderBlocks()}</div>
       </div>

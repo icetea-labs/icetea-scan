@@ -1,12 +1,9 @@
-/* eslint-disable no-undef */
 import React, { Component } from 'react';
-import { ContractMode } from '@iceteachain/common';
 import { connect } from 'react-redux';
 import Select from 'rc-select';
 import PaginationPro from '../elements/PaginationPro';
-import { Link } from 'react-router-dom';
-import { toTEA } from '../../utils';
-import { getAllContracts, getDataContract } from '../../service/blockchain/get-single-data';
+import { TotalInfo, HeaderMap, Balance, Address, Language } from '../elements/Common';
+import { getAllContracts, getAccountInfo } from '../../service';
 import * as actions from '../../store/actions';
 class ListContracts extends Component {
   constructor(props) {
@@ -22,11 +19,6 @@ class ListContracts extends Component {
 
   async componentDidMount() {
     const res = await getAllContracts();
-    // console.log(res);
-    // if (res.status === 200) {
-    //   let data_res = res.data;
-    //   this.loadData(data_res);
-    // }
     const { setLoading } = this.props;
     setLoading(true);
     this.loadData(res.data);
@@ -47,10 +39,9 @@ class ListContracts extends Component {
       });
     }
 
-    // console.log("contract", contract);
     let tmp = [];
     for (let i = 0; i < contract.length; i++) {
-      let res = await getDataContract(contract[i]);
+      let res = await getAccountInfo(contract[i]);
       // console.log("res", res);
       res.data.address = contract[i];
       // if (res.status === 200) {
@@ -70,16 +61,16 @@ class ListContracts extends Component {
       return (
         <tr key={index}>
           <td>
-            <Link to={`/contract/${item.address}`}>{item.address}</Link>
+            <Address value={item.address} />
           </td>
           <td>
-            <span>{toTEA(item.balance)}</span>
+            <Balance value={item.balance} />
           </td>
           <td>
-            <Link to={`/contract/${item.deployedBy}`}>{item.deployedBy}</Link>
+            <Address value={item.deployedBy} />
           </td>
           <td>
-            <span>{item.mode === ContractMode.WASM ? 'WebAssembly' : 'JavaScript'}</span>
+            <Language value={item.mode} />
           </td>
         </tr>
       );
@@ -102,20 +93,10 @@ class ListContracts extends Component {
 
     return (
       <div className="listContract pc-container">
-        <h3>Contract</h3>
+        <h3>Contracts</h3>
         <div className="flexBox">
-          <div className="sub-title">
-            More than > <span>{total}</span> contracts found
-          </div>
-          <div className="breadcrumb">
-            <span className="breadcrumb-item">
-              <Link to="/">Home</Link>
-            </span>
-            <div className="breadcrumb-separator">/</div>
-            <span className="breadcrumb-item">
-              <Link to="/contracts">Contracts</Link>
-            </span>
-          </div>
+          <TotalInfo total={total} text={['contracts', ['contract']]} />
+          <HeaderMap value={[{ path: '/', text: 'Home' }, { path: '/contracts', text: 'Contracts' }]} />
         </div>
         <div className="table_data">
           <table>
@@ -124,7 +105,7 @@ class ListContracts extends Component {
                 <th width="35%">Address</th>
                 <th width="15%">Balance</th>
                 <th width="35%">Deployed by</th>
-                <th width="15%">Type</th>
+                <th width="15%">Language</th>
               </tr>
             </thead>
             <tbody>{this.renderTbody()}</tbody>

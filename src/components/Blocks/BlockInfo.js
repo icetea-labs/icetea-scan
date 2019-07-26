@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-import moment from 'moment';
 import { Link } from 'react-router-dom';
-// import { getDataBlock } from '../../service/get-single-data';
-// import diffTime from "../../service/blockchain/find-time-return";
-import { diffTime } from '../../utils';
-import { _get } from '../../service/api/base-api';
-import { singleBlock } from '../../service/api/list-api';
+import { HeaderMap, Age, Block, TimeWithFormat } from '../elements/Common';
+import { singleBlock, _get } from '../../service';
 
 class BlockInfo extends Component {
   constructor() {
@@ -19,49 +15,63 @@ class BlockInfo extends Component {
       blockHash: '',
       parentHash: '',
       node: '',
-      diff_time: '',
     };
   }
 
-  componentDidMount() {
-    const height = this.props.match.params.blockId;
-    this.loadData(height);
-    console.log('componentDidMount');
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const height = nextProps.match.params.blockId;
+    if (height !== prevState.height) {
+      return { height };
+    }
+    return null;
   }
 
-  async loadData(height) {
+  componentDidMount() {
+    this.loadBlockInfo();
+  }
+
+  componentDidUpdate(prevProp, prevState) {
+    const { height } = this.state;
+    if (prevState.height !== height) {
+      this.loadBlockInfo();
+    }
+  }
+
+  async loadBlockInfo() {
+    const { height } = this.state;
+
     const response = await _get(null, singleBlock + '/' + height);
-    if (response.status === 200) {
+    if (response.status === 200 && response.data[0]) {
       const { data } = response;
       const blockInfo = data[0];
-      blockInfo &&
-        this.setState({
-          height: blockInfo.height,
-          blockInfo: blockInfo,
-          blockHash: blockInfo.hash,
-          num_txs: blockInfo.num_txs,
-          node: blockInfo.chain_id,
-          time: blockInfo.time,
-          diff_time: diffTime(blockInfo.time),
-        });
+      this.setState({
+        height: blockInfo.height,
+        blockInfo: blockInfo,
+        blockHash: blockInfo.hash,
+        num_txs: blockInfo.num_txs,
+        node: blockInfo.chain_id,
+        time: blockInfo.time,
+      });
+      await this.loadParentHeight(height);
     } else {
-      this.props.history.push('/not-found');
+      this.props.history.push('/exception');
     }
+  }
 
+  async loadParentHeight(height) {
     let parentHeight = 1;
     if (height - 2 > 0) {
       parentHeight = height - 2;
     }
     const resp = await _get(null, singleBlock + '/' + parentHeight);
 
-    if (resp.status === 200) {
+    if (resp.status === 200 && resp.data[0]) {
       const { data } = resp;
       const parentBlockInfo = data[0];
-      parentBlockInfo &&
-        this.setState({
-          parentHash: parentBlockInfo.hash,
-          parentHeight: parentHeight,
-        });
+      this.setState({
+        parentHash: parentBlockInfo.hash,
+        parentHeight: parentHeight,
+      });
     } else {
       this.setState({
         parentHash: 'N/A',
@@ -70,7 +80,7 @@ class BlockInfo extends Component {
   }
 
   render() {
-    const { height, parentHeight, time, diff_time, num_txs, blockHash, parentHash, node } = this.state;
+    const { height, parentHeight, time, num_txs, blockHash, parentHash, node } = this.state;
 
     return (
       <div className="detailBlocks">
@@ -79,19 +89,13 @@ class BlockInfo extends Component {
             <h3>Block</h3>
             <span className="id_status">#{height}</span>
           </div>
-          <div className="breadcrumb">
-            <span className="breadcrumb-item">
-              <Link to="/">Home</Link>
-            </span>
-            <div className="breadcrumb-separator">/</div>
-            <span className="breadcrumb-item">
-              <Link to="/blocks">Blocks</Link>
-            </span>
-            <div className="breadcrumb-separator">/</div>
-            <span className="breadcrumb-item">
-              <Link to={`/block/${height}`}>Block</Link>
-            </span>
-          </div>
+          <HeaderMap
+            value={[
+              { path: '/', text: 'Home' },
+              { path: '/blocks', text: 'Blocks' },
+              { path: `/block/${height}`, text: 'Block' },
+            ]}
+          />
         </div>
 
         <div className="block_content page_info_content">
@@ -103,8 +107,10 @@ class BlockInfo extends Component {
             <div className="row_detail">
               <span className="label">TimeStamp: </span>
               <div className="text_wrap">
-                {diff_time}
-                {' [ ' + moment(time).format('MMMM-DD-YYYY h:mm:ss') + ' ]'}
+                <Age value={time} />
+                &nbsp;[&nbsp;
+                <TimeWithFormat value={time} />
+                &nbsp;]&nbsp;
               </div>
             </div>
             <div className="row_detail">
@@ -121,18 +127,14 @@ class BlockInfo extends Component {
             <div className="row_detail">
               <span className="label">ParentHash:</span>
               <div className="text_wrap">
-                <Link to={`/block/${parentHeight}`} onClick={() => this.loadData(parentHeight)}>
+                <Block value={parentHeight} onClick={() => this.loadBlockInfo(parentHeight)}>
                   {parentHash}
-                </Link>
+                </Block>
               </div>
             </div>
             <div className="row_detail">
               <span className="label">Node:</span>
               <div className="text_wrap transaction_type">{node}</div>
-            </div>
-            <div className="row_detail">
-              <span className="label">RewardedTo / Fee:</span>
-              <div className="text_wrap">--</div>
             </div>
           </div>
         </div>

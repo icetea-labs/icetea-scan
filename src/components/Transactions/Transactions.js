@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { toTEA, convertTxType, diffTime, formatNumber } from '../../utils';
+import { TotalInfo, HeaderMap, Hash, Age, Block, Address, Balance, TxType } from '../elements/Common';
 import './Transactions.scss';
-// import moment from 'moment';
 import Select from 'rc-select';
 import PaginationPro from '../elements/PaginationPro';
-import { getListTxApi, getTotalTxsApi, getTotalTxsByHeighApi } from '../../service/api/get-list-data';
+import { getListTxApi, getTotalTxsApi, getTotalTxsByHeighApi } from '../../service';
 import * as actions from '../../store/actions';
 
 class Transactions extends Component {
@@ -15,18 +13,36 @@ class Transactions extends Component {
     this.state = {
       height: 1,
       isShowTxForBlock: false,
-      pageIndex: 1,
-      to: '',
-      from: '',
       current: 1,
       pageSize: 15,
+      value: '',
     };
   }
 
-  componentDidMount() {
-    const { pageSize } = this.state;
-    const search_params = new URLSearchParams(window.location.search);
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const search_params = new URLSearchParams(nextProps.location.search);
     const height = search_params.get('height');
+
+    if (height !== prevState.height) {
+      return { height };
+    }
+    return null;
+  }
+
+  componentDidMount() {
+    this.loadTransactions();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { height } = this.state;
+
+    if (prevState.height !== height) {
+      this.loadTransactions();
+    }
+  }
+
+  loadTransactions = () => {
+    const { pageSize, height } = this.state;
 
     if (height) {
       getListTxApi({ height: height, page_size: pageSize });
@@ -35,8 +51,9 @@ class Transactions extends Component {
     } else {
       getListTxApi({ page_size: pageSize });
       getTotalTxsApi();
+      this.setState({ isShowTxForBlock: false });
     }
-  }
+  };
 
   paginationOnChange = current => {
     const { pageSize } = this.state;
@@ -65,33 +82,29 @@ class Transactions extends Component {
     if (transactionsInfo.length === 0) {
       return (
         <tr className="no_data">
-          <th />
-          <th />
-          <th />
-          <th>No Data</th>
-          <th />
-          <th />
-          <th />
-          <th />
+          <td colSpan="8">
+            <span>No Data</span>
+          </td>
         </tr>
       );
     } else {
       return transactionsInfo.map((item, index) => {
-        // console.log('transactionsInfo', transactionsInfo);
         return (
           <tr key={index}>
             <td className="text_overflow">
-              <Link to={`/tx/${item.hash}`}>{item.hash}</Link>
+              <Hash value={item.hash} />
             </td>
             <td>
-              <Link to={`/block/${item.height}`} title={item.height}>
-                {item.height}
-              </Link>
+              <Block value={item.height} />
             </td>
-            <td>{diffTime(item.time)}</td>
-            <td className="statusTx">{convertTxType(item.data_op)}</td>
+            <td>
+              <Age value={item.time} />
+            </td>
+            <td>
+              <TxType value={item.data_op} />
+            </td>
             <td className="text_overflow">
-              {item.from ? <Link to={`/contract/${item.from}`}>{item.from}</Link> : <span>--</span>}
+              <Address value={item.from} />
             </td>
             <td className="text-center">
               {item.result_code === 0 ? (
@@ -105,10 +118,10 @@ class Transactions extends Component {
               )}
             </td>
             <td className="text_overflow">
-              {item.to ? <Link to={`/contract/${item.to}`}>{item.to}</Link> : <span>--</span>}
+              <Address value={item.to} />
             </td>
             <td>
-              <span>{toTEA(item.gasused)} TEA</span>
+              <Balance value={item.gasused} />
             </td>
           </tr>
         );
@@ -133,18 +146,8 @@ class Transactions extends Component {
           <h3>Transactions</h3>
         )}
         <div className="flexBox">
-          <div className="sub-title">
-            More than > <span>{formatNumber(totalTxs)}</span> transactions found
-          </div>
-          <div className="breadcrumb">
-            <span className="breadcrumb-item">
-              <Link to="/">Home</Link>
-            </span>
-            <div className="breadcrumb-separator">/</div>
-            <span className="breadcrumb-item">
-              <Link to="/txs">Transactions</Link>
-            </span>
-          </div>
+          <TotalInfo total={totalTxs} text={['transactions', ['transaction']]} />
+          <HeaderMap value={[{ path: '/', text: 'Home' }, { path: '/txs', text: 'Transactions' }]} />
         </div>
 
         <div className="table_data">

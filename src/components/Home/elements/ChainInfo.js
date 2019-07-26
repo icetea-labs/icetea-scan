@@ -41,11 +41,11 @@ class ChainInfo extends PureComponent {
           </li>
           <li>
             <p className="info-stamp"># {height}</p>
-            <p>Height Block</p>
+            <p>Block Height </p>
           </li>
           <li>
             <p className="info-stamp">{formatNumber(total_txs)}</p>
-            <p>Total Transactions Counter</p>
+            <p>Total Transactions</p>
           </li>
           <li>
             <p className="info-stamp">{formatNumber(total_accounts)}</p>

@@ -41,26 +41,6 @@ export function diffTime(time) {
   return moment(time).fromNow();
 }
 
-export function convertTxType(dataOp) {
-  let txType = 'transfer';
-  let typeColor = 'transfer';
-
-  if (dataOp === 0) {
-    txType = 'deploy';
-    typeColor = 'deploy';
-  } else if (dataOp === 1) {
-    txType = 'call';
-    typeColor = 'call';
-  }
-  typeColor += ' fa fa-circle';
-
-  return (
-    <React.Fragment>
-      <i className={typeColor} />
-      <span>{txType}</span>
-    </React.Fragment>
-  );
-}
 export function fmtType(t, convert) {
   if (!t) return 'any';
   if (!Array.isArray(t)) {

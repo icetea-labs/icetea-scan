@@ -12,11 +12,11 @@ import TransactionsInfo from './components/Transactions/TransactionsInfo';
 import BlockInfo from './components/Blocks/BlockInfo';
 import Blocks from './components/Blocks/Blocks';
 import Transactions from './components/Transactions/Transactions';
-import NotFound from './components/NotFound/NotFound';
-import Contract from './components/Contract/Contract';
+import { NotFound, Exception } from './components/NotFound/NotFound';
+import ContractInfo from './components/Contract/ContractInfo';
 import ListContracts from './components/Contract/ListContracts';
-import Address from './components/Address/Address';
 import GlobaLoading from './components/elements/GlobaLoading';
+import ViewSource from './components/Contract/ViewSource';
 
 function RouteWithLayout({ layout, component, ...rest }) {
   return (
@@ -25,7 +25,7 @@ function RouteWithLayout({ layout, component, ...rest }) {
 }
 class App extends Component {
   render() {
-    const { isLoading } = this.props;
+    const { isLoading } = this.props; 
     return (
       <div className="App">
         <Router>
@@ -35,9 +35,12 @@ class App extends Component {
             <RouteWithLayout layout={Layout} exact path={`/block/:blockId`} component={BlockInfo} />;
             <RouteWithLayout layout={Layout} exact path={`/blocks`} component={Blocks} />;
             <RouteWithLayout layout={Layout} exact path={`/txs`} component={Transactions} />;
-            <RouteWithLayout layout={Layout} exact path={'/contract/:address'} component={Contract} />;
             <RouteWithLayout layout={Layout} exact path={`/contracts`} component={ListContracts} />
-            <RouteWithLayout exact path={'/address/:address'} component={Address} />
+            <RouteWithLayout layout={Layout} exact path={'/contract/:address'} component={ContractInfo} />;
+            <RouteWithLayout layout={Layout} exact path={'/address/:address'} component={ContractInfo} />;
+            <RouteWithLayout layout={Layout} exact path={`/exception`} component={Exception} />
+            <RouteWithLayout layout={Layout} exact path={`/src/:address`} component={ViewSource} />
+
             <Route component={NotFound} />
           </Switch>
         </Router>

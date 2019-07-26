@@ -17,7 +17,7 @@ function LayoutCommon(props) {
 export function HomeLayout(props) {
   return (
     <LayoutCommon>
-      <main className="home_container">{props.children}</main>
+      <main className="homeContainer">{props.children}</main>
     </LayoutCommon>
   );
 }

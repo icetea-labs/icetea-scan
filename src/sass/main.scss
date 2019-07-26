@@ -140,11 +140,11 @@
 //   overflow: hidden;
 // }
 // --------------------------------------------------------------
-.home_container {
+.homeContainer {
   background-color: #fdfdfd;
   height: 100%;
   flex: 1 1 0%;
-  .home_content {
+  .homeContent {
     margin: 0 auto;
     max-width: $pc-contentmaxwidth;
     padding: rem(30) rem(16);
@@ -153,7 +153,7 @@
       max-width: px2rem($mobi-contentmaxwidth);
     }
   }
-  .home_topContainer {
+  .homeTopContainer {
     margin-bottom: rem(30);
     @include mobile {
       margin: 0;
@@ -161,9 +161,20 @@
   }
 }
 
-.blocks_box,
-.transactions_box {
+.blocks_box {
   width: 100%;
+  .shadow_box {
+    height: rem(360);
+    overflow: auto;
+  }
+}
+.transactions_box {
+  padding-left: rem(16);
+  box-sizing: border-box;
+  width: 100%;
+  @include mobile {
+    padding-left: 0;
+  }
   .shadow_box {
     height: rem(360);
     overflow: auto;
@@ -265,6 +276,71 @@
     }
     &:last-child {
       margin-bottom: 0;
+    }
+  }
+}
+
+.bannerContainer {
+  width: 100%;
+  box-sizing: border-box;
+  background: linear-gradient(to right, $color_blue_lagoon 0%, $color_blue 50%, $color_blue_lagoon 100%);
+  background-position: left bottom;
+  background-repeat: no-repeat;
+  box-shadow: 0px 4px 8px 0px rgba(234, 236, 239, 0.5);
+  padding: rem(72) rem(20) rem(50) rem(20);
+  h3 {
+    margin: 0px;
+    color: #fff;
+    font-size: rem(28);
+    font-weight: normal;
+  }
+  @include mobile {
+    h3 {
+      font-size: rem(24);
+      text-align: center;
+    }
+  }
+  .searchBox {
+    margin-top: rem(30);
+    position: relative;
+    transform: none;
+    left: 0;
+    max-width: rem(470);
+    min-width: rem(290);
+    width: 100%;
+    .searchContainer {
+      [tabindex='-1']:focus {
+        outline: none !important;
+      }
+      & input {
+        background: rgba(4, 114, 142, 0.2);
+        color: #fff;
+        font-size: rem(12);
+        font-family: ProximaNova-Regular;
+        text-overflow: ellipsis;
+        ::placeholder {
+          color: red;
+        }
+      }
+      .anticon {
+        color: inherit;
+      }
+      .ant-input-affix-wrapper .ant-input:not(:last-child) {
+        padding-right: 45px;
+      }
+      .ant-input:hover {
+        border-color: #f0b90b;
+        // border-right-width: 1px !important;
+      }
+      .ant-input:focus {
+        border-color: #f0b90b;
+        // border-right-width: 1px !important;
+        outline: 0;
+        box-shadow: 0 0 0 0.1875rem rgba(240, 185, 11, 0.2);
+      }
+      .ant-input-affix-wrapper:hover .ant-input:not(.ant-input-disabled) {
+        border-color: #f0b90b;
+      }
     }
   }
 }

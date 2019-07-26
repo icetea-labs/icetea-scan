@@ -7,17 +7,6 @@ import { FlexBox, FlexWidthBox } from '../elements/Common';
 import { getListBlockApi, getListTxApi, getAllContracts } from '../../service';
 
 let interval = null;
-
-function Banner() {
-  return (
-    <div className="banner-container">
-      <h3>ICETEA CHAIN EXPLORER (TESTNET)</h3>
-      <div className="searh-box">
-        <SearchBox />
-      </div>
-    </div>
-  );
-}
 class Home extends Component {
   componentDidMount() {
     interval = setInterval(() => {
@@ -35,9 +24,14 @@ class Home extends Component {
     // const { blocksInfo, transactionsInfo, totalContract } = this.props;
     return (
       <React.Fragment>
-        <Banner />
-        <div className="home_content">
-          <FlexBox wrap="wrap" className="home_topContainer">
+        <FlexBox direction="column" align="center" className="bannerContainer">
+          <h3>ICETEA CHAIN EXPLORER (TESTNET)</h3>
+          <div className="searchBox">
+            <SearchBox />
+          </div>
+        </FlexBox>
+        <div className="homeContent">
+          <FlexBox wrap="wrap" className="homeTopContainer">
             <FlexWidthBox width="100%">
               <ChainInfo />
             </FlexWidthBox>

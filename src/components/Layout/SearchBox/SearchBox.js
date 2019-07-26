@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import './SearchBox.scss';
 
 import { Input } from 'antd';
 const { Search } = Input;
@@ -60,7 +59,7 @@ class SearchBox extends Component {
     const { isShow } = this.state;
 
     return (
-      <div className="search-box_out-side" style={{ display: isShow ? 'block' : 'none' }}>
+      <div className="searchContainer" style={{ display: isShow ? 'block' : 'none' }}>
         <Search
           placeholder="Search by block, transaction or address"
           onSearch={value => {

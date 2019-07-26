@@ -39,24 +39,4 @@
   }
 }
 // #2
-.banner-container {
-  width: 100%;
-  box-sizing: border-box;
-  background: linear-gradient(to right, $color_blue_lagoon 0%, $color_blue 50%, $color_blue_lagoon 100%);
-  background-position: left bottom;
-  background-repeat: no-repeat;
-  padding: 5.5rem 1.25rem 3.125rem;
-  display: flex;
-  flex-direction: column;
-  -webkit-box-align: center;
-  align-items: center;
-  & h3 {
-    color: rgb(255, 255, 255);
-    font-size: $font_size_large;
-    font-weight: $font-weight-medium;
-    margin: 0px;
-  }
-  .searh-box {
-    margin: 3.5rem 0 0rem;
-  }
-}
+

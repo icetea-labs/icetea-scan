@@ -1,4 +1,5 @@
 import React from 'react';
+import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { ContractMode } from '@iceteachain/common';
 import moment from 'moment';
@@ -72,7 +73,7 @@ export function TxTypeTranfer(props) {
 export function NumTxs(props) {
   return (
     <Link to={`/txs?height=${props.height}`}>
-      <span> {props.value} Txns</span>
+      <span>{`${props.value} Txns`} </span>
     </Link>
   );
 }
@@ -134,3 +135,76 @@ export function TotalInfo(props) {
     </React.Fragment>
   );
 }
+
+const breakPoint = '992px';
+const px2rem = px => `${px / 16}rem`;
+const rem = px => `${px / 16}rem`;
+export const media = {
+  pc: (...args) =>
+    css`
+      @media (min-width: ${breakPoint}) {
+        ${css(...args)}
+      }
+    `,
+  mobile: (...args) =>
+    css`
+      @media (max-width: ${breakPoint}) {
+        ${css(...args)}
+      }
+    `,
+};
+export const FlexBox = styled.div`
+  display: flex;
+  flex-direction: ${props => props.direction};
+  justify-content: ${props => props.justify};
+  align-items: ${props => props.align};
+  flex: ${props => props.flex};
+  padding: ${props => props.padding};
+  height: ${props => props.height};
+  flex-wrap: ${props => props.wrap};
+  margin: ${props => props.margin};
+  margin-top: ${props => props.marginTop};
+  margin-bottom: ${props => props.marginBottom};
+  margin-left: ${props => props.marginLeft};
+  margin-right: ${props => props.marginRight};
+`;
+export const FlexWidthBox = styled.div`
+  width: ${props => props.width};
+  ${media.mobile`
+    width: 100%;
+  `}
+`;
+export const ShadowBox = styled.div.attrs({
+  className: 'shadow_box',
+})`
+  width: ${props => props.width};
+  background-color: #fff;
+  box-shadow: 0px 2px 10px 0px rgba(90, 102, 124, 0.1);
+  padding: ${props => props.padding};
+  box-sizing: border-box;
+  margin: ${props => props.margin};
+  ::-webkit-scrollbar {
+    width: 4px;
+    border-radius: 4px;
+    background-color: #fff;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: #fff;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: #dfe2e7;
+  }
+  ::-webkit-scrollbar-corner {
+    background-color: #fff;
+  }
+  ${media.mobile`
+    padding: ${props => props.padding && '16px 12px'};
+    margin: 0px 0px 16px 0px;
+  `}
+`;
+export const TextOvewflow = styled.div.attrs({
+  className: 'text-overflow',
+})`
+  width: ${props => props.width};
+`;

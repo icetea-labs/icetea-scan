@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700&subset=vietnamese');
+/*
+all custom fonts:
+ProximaNova-Regular
+ProximaNova-Semibold
+DIN-Regular
+DIN-Medium
+DINPro-Bold
+*/
+.proxima-nova-regular {
+  font-family: ProximaNova-Regular;
+}
+.proxima-nova-semibold {
+  font-family: ProximaNova-Semibold;
+}
+.din-pro-regular {
+  font-family: DINPro-Regular;
+}
+.din-pro-medium {
+  font-family: DINPro-Medium;
+}
+.din-pro-bold {
+  font-family: DINPro-Bold;
+}
+.border-bottom {
+  border-bottom: 0.0625rem solid rgba(234, 236, 239, 0.5);
+}
+.border-top {
+  border-top: 0.0625rem solid rgba(234, 236, 239, 0.5);
+}
+.text-right {
+  text-align: right;
+}
+.text-left {
+  text-align: left;
+}
+.text-center {
+  text-align: center;
+}
+.primary-color {
+  color: #212833;
+}
+.secondary-color {
+  color: #848e9c;
+}
+.info-color {
+  color: #4a90e2;
+}
+.success-color {
+  color: #00c087;
+}
+.danger-color {
+  color: #e50370;
+}
+.text-overflow {
+  display: inline-block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.text-wrap {
+  word-break: break-all;
+}
+.offset-r {
+  margin-right: 1rem;
+}
+.offset-l {
+  margin-left: 1rem;
+}
+@font-face {
+  font-family: 'ProximaNova-Regular';
+  src: url(./../assets/font/ProximaNova-Regular.eot?#iefix);
+  src: url(./../assets/font/ProximaNova-Regular.eot?#iefix) format('eot'),
+    url(./../assets/font/ProximaNova-Regular.woff2) format('woff2'),
+    url(./../assets/font/ProximaNova-Regular.woff) format('woff'),
+    url(./../assets/font/ProximaNova-Regular.ttf) format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'ProximaNova-Semibold';
+  src: url(./../assets/font/ProximaNova-Semibold.eot?#iefix);
+  src: url(./../assets/font/ProximaNova-Semibold.eot?#iefix) format('eot'),
+    url(./../assets/font/ProximaNova-Semibold.woff2) format('woff2'),
+    url(./../assets/font/ProximaNova-Semibold.woff) format('woff'),
+    url(./../assets/font/ProximaNova-Semibold.ttf) format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'DINPro-Regular';
+  src: url(./../assets/font/DINPro-Regular.eot?#iefix);
+  src: url(./../assets/font/DINPro-Regular.eot?#iefix) format('eot'),
+    url(./../assets/font/DINPro-Regular.woff2) format('woff2'), url(./../assets/font/DINPro-Regular.woff) format('woff'),
+    url(./../assets/font/DINPro-Regular.ttf) format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'DINPro-Medium';
+  src: url(./../assets/font/DINPro-Medium.eot?#iefix);
+  src: url(./../assets/font/DINPro-Medium.eot?#iefix) format('eot'),
+    url(./../assets/font/DINPro-Medium.woff2) format('woff2'), url(./../assets/font/DINPro-Medium.woff) format('woff'),
+    url(./../assets/font/DINPro-Medium.ttf) format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'DINPro-Bold';
+  src: url(./../assets/font/DINPro-Bold.eot?#iefix);
+  src: url(./../assets/font/DINPro-Bold.eot?#iefix) format('eot'),
+    url(./../assets/font/DINPro-Bold.woff2) format('woff2'), url(./../assets/font/DINPro-Bold.woff) format('woff'),
+    url(./../assets/font/DINPro-Bold.ttf) format('truetype');
+  font-display: swap;
+}
+body {
+  font-family: ProximaNova-Regular, -apple-system, BlinkMacSystemFont, 'PingFang  SC', 'Microsoft YaHei',
+    'WenQuanYi Micro Hei', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, 'Segoe UI', sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+  position: relative;
+  color: #212833;
+}
+a {
+  color: #4a90e2;
+  text-decoration: none;
+  font-family: DINPro-Medium;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+// .spin {
+//   display: inline-block;
+//   animation: spin-animation 2s linear infinite;
+//   line-height: 1;
+// }
+// @keyframes spin-animation {
+//   from {
+//     transform: rotate(0deg);
+//   }
+//   to {
+//     transform: rotate(360deg);
+//   }
+// }

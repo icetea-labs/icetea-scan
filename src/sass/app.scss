@@ -1,18 +1,23 @@
 @import './common.scss';
+@import './styles.scss';
 @import './responsive.scss';
 @import './header.scss';
 @import './main.scss';
 @import './footer.scss';
 
 .layout_container {
-  display: flex;
   flex-direction: column;
   min-height: 100vh;
-  max-width: 100%;
-  min-width: 992px;
-  background-color: rgb(253, 253, 253);
+  max-width: $pc-pagemaxwidth;
+  min-width: $pc-pageminwidth;
+  background-color: #fdfdfd;
+  @include mobile {
+    max-width: $mobi-pagemaxwidth;
+    min-width: $mobi-pageminwidth;
+  }
 }
 
+//-----------
 .content {
   flex: 1;
 }
@@ -43,7 +48,7 @@
     display: flex;
     justify-content: space-between;
   }
-  .blocks_box {
+  .blocks_box1 {
     width: 40%;
     .row_blocks {
       margin: 0 15px;

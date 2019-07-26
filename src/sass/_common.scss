@@ -1,125 +1,101 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700&subset=vietnamese');
-@import './variables';
-@font-face {
-  font-family: 'ProximaNova-Regular';
-  src: url(./../assets/font/ProximaNova-Regular.eot?#iefix);
-  src: url(./../assets/font/ProximaNova-Regular.eot?#iefix) format('eot'),
-    url(./../assets/font/ProximaNova-Regular.woff2) format('woff2'),
-    url(./../assets/font/ProximaNova-Regular.woff) format('woff'),
-    url(./../assets/font/ProximaNova-Regular.ttf) format('truetype');
-  font-display: swap;
-}
-@font-face {
-  font-family: 'ProximaNova-Semibold';
-  src: url(./../assets/font/ProximaNova-Semibold.eot?#iefix);
-  src: url(./../assets/font/ProximaNova-Semibold.eot?#iefix) format('eot'),
-    url(./../assets/font/ProximaNova-Semibold.woff2) format('woff2'),
-    url(./../assets/font/ProximaNova-Semibold.woff) format('woff'),
-    url(./../assets/font/ProximaNova-Semibold.ttf) format('truetype');
-  font-display: swap;
-}
-@font-face {
-  font-family: 'DINPro-Regular';
-  src: url(./../assets/font/DINPro-Regular.eot?#iefix);
-  src: url(./../assets/font/DINPro-Regular.eot?#iefix) format('eot'),
-    url(./../assets/font/DINPro-Regular.woff2) format('woff2'), url(./../assets/font/DINPro-Regular.woff) format('woff'),
-    url(./../assets/font/DINPro-Regular.ttf) format('truetype');
-  font-display: swap;
-}
-@font-face {
-  font-family: 'DINPro-Medium';
-  src: url(./../assets/font/DINPro-Medium.eot?#iefix);
-  src: url(./../assets/font/DINPro-Medium.eot?#iefix) format('eot'),
-    url(./../assets/font/DINPro-Medium.woff2) format('woff2'), url(./../assets/font/DINPro-Medium.woff) format('woff'),
-    url(./../assets/font/DINPro-Medium.ttf) format('truetype');
-  font-display: swap;
-}
-@font-face {
-  font-family: 'DINPro-Bold';
-  src: url(./../assets/font/DINPro-Bold.eot?#iefix);
-  src: url(./../assets/font/DINPro-Bold.eot?#iefix) format('eot'),
-    url(./../assets/font/DINPro-Bold.woff2) format('woff2'), url(./../assets/font/DINPro-Bold.woff) format('woff'),
-    url(./../assets/font/DINPro-Bold.ttf) format('truetype');
-  font-display: swap;
-}
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+// * {
+//   margin: 0;
+//   padding: 0;
+//   box-sizing: border-box;
+// }
 
-html,
-body {
-  font-family: $font_root;
-  font-size: $font_size_base;
-  font-weight: normal;
-  background: $color_white_rgb;
-  color: #212833;
-  // -webkit-tap-highlight-color: transparent;
-}
+// html,
+// body {
+//   font-family: $font_root;
+//   font-size: $font_size_base;
+//   font-weight: normal;
+//   background: $color_white_rgb;
+//   color: #212833;
+//   // -webkit-tap-highlight-color: transparent;
+// }
 
-a {
-  text-decoration: none;
-  color: $color_blue_link;
-  &:hover {
-    text-decoration: underline;
-  }
-  font-family: DINPro-Medium;
-}
+// a {
+//   text-decoration: none;
+//   color: $color_blue_link;
+//   &:hover {
+//     text-decoration: underline;
+//   }
+//   font-family: DINPro-Medium;
+// }
 
-ul,
-li {
-  list-style: none;
-}
+// ul,
+// li {
+//   list-style: none;
+// }
 
-input,
-button {
-  &:focus {
-    outline: none;
-  }
-}
+// input,
+// button {
+//   &:focus {
+//     outline: none;
+//   }
+// }
 
-.container {
-  width: 1200px;
-  margin: 0 auto;
-}
+// .container {
+//   width: 1200px;
+//   margin: 0 auto;
+// }
 
-.mt_50 {
-  margin-top: 50px;
-}
+// .mt_50 {
+//   margin-top: 50px;
+// }
 
-.mb_30 {
-  margin-bottom: 30px;
-}
+// .mb_30 {
+//   margin-bottom: 30px;
+// }
 
-.btn-common {
-  width: 60px;
-  height: 40px;
-}
+// .btn-common {
+//   width: 60px;
+//   height: 40px;
+// }
 
-.circle-span {
-  border-radius: 50%;
-  position: relative;
-  left: -10px;
-  top: 10px;
-  width: 6px;
-  height: 6px;
-  margin: 0px 0px 0px 0px !important;
-}
+// .circle-span {
+//   border-radius: 50%;
+//   position: relative;
+//   left: -10px;
+//   top: 10px;
+//   width: 6px;
+//   height: 6px;
+//   margin: 0px 0px 0px 0px !important;
+// }
 
-.no_data {
-  td {
-    text-align: center;
+// .no_data {
+//   td {
+//     text-align: center;
+//   }
+// }
+
+// li {
+//   cursor: pointer;
+// }
+
+// pre {
+//   border: solid rgba(139, 69, 19, 0.258) 1px;
+//   background-color: rgba(251, 237, 227, 0.36);
+//   padding: 10px;
+//   min-width: 600px;
+// }
+
+//Function to convert px value into rem
+//You can replace rem with any other value you want (rem is most preferred value for web)
+@function rem($target, $context: $base-size) {
+  @return ($target / $context) * 1rem;
+}
+@function px2rem($target, $context: $base-size) {
+  $context: $context * 1px;
+  @return ($target / $context) * 1rem;
+}
+@mixin pc {
+  @media (min-width: $pc-pageminwidth) {
+    @content;
   }
 }
-
-li {
-  cursor: pointer;
-}
-
-pre {
-  border: solid rgba(139, 69, 19, 0.258) 1px;
-  background-color: rgba(251, 237, 227, 0.36);
-  padding: 10px;
-  min-width: 600px;
+@mixin mobile {
+  @media (max-width: $pc-pageminwidth) {
+    @content;
+  }
 }

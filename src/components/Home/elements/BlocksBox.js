@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import './BlocksBox.scss';
-import { Block, Age, NumTxs } from '../../elements/Common';
+import { Block, Age, NumTxs, ShadowBox, FlexBox } from '../../elements/Common';
 
 class BlocksBox extends PureComponent {
   constructor(props) {
@@ -25,28 +25,28 @@ class BlocksBox extends PureComponent {
 
     return blocksInfo.map((block, index) => {
       return (
-        <div className="wrapper-rowbox" key={index}>
-          <div className="row_blocks">
-            <div className="title flex">
-              <div className="block_count">
-                <span>Blocks</span>
+        <div className="wrapperRowBox" key={index}>
+          <div className="innerRowBox border-bottom">
+            <FlexBox className="row title">
+              <div className="primary-color">
+                <span>Block </span>
                 <Block value={block.height} />
               </div>
-              <div className="seconds_time">
+              <div className="secondary-color proxima-nova-regular">
                 <Age value={block.time} />
               </div>
-            </div>
-            <div className="includes flex">
-              <div className="in_detail">
-                <span>Includes</span>
+            </FlexBox>
+            <FlexBox className="row">
+              <div className="secondary-color text-overflow offset-r">
+                <span>Includes </span>
                 <NumTxs value={block.num_txs} height={block.height} />
               </div>
-              <div className="node">
+              <div className="primary-color">
                 <span>
                   Node: <span>{block.chain_id}</span>
                 </span>
               </div>
-            </div>
+            </FlexBox>
           </div>
         </div>
       );
@@ -57,15 +57,15 @@ class BlocksBox extends PureComponent {
     const { cssIcon } = this.state;
 
     return (
-      <div className="blocks_box col-3">
-        <div className="header_top">
-          <div className="title">
+      <div className="blocks_box">
+        <div className="flex_header">
+          <h3 className="title">
             <i className={cssIcon} />
             <span>Blocks</span>
-          </div>
+          </h3>
           <Link to="/blocks/">View All >></Link>
         </div>
-        <div className="box_wrap">{this.renderBlocks()}</div>
+        <ShadowBox>{this.renderBlocks()}</ShadowBox>
       </div>
     );
   }

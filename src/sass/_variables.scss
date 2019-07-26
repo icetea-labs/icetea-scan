@@ -1,5 +1,6 @@
-// color
+$base-size: 16;
 
+// color
 $color_blue: #15b5dd;
 $color_blue_link: #4a90e2;
 $color_blue_lagoon: #04728e;
@@ -33,3 +34,24 @@ $font-weight-semi-bold: 600;
 $font-weight-bold: 700;
 $font-weight-extra-bold: 800;
 $font-weight-ultra-bold: 900;
+
+// media
+$mobile-width: 480px;
+$tablet-width: 768px;
+$desktop-width: 1024px;
+// pc
+$pc-pageminwidth: 992px;
+$pc-pagemaxwidth: 100%;
+$pc-contentmaxwidth: 1200px;
+$pc-topleft: 25%;
+$pc-topright: 20%;
+$pc-blocks: 40%;
+$pc-transactions: 60%;
+// mobile
+$mobi-pageminwidth: 320px;
+$mobi-pagemaxwidth: 992px;
+$mobi-contentmaxwidth: 750px;
+$mobi-topleft: 100%;
+$mobi-topright: 100%;
+$mobi-blocks: 100%;
+$mobi-transactions: 100%;

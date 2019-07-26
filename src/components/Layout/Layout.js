@@ -1,32 +1,34 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Header from './Header/Header';
 import Footer from './Footer';
 import SideBar from './SideBar/SideBar';
+import { FlexBox } from '../elements/Common';
 
-function HomeContainer(props) {
+function LayoutCommon(props) {
   return (
-    <div className="layout_container">
+    <FlexBox className="layout_container">
       <SideBar />
       <Header />
-      <main className="home-content">{props.children}</main>
+      {props.children}
       <Footer />
-    </div>
+    </FlexBox>
   );
 }
-class Layout extends Component {
-  render() {
-    return (
-      <div className="layout_container">
-        <SideBar />
-        <Header />
-        <div className="content">
-          <main className="layout-content">{this.props.children}</main>
-        </div>
-        <Footer />
+export function HomeLayout(props) {
+  return (
+    <LayoutCommon>
+      <main className="home_container">{props.children}</main>
+    </LayoutCommon>
+  );
+}
+export function Layout(props) {
+  return (
+    <LayoutCommon>
+      <div className="content">
+        <main className="layout-content">{props.children}</main>
       </div>
-    );
-  }
+    </LayoutCommon>
+  );
 }
 
-export { HomeContainer, Layout };
 export default Layout;

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import './TransactionsBox.scss';
-import { TxType, Address, Hash, TimeWithFormat } from '../../elements/Common';
+import { TxType, Address, Hash, TimeWithFormat, ShadowBox, FlexBox, TextOvewflow } from '../../elements/Common';
 
 class TransactionsBox extends PureComponent {
   constructor(props) {
@@ -25,32 +25,32 @@ class TransactionsBox extends PureComponent {
 
     return transactionsInfo.map((item, index) => {
       return (
-        <div className="wrapper-rowbox" key={index}>
-          <div className="row_transactions">
-            <div className="info_tx flex">
-              <div className="tx">
-                <span>TX#:</span>
+        <div className="wrapperRowBox" key={index}>
+          <div className="innerRowBox">
+            <FlexBox className="row title">
+              <TextOvewflow width="75%" className="info-text padding-r">
+                <span className="primary-color">TX#:</span>
                 <Hash value={item.hash} />
-              </div>
-              <div className="seconds_time">
+              </TextOvewflow>
+              <div className="secondary-color proxima-nova-regular">
                 <TimeWithFormat value={item.time} />
               </div>
-            </div>
-            <div className="transactions flex">
-              <div className="from_to">
-                <div className="from">
+            </FlexBox>
+            <FlexBox className="row">
+              <div style={{ width: '75%' }} className="secondary-color padding-r">
+                <TextOvewflow width="50%" className="padding-r">
                   <span>From: </span>
-                  <Address value={item.from} />
-                </div>
-                <div className="to">
+                  <Address className="secondary-color" value={item.from} />
+                </TextOvewflow>
+                <TextOvewflow width="50%">
                   <span>To: </span>
-                  <Address value={item.to} />
-                </div>
+                  <Address className="secondary-color" value={item.to} />
+                </TextOvewflow>
               </div>
               <div className="statusTx">
                 <TxType value={item.data_op} />
               </div>
-            </div>
+            </FlexBox>
           </div>
         </div>
       );
@@ -62,14 +62,14 @@ class TransactionsBox extends PureComponent {
 
     return (
       <div className="transactions_box">
-        <div className="header_top">
+        <div className="flex_header">
           <div className="title">
             <i className={cssIcon} />
             <span>Transactions</span>
           </div>
           <Link to="/txs">View All >></Link>
         </div>
-        <div className="box_wrap">{this.renderTransactions()}</div>
+        <ShadowBox>{this.renderTransactions()}</ShadowBox>
       </div>
     );
   }

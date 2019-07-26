@@ -3,7 +3,7 @@ import SearchBox from '../Layout/SearchBox/SearchBox';
 import BlocksBox from './elements/BlocksBox';
 import TransactionsBox from './elements/TransactionsBox';
 import ChainInfo from './elements/ChainInfo';
-
+import { FlexBox, FlexWidthBox } from '../elements/Common';
 import { getListBlockApi, getListTxApi, getAllContracts } from '../../service';
 
 let interval = null;
@@ -36,16 +36,18 @@ class Home extends Component {
     return (
       <React.Fragment>
         <Banner />
-        <div className="blocks_transactions_view">
-          <div className="container">
-            <div className="chain-value">
-              <ChainInfo />
-            </div>
-            <div className="flex">
+        <div className="home_content">
+          <FlexBox wrap="wrap" className="home_topContainer">
+            <ChainInfo />
+          </FlexBox>
+          <FlexBox wrap="wrap">
+            <FlexWidthBox width="40%">
               <BlocksBox />
+            </FlexWidthBox>
+            <FlexWidthBox width="60%">
               <TransactionsBox />
-            </div>
-          </div>
+            </FlexWidthBox>
+          </FlexBox>
         </div>
       </React.Fragment>
     );

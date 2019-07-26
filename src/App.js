@@ -6,7 +6,7 @@ import './sass/reset.css';
 import './sass/app.scss';
 // import './sass/_responsive.scss';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { HomeContainer, Layout } from './components/Layout/Layout';
+import { HomeLayout, Layout } from './components/Layout/Layout';
 import Home from './components/Home/Home';
 import TransactionsInfo from './components/Transactions/TransactionsInfo';
 import BlockInfo from './components/Blocks/BlockInfo';
@@ -30,7 +30,7 @@ class App extends Component {
       <div className="App">
         <Router>
           <Switch>
-            <RouteWithLayout layout={HomeContainer} exact path="/" component={Home} />
+            <RouteWithLayout layout={HomeLayout} exact path="/" component={Home} />
             <RouteWithLayout layout={Layout} exact path={`/tx/:hashId`} component={TransactionsInfo} />;
             <RouteWithLayout layout={Layout} exact path={`/block/:blockId`} component={BlockInfo} />;
             <RouteWithLayout layout={Layout} exact path={`/blocks`} component={Blocks} />;

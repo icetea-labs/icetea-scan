@@ -34,7 +34,7 @@ class SearchBox extends Component {
 
   touchEndHandle = () => {
     const value = this.scrollTargetEl === document ? window.pageYOffset : this.scrollTargetEl.scrollTop;
-    this.setState({ isShow: value > 135 });
+    this.setState({ isShow: value > 180 });
   };
 
   onSearchData = value => {

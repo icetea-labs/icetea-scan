@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import SearchBox from '../Layout/SearchBox/SearchBox';
+import SearchBox from '../elements/SearchBox';
 import BlocksBox from './elements/BlocksBox';
 import TransactionsBox from './elements/TransactionsBox';
 import ChainInfo from './elements/ChainInfo';

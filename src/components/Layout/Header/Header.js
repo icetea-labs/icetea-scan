@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 // import logo from '../../../assets/img/logo.png';
 import logo from '../../../assets/img/icetea-logo.svg';
 import Menu from '../Menu/Menu';
-import SearchBox from '../SearchBox/SearchBox';
-import './Header.scss';
+import SearchBox from '../../elements/SearchBox';
 
 class Header extends Component {
   render() {
@@ -15,7 +14,7 @@ class Header extends Component {
             <img src={logo} alt="itea-scan" />{' '}
           </Link>
         </div>
-        <div className="search-box">
+        <div className="searchBoxHeader">
           <SearchBox isHeader />
         </div>
         <Menu />

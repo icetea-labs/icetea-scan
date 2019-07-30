@@ -126,6 +126,39 @@
         margin-bottom: 0;
         border-bottom: 1px solid rgba(0, 0, 0, 0.125);
       }
+      .active,
+      .info-box:hover {
+        text-decoration: underline;
+      }
+      .func-content {
+        padding: 0 18px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-in-out;
+        background-color: #f1f1f1;
+      }
+      .func-content-shown-by-default {
+        max-height: 100%;
+        padding: 0 18px;
+        overflow: hidden;
+        transition: max-height 0.3s ease-in-out;
+        background-color: #f1f1f1;
+      }
+      .info-box:after {
+        content: '\2193'; /* Unicode character for close */
+        font-size: 20px;
+        // color: #15b5dd;
+        float: right;
+        margin-left: 5px;
+        // font-weight: bold;
+      }
+
+      .active:after {
+        content: '\2192'; /* Unicode character for open */
+        font-size: 20px;
+        // color: #15b5dd;
+        // font-weight: bold;
+      }
       .func-body {
         padding: 1.25rem;
         color: #212529;

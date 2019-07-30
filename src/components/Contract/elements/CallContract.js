@@ -74,6 +74,39 @@ class CallContract extends Component {
       });
     }
     console.log('txSigned', txSigned);
+    var coll = document.getElementsByClassName('info-box');
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+      coll[i].addEventListener('click', function() {
+        this.classList.toggle('active');
+        var content = this.nextElementSibling;
+        var mHeight = window.getComputedStyle(content).maxHeight;
+        if (mHeight !== '0px') {
+          content.style.maxHeight = '0px';
+        } else {
+          content.style.maxHeight = '100%';
+        }
+      });
+    }
+  }
+
+  toggleCollapsibleSectionWithAnimation() {
+    var coll = document.getElementsByClassName('info-box');
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+      coll[i].addEventListener('click', function() {
+        this.classList.toggle('active');
+        var content = this.nextElementSibling;
+        var mHeight = window.getComputedStyle(content).maxHeight;
+        if (mHeight !== '0px') {
+          content.style.maxHeight = '0px';
+        } else {
+          content.style.maxHeight = '100%';
+        }
+      });
+    }
   }
 
   onChangeTypeFunc = index => {
@@ -131,7 +164,7 @@ class CallContract extends Component {
               <li
                 key={index}
                 className={func.selected ? 'on' : ''}
-                id={func.name}
+                // id={func.name}
                 onClick={() => this.selectFunc(func.name)}
               >
                 <span>{func.name}</span>
@@ -155,6 +188,12 @@ class CallContract extends Component {
       }
     });
     // console.log("metadata", metadata);
+    var elmnt = document.getElementById(value);
+    console.log('view select element', elmnt);
+    // elmnt.scrollIntoView(true); //scroll to Top
+    // elmnt.scrollIntoView({block: "end"}); // scroll to bottom
+    // elmnt.scrollIntoView(false);
+    elmnt.scrollIntoView({behavior: "instant", block: "start", inline: "nearest"});
     this.setState({ selectedFunc: value });
   };
 
@@ -196,11 +235,11 @@ class CallContract extends Component {
 
     return selectedMeta.map((func, index) => {
       return (
-        <div className="wrapper-func" key={index}>
+        <div className="wrapper-func" key={index} id={func.name}>
           <div className="info-box">
             <code className="language-js">{funcsInfo[func.name]}</code>
           </div>
-          <div className="func-content">
+          <div className="func-content-shown-by-default">
             <form className="func-body">
               {func.type === 'unknown' ? (
                 <React.Fragment>

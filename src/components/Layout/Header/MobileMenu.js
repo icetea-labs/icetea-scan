@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import { LayoutDisplay } from '../../elements/Common';
 
 class MobileMenu extends Component {
+  constructor(props) {
+    super(props);
+    this.layoutRef = React.createRef();
+  }
+
   hidden = () => {
     const { close } = this.props;
     this.setState({ hide: true });
@@ -10,9 +15,13 @@ class MobileMenu extends Component {
     }, 100);
   };
 
+  clickLayout = e => {
+    e.target === this.layoutRef.current && this.hidden();
+  };
+
   render() {
     return (
-      // <LayoutDisplay ref={this.layoutRef} onClick={this._clickLayout}>
+      <LayoutDisplay ref={this.layoutRef} onClick={this.clickLayout}>
         <div className="mobileMenuBox">
           <div className="btcClose">
             <i className="fa fa-close" onClick={this.hidden} />
@@ -51,7 +60,7 @@ class MobileMenu extends Component {
             </li>
           </ul>
         </div>
-      // </LayoutDisplay>
+      </LayoutDisplay>
     );
   }
 }

@@ -43,7 +43,7 @@ class Header extends Component {
     this.state = {
       isShowSearch: false,
       showFullSearch: false,
-      isMobile: checkDevice.isMobile,
+      isMobile: checkDevice.isMobile(),
       showMobileMenu: false,
     };
     this.scrollTargetEl = null;
@@ -92,7 +92,7 @@ class Header extends Component {
 
   render() {
     const { isShowSearch, isMobile, showFullSearch, showMobileMenu } = this.state;
-
+    console.log('isMobile', isMobile);
     return (
       <header className="header">
         {isMobile ? (
@@ -124,7 +124,6 @@ class Header extends Component {
                 <SearchBox isHeader />
               </div>
             )}
-            }
             <Menu />
           </React.Fragment>
         )}

@@ -288,8 +288,10 @@
   .searchContainer {
     transition: all 0.3s ease;
     width: rem(350);
-    &:hover {
-      width: rem(400);
+    @include pc {
+      &:hover {
+        width: rem(400);
+      }
     }
   }
 }

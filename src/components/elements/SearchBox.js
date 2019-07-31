@@ -7,6 +7,7 @@ const { Search } = Input;
 class SearchBox extends Component {
   onSearchData = value => {
     // console.log(value);
+    if (!value) return;
     const { history } = this.props;
     if (!isNaN(value)) {
       history.push('/block/' + value);

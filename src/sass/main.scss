@@ -96,50 +96,13 @@
 //   color: #212833;
 // }
 
-// .table_data {
-//   padding-top: 10px;
-//   table {
-//     width: 100%;
-//     display: table;
-//     border-spacing: 0 5px;
-//     border-collapse: separate;
-//     table-layout: fixed;
-//     font-family: DINPro-Regular;
-//   }
-//   th {
-//     padding: 11px 16px;
-//     text-align: left;
-//     color: $color_secondary;
-//   }
-//   tbody {
-//     tr {
-//       background: $color_white;
-//       line-height: 17px;
-//       margin-bottom: 4px;
-//       box-shadow: rgba(0, 0, 0, 0.06) 0px 0px 10px 0px;
-//       transition: all 0.3s ease;
-//       &:hover {
-//         box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 10px 0px;
-//         transition: all 0.3s ease;
-//       }
-//     }
-//   }
-//   td {
-//     padding: 10px 16px;
-//     font-size: 13px;
-//     &.text_overflow {
-//       white-space: nowrap;
-//       text-overflow: ellipsis;
-//       overflow: hidden;
-//     }
-//   }
-// }
 // .text_overflow {
 //   white-space: nowrap;
 //   text-overflow: ellipsis;
 //   overflow: hidden;
 // }
 // --------------------------------------------------------------
+// Home.js
 .homeContainer {
   background-color: #fdfdfd;
   height: 100%;
@@ -330,6 +293,22 @@
     }
   }
 }
+.mobileIconSearch {
+  color: #848e9c;
+  font-size: rem(22);
+  margin-right: rem(20);
+}
+.mobileIconMenu {
+  display: inline-block;
+  cursor: pointer;
+  i {
+    color: #848e9c;
+    font-size: rem(22);
+  }
+  &:hover {
+    opacity: 0.7;
+  }
+}
 .searchContainer {
   [tabindex='-1']:focus {
     outline: none !important;
@@ -362,5 +341,61 @@
   }
   .ant-input-affix-wrapper:hover .ant-input:not(.ant-input-disabled) {
     border-color: #f0b90b;
+  }
+}
+
+.mobileMenuBox {
+  // min-height: 100%;
+  // width: rem(300);
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
+  font-size: rem(16);
+  // transform: translate(0px, 0px);
+  background: linear-gradient(133deg, #1c222c 0%, #12161c 100%);
+  transition: transform 0.3s linear 0s;
+  // animation: 0.3s linear 0s 1 normal none running bounce;
+
+  .btcClose {
+    padding: rem(16);
+    text-align: right;
+    i {
+      color: #848e9c;
+      font-size: rem(22); //17
+    }
+  }
+  .menu {
+    height: 100%;
+    width: rem(280);
+    box-sizing: border-box;
+    padding-left: 0px;
+    margin: 0;
+    list-style: none;
+    font-size: rem(17);
+    &,
+    a {
+      color: #fff;
+      font-family: DINPro-Regular;
+      text-decoration: none;
+    }
+  }
+  .menuItems {
+    position: relative;
+    a {
+      display: block;
+      padding: rem(16);
+      &:active {
+        background-color: #212833;
+      }
+    }
+    > span {
+      display: block;
+      padding: rem(16);
+    }
+    i {
+      margin-right: rem(10);
+      font-size: rem(17);
+    }
   }
 }

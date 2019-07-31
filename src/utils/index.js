@@ -135,3 +135,23 @@ export function replaceAll(text, search, replacement) {
 export function formatNumber(num) {
   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 }
+
+export const checkDevice = {
+  URI: function(e) {
+    var t = new RegExp('(^|&)'.concat(e, '=([^&]*)(&|$)')),
+      n = window.location.search.substr(1).match(t);
+    return null != n ? decodeURIComponent(n[2]) : null;
+  },
+  isMobile: function() {
+    return /mobile|phone|android|pad/i.test(window.navigator.userAgent);
+  },
+  ios: function() {
+    return /iphone|ipad/i.test(window.navigator.userAgent);
+  },
+  redirect: function() {
+    var e = window.location,
+      t = e.origin,
+      n = e.pathname;
+    window.location.href = t + n;
+  },
+};

@@ -1,3 +1,4 @@
+@import './variables';
 // * {
 //   margin: 0;
 //   padding: 0;
@@ -97,5 +98,60 @@
 @mixin mobile {
   @media (max-width: $pc-pageminwidth) {
     @content;
+  }
+}
+.breadcrumb {
+  color: #848e9c;
+  font-size: 0.85rem;
+}
+.breadcrumb-item a {
+  color: #848e9c;
+  text-decoration: none;
+  cursor: pointer;
+}
+.breadcrumb-separator {
+  display: inline-block;
+  padding: 0 0.3125rem;
+}
+.breadcrumb-item:last-child,
+.breadcrumb-item:last-child a {
+  color: #212833;
+}
+.table_data {
+  padding-top: 10px;
+  table {
+    width: 100%;
+    display: table;
+    border-spacing: 0 5px;
+    border-collapse: separate;
+    table-layout: fixed;
+    font-family: DINPro-Regular;
+  }
+  th {
+    padding: 11px 16px;
+    text-align: left;
+    color: $color_secondary;
+  }
+  tbody {
+    tr {
+      background: $color_white;
+      line-height: 17px;
+      margin-bottom: 4px;
+      box-shadow: rgba(0, 0, 0, 0.06) 0px 0px 10px 0px;
+      transition: all 0.3s ease;
+      &:hover {
+        box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 10px 0px;
+        transition: all 0.3s ease;
+      }
+    }
+  }
+  td {
+    padding: 10px 16px;
+    font-size: 13px;
+    &.text_overflow {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
   }
 }

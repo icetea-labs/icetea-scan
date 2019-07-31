@@ -208,3 +208,12 @@ export const TextOvewflow = styled.div.attrs({
 })`
   width: ${props => props.width};
 `;
+export const LayoutDisplay = styled.div`
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  z-index: 1100;
+  background: rgba(0, 0, 0, 0.4);
+`;

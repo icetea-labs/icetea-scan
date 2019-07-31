@@ -174,6 +174,12 @@ export const FlexWidthBox = styled.div`
     width: 100%;
   `}
 `;
+export const FlexItem = styled.div`
+  flex: ${props => props.flex || 1};
+  padding: ${props => props.padding};
+  margin: ${props => props.margin};
+  width: ${props => props.width};
+`;
 export const ShadowBox = styled.div.attrs({
   className: 'shadow_box',
 })`

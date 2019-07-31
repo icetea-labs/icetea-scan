@@ -1,78 +1,5 @@
 @import './variables';
 
-// .layout-content {
-//   max-width: 1200px;
-//   margin: 0px auto;
-//   padding: 70px 16px 20px;
-//   .flexBox {
-//     display: flex;
-//     -webkit-box-pack: justify;
-//     justify-content: space-between;
-//     -webkit-box-align: center;
-//     align-items: center;
-//   }
-//   & h3 {
-//     color: rgb(0, 0, 0);
-//     font-family: DINPro-Medium;
-//     font-size: 20px;
-//     margin: 0px;
-//   }
-//   .pc-container {
-//     .sub-title {
-//       margin-top: 10px;
-//       font-size: 12px;
-//       color: rgb(132, 142, 156);
-//       & span {
-//         color: rgb(72, 81, 93);
-//         font-family: DINPro-Bold;
-//       }
-//     }
-//   }
-//   .detailBlocks {
-//     .flex-wrap {
-//       display: flex;
-//       -webkit-box-pack: justify;
-//       justify-content: space-between;
-//       align-items: flex-end;
-//       margin-bottom: 1.5rem;
-//     }
-//     .copy_to_add {
-//       margin-left: 10px;
-//       cursor: pointer;
-//     }
-//     .flexBox {
-//       align-items: flex-end;
-//     }
-//     & h3 {
-//       margin: 0px 1.25rem 0px 0px;
-//     }
-//     .id_status {
-//       font-size: 16px;
-//       font-family: DINPro-Bold;
-//       color: rgb(132, 142, 156);
-//     }
-//   }
-//   .transactions {
-//     .sub-title {
-//       font-size: 13px;
-//     }
-//     .flex-header {
-//       align-items: flex-end;
-//       justify-content: left;
-//     }
-//     & h3 {
-//       margin: 0px 1.25rem 0px 0px;
-//     }
-//     .id_status {
-//       font-size: 16px;
-//       font-family: DINPro-Bold;
-//       color: rgb(132, 142, 156);
-//     }
-//   }
-//   // .detailTransactions {
-//   // }
-// }
-
 // .home-content {
 //   background-color: rgb(253, 253, 253);
 //   height: 100%;
@@ -400,4 +327,78 @@
       font-size: rem(17);
     }
   }
+}
+
+// .mobileContainer {
+
+// }
+
+.layoutContent {
+  .flexBox {
+    display: flex;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    align-items: center;
+  }
+  & h3 {
+    color: rgb(0, 0, 0);
+    font-family: DINPro-Medium;
+    font-size: 20px;
+    margin: 0px;
+  }
+  .pcContainer {
+    .sub-title {
+      margin-top: 10px;
+      font-size: 12px;
+      color: rgb(23, 26, 31);
+      & span {
+        color: rgb(72, 81, 93);
+        font-family: DINPro-Bold;
+      }
+    }
+  }
+  .detailBlocks {
+    .flex-wrap {
+      display: flex;
+      -webkit-box-pack: justify;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 1.5rem;
+    }
+    .copy_to_add {
+      margin-left: 10px;
+      cursor: pointer;
+    }
+    .flexBox {
+      align-items: flex-end;
+    }
+    & h3 {
+      margin: 0px 1.25rem 0px 0px;
+    }
+    .id_status {
+      font-size: 16px;
+      font-family: DINPro-Bold;
+      color: rgb(132, 142, 156);
+    }
+  }
+  .transactions {
+    .sub-title {
+      font-size: 13px;
+    }
+    .flex-header {
+      align-items: flex-end;
+      justify-content: left;
+    }
+    & h3 {
+      margin: 0px 1.25rem 0px 0px;
+    }
+    .id_status {
+      font-size: 16px;
+      font-family: DINPro-Bold;
+      color: rgb(132, 142, 156);
+    }
+  }
+  // .detailTransactions {
+  // }
 }

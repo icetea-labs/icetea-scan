@@ -134,7 +134,7 @@ class Transactions extends Component {
     const { totalTxs } = this.props;
 
     return (
-      <div className="transactions pc-container ">
+      <div className="pcContainer">
         {isShowTxForBlock ? (
           <div className="flexBox flex-header">
             <h3>Transactions</h3>

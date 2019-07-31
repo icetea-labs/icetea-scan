@@ -18,25 +18,11 @@ class Blocks extends PureComponent {
     };
   }
 
-  // static getDerivedStateFromProps(nextProps, prevState) {
-  //   if (nextProps.blocksInfo !== prevState.blocksInfo) {
-  //     return { blocksInfo: nextProps.blocksInfo };
-  //   } else {
-  //     return null;
-  //   }
-  // }
-
   componentDidMount() {
     const { pageSize } = this.state;
     getListBlockApi({ page_size: pageSize });
     getTotalBlockApi();
   }
-
-  // componentDidUpdate() {
-  //   const { setLoading } = this.props;
-  //   console.log("componentDidUpdate");
-  //   setLoading(false);
-  // }
 
   renderTHead() {
     return (
@@ -110,7 +96,7 @@ class Blocks extends PureComponent {
     if (to > totalBlocks) to = totalBlocks;
 
     return (
-      <div className="blocks pc-container ">
+      <div className="pcContainer">
         <h3>Blocks</h3>
         <div className="flexBox">
           <div className="sub-title">

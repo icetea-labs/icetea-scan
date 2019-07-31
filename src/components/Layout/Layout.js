@@ -1,11 +1,11 @@
 import React from 'react';
 import Header from './Header/Header';
 import Footer from './Footer';
-import { FlexBox } from '../elements/Common';
+import { FlexBox, FlexItem } from '../elements/Common';
 
 function LayoutCommon(props) {
   return (
-    <FlexBox className="layout_container">
+    <FlexBox className="layoutContainer">
       <Header {...props} />
       {props.children}
       <Footer />
@@ -22,9 +22,9 @@ export function HomeLayout(props) {
 export function Layout(props) {
   return (
     <LayoutCommon {...props}>
-      <div className="content">
-        <main className="layout-content">{props.children}</main>
-      </div>
+      <FlexItem>
+        <main className="layoutContent">{props.children}</main>
+      </FlexItem>
     </LayoutCommon>
   );
 }

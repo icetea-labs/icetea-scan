@@ -80,7 +80,7 @@ class TransactionsInfo extends Component {
     const { txInfo } = this.state;
 
     return (
-      <div className="detailTransactions detailBlocks pc-container">
+      <div className="detailTransactions blockInfo pc-container">
         <div className="flex-wrap">
           <div className="flexBox">
             <h3>Transactions</h3>

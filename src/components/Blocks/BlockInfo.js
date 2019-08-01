@@ -83,7 +83,7 @@ class BlockInfo extends Component {
     const { height, parentHeight, time, num_txs, blockHash, parentHash, node } = this.state;
 
     return (
-      <div className="detailBlocks">
+      <div className="blockInfo">
         <div className="flex-wrap">
           <div className="flexBox">
             <h3>Block</h3>

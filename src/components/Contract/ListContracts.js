@@ -56,7 +56,7 @@ class ListContracts extends Component {
 
   renderTbody() {
     const { dataCurrentPage } = this.state;
-
+    console.log('dataCurrentPage', dataCurrentPage);
     return dataCurrentPage.map((item, index) => {
       return (
         <tr key={index}>

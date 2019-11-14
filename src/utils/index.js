@@ -4,7 +4,7 @@ import moment from 'moment';
 export const decimal = 6;
 
 export function toTEA(unit) {
-  return unit / 10 ** decimal;
+  return Number(unit) / (10 ** decimal);
 }
 
 export function toUNIT(tea) {

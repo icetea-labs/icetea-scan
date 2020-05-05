@@ -4,7 +4,7 @@ import moment from 'moment';
 export const decimal = 6;
 
 export function toTEA(unit) {
-  return Number(unit) / (10 ** decimal);
+  return Number(unit) / 10 ** decimal;
 }
 
 export function toUNIT(tea) {
@@ -47,7 +47,7 @@ export function fmtType(t, convert) {
     t = [t];
   }
   if (convert) {
-    t = t.map(item => (item === 'undefined' ? 'void' : item));
+    t = t.map((item) => (item === 'undefined' ? 'void' : item));
   }
   return t.join('|');
 }
@@ -115,7 +115,7 @@ export function parseParamList(pText) {
   pText = replaceAll(pText, '\n\n', '\n');
   let params = pText
     .split('\n')
-    .filter(e => e.trim())
+    .filter((e) => e.trim())
     .map(tryParseJson);
 
   return params;
@@ -134,4 +134,7 @@ export function replaceAll(text, search, replacement) {
 
 export function formatNumber(num) {
   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+}
+export function isSameTXs(oldTxs, newTxs) {
+  return oldTxs.length !== newTxs.length ? false : oldTxs.every((o) => newTxs.find((n) => o.hash === n.hash));
 }

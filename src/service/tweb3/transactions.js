@@ -8,9 +8,12 @@ export const getTxHistoryByAddress = async (address) => {
     const txTo = await tweb3.searchTransactions(`system.to='${address}' AND system._ev = 'tx'`, { per_page: 100 });
     const txPayer = await tweb3.searchTransactions(`system.payer='${address}' AND system._ev = 'tx'`, { per_page: 100 });
 
-    const all = txFrom.txs.concat(txTo.txs).concat(txPayer.txs); //.map(tweb3.utils.decodeTxResult);
-    if (all) {
-      return { msg: 'ok', data: all, status: 200 };
+    let myTxs = txFrom.txs.concat(txTo.txs).concat(txPayer.txs); //.map(tweb3.utils.decodeTxResult);
+    // Remove duplicates tx
+    myTxs = Object.values(myTxs.reduce((txs, tx) => Object.assign(txs, { [tx.hash]: tx }), {}));
+
+    if (myTxs) {
+      return { msg: 'ok', data: myTxs, status: 200 };
     }
   } catch (err) {
     throw err;

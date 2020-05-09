@@ -2,18 +2,18 @@ import tweb3 from './tweb3';
 // import store from '../../store';
 // import * as actions from '../../store/actions';
 
-export const getTxHistoryByAddress = async address => {
+export const getTxHistoryByAddress = async (address) => {
   try {
-    const fromList = await tweb3.searchTransactions("tx.from='" + address + "'", { per_page: 100 });
-    const toList = await tweb3.searchTransactions("tx.to='" + address + "'", { per_page: 100 });
-    const payerList = await tweb3.searchTransactions("tx.payer='" + address + "'", { per_page: 100 });
-    const all = fromList.txs
-      .concat(toList.txs)
-      .concat(payerList.txs)
-      .map(tweb3.utils.decodeTxResult);
+    const txFrom = await tweb3.searchTransactions(`system.from='${address}' AND system._ev = 'tx'`, { per_page: 100 });
+    const txTo = await tweb3.searchTransactions(`system.to='${address}' AND system._ev = 'tx'`, { per_page: 100 });
+    const txPayer = await tweb3.searchTransactions(`system.payer='${address}' AND system._ev = 'tx'`, { per_page: 100 });
 
-    if (all) {
-      return { msg: 'ok', data: all, status: 200 };
+    let myTxs = txFrom.txs.concat(txTo.txs).concat(txPayer.txs); //.map(tweb3.utils.decodeTxResult);
+    // Remove duplicates tx
+    myTxs = Object.values(myTxs.reduce((txs, tx) => Object.assign(txs, { [tx.hash]: tx }), {}));
+
+    if (myTxs) {
+      return { msg: 'ok', data: myTxs, status: 200 };
     }
   } catch (err) {
     throw err;
@@ -26,7 +26,7 @@ export const getTxHistoryByAddress = async address => {
  *  @param {string} getTransaction
  * @return {object } return re  uest of data
  */
-export const getDataTransaction = async hash => {
+export const getDataTransaction = async (hash) => {
   let info = null;
 
   try {

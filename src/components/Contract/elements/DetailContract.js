@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react';
 import { codec } from '@iceteachain/common';
 import Select from 'rc-select';
+
 import PaginationPro from '../../elements/PaginationPro';
 import { Balance, Language, Address, Block, TxType, TxStatus, TxTypeTranfer, Hash } from '../../elements/Common';
+import { isSameTXs } from '../../../utils';
 
 class DetailContract extends PureComponent {
   constructor(props) {
@@ -30,7 +32,7 @@ class DetailContract extends PureComponent {
 
   componentDidUpdate(prevProp, prevState) {
     const { txOnPage } = this.state;
-    if (JSON.stringify(prevState.txOnPage) !== JSON.stringify(txOnPage)) {
+    if (!isSameTXs(prevState.txOnPage, txOnPage)) {
       this.loadTxHistory();
     }
   }
@@ -53,7 +55,6 @@ class DetailContract extends PureComponent {
 
   renderTbody() {
     const { txOnPage } = this.state;
-    // console.log('renderTbody', txOnPage.length);
     if (txOnPage.length === 0) {
       return (
         <tr className="no_data">
@@ -101,7 +102,6 @@ class DetailContract extends PureComponent {
 
   loadTxHistory() {
     const { current, pageSize, baseTxHistory } = this.state;
-
     const total = baseTxHistory.length;
     const from = (current - 1) * pageSize;
     let to = from + pageSize;
@@ -117,7 +117,7 @@ class DetailContract extends PureComponent {
     this.setState({ txOnPage: txHistoryTmp, total });
   }
 
-  paginationOnChange = current => {
+  paginationOnChange = (current) => {
     this.setState({ current }, () => {
       this.loadTxHistory();
     });

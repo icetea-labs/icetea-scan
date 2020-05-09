@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Select from 'rc-select';
+
 import PaginationPro from '../elements/PaginationPro';
 import { TotalInfo, HeaderMap, Balance, Address, Language } from '../elements/Common';
 import { getAllContracts, getAccountInfo } from '../../service';
 import * as actions from '../../store/actions';
+
 class ListContracts extends Component {
   constructor(props) {
     super(props);
@@ -77,7 +79,7 @@ class ListContracts extends Component {
     });
   }
 
-  paginationOnChange = current => {
+  paginationOnChange = (current) => {
     // console.log("current", current);
     const { allContractsAddress } = this.state;
     const { setLoading } = this.props;
@@ -96,7 +98,12 @@ class ListContracts extends Component {
         <h3>Contracts</h3>
         <div className="flexBox">
           <TotalInfo total={total} text={['contracts', ['contract']]} />
-          <HeaderMap value={[{ path: '/', text: 'Home' }, { path: '/contracts', text: 'Contracts' }]} />
+          <HeaderMap
+            value={[
+              { path: '/', text: 'Home' },
+              { path: '/contracts', text: 'Contracts' },
+            ]}
+          />
         </div>
         <div className="table_data">
           <table>
@@ -125,15 +132,12 @@ class ListContracts extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    setLoading: value => {
+    setLoading: (value) => {
       dispatch(actions.setLoading(value));
     },
   };
 };
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(ListContracts);
+export default connect(null, mapDispatchToProps)(ListContracts);

@@ -11,8 +11,6 @@ import 'rc-tabs/assets/index.css';
 import { getAccountInfo, getMetadataContract, getTxHistoryByAddress } from '../../service';
 import { HeaderMap } from '../elements/Common';
 
-import { toTEA, tryParseJson } from '../../utils';
-
 class ContractInfo extends Component {
   constructor(props) {
     super(props);
@@ -83,31 +81,28 @@ class ContractInfo extends Component {
 
     if (resp.status === 200 && resp.data) {
       const { data } = resp;
-      data.forEach(x => {
-        x.from = x.tx.from || x.tags['tx.from'];
-        x.fromText = x.from;
-        x.to = x.tx.to || x.tags['tx.to'];
-        x.toText = x.to;
-        x.payer = x.tx.payer || x.tags['tx.payer'];
-        x.payerText = x.payer;
-        x.tx.data = x.tx.data ? tryParseJson(x.tx.data) || {} : {};
+      data.forEach((x) => {
+        const evTx = x.events.filter((e) => e.eventName === 'tx');
+        x.from = x.tx.from || evTx[0].eventData.from;
+        x.to = x.tx.to || evTx[0].eventData.to;
+        x.payer = x.tx.payer || evTx[0].eventData.payer;
+        x.tx.data = x.tx.data || {};
 
         x.status = x.tx_result.code;
         x.inOut = x.from === address ? 'OUT' : x.to === address ? 'IN' : x.payer === address ? 'PAYER' : '--';
         x.shash = x.hash;
         x.blockHeight = +x.height;
         x.value = x.tx.value || 0;
-        x.valueText = toTEA(x.value).toLocaleString() + ' TEA';
 
         x.txType = x.tx.data.op;
       });
-      const arrTmp = [];
-      const uniqueArray = data.filter((item, index) => {
-        arrTmp[index] = item.shash;
-        return arrTmp.indexOf(item.shash) === index;
-      });
+      // const arrTmp = [];
+      // const uniqueArray = data.filter((item, index) => {
+      //   arrTmp[index] = item.shash;
+      //   return arrTmp.indexOf(item.shash) === index;
+      // });
 
-      const sorted = uniqueArray.sort((a, b) => {
+      const sorted = data.sort((a, b) => {
         const delta = b.blockHeight - a.blockHeight;
         if (delta) return delta;
         return b.index - a.index;
@@ -117,7 +112,7 @@ class ContractInfo extends Component {
     }
   }
 
-  tabOnChange = value => {
+  tabOnChange = (value) => {
     this.setState({ activeKey: value });
   };
 

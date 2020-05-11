@@ -29,7 +29,7 @@ class BlocksBox extends PureComponent {
           <div className="row_blocks">
             <div className="title flex">
               <div className="block_count">
-                <span>Blocks</span>
+                <span>Block</span>
                 <Block value={block.height} />
               </div>
               <div className="seconds_time">

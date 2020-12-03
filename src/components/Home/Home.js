@@ -4,7 +4,7 @@ import BlocksBox from './elements/BlocksBox';
 import TransactionsBox from './elements/TransactionsBox';
 import ChainInfo from './elements/ChainInfo';
 
-import { getListBlockApi, getListTxApi, getAllContracts } from '../../service';
+import { getListBlockApi, getListTxApi, getAllContracts, getTotalTxsApi } from '../../service';
 
 let interval = null;
 
@@ -24,6 +24,7 @@ class Home extends Component {
       getListBlockApi({ page_size: 10 });
       getListTxApi({ page_size: 10 });
       getAllContracts();
+      getTotalTxsApi();
     }, 1000);
   }
 

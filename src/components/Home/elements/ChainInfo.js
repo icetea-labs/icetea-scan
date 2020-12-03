@@ -20,7 +20,8 @@ class ChainInfo extends PureComponent {
       return {
         time: nextProps.blocksInfo[0].time,
         height: nextProps.blocksInfo[0].height,
-        total_txs: nextProps.blocksInfo[0].total_txs,
+        // total_txs: nextProps.blocksInfo[0].total_txs,
+        total_txs: nextProps.totalTxs,
         total_accounts: nextProps.totalContract,
       };
     } else {
@@ -57,15 +58,13 @@ class ChainInfo extends PureComponent {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { chainInfo } = state;
   return {
     blocksInfo: chainInfo.blocks,
     totalContract: chainInfo.totalContract,
+    totalTxs: chainInfo.totalTxs,
   };
 };
 
-export default connect(
-  mapStateToProps,
-  null
-)(ChainInfo);
+export default connect(mapStateToProps, null)(ChainInfo);

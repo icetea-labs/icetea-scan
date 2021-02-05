@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-// import logo from '../../../assets/img/logo.png';
 import logo from '../../../assets/img/icetea-logo.svg';
 import Menu from '../Menu/Menu';
 import SearchBox from '../SearchBox/SearchBox';

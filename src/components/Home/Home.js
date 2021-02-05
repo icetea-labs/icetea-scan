@@ -11,7 +11,7 @@ let interval = null;
 function Banner() {
   return (
     <div className="banner-container">
-      <h3>ICETEA CHAIN EXPLORER (TESTNET)</h3>
+      <h3>POLKAFOUNDRY CHAIN EXPLORER (TESTNET)</h3>
       <div className="searh-box">
         <SearchBox />
       </div>

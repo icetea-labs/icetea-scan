@@ -7,10 +7,11 @@ class Footer extends Component {
         <div className="container">
           <div className="infomation">
             <p>
-              © 2019 &nbsp;
+              Copyright © 2019&nbsp;
               <a href={process.env.REACT_APP_TRADA} target="_blank" rel="noopener noreferrer">
-                TradaTech
+                Icetea Foundation
               </a>
+              . All rights reserved.
             </p>
             <a href={process.env.REACT_APP_TELE} rel="noopener noreferrer" target="_blank">
               <i className="fa fa-paper-plane" />

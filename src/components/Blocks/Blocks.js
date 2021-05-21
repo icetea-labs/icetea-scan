@@ -82,7 +82,7 @@ class Blocks extends PureComponent {
               <span>{item.chain_id}</span>
             </td>
             <td>
-              <span>0 TEA</span>
+              <span>0 PKF</span>
             </td>
           </tr>
         );

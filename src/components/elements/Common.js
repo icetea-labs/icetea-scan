@@ -84,7 +84,7 @@ export function TimeWithFormat(props) {
   return <span>{moment(props.value).format(formatValue)}</span>;
 }
 export function Balance(props) {
-  return <span>{`${toTEA(props.value)} TEA`}</span>;
+  return <span>{`${toTEA(props.value)} PKF`}</span>;
 }
 export function Language(props) {
   let { address, isContractAddress } = props;

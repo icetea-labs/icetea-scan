@@ -195,7 +195,7 @@ class TransactionsInfo extends Component {
             </div>
             <div className="row_detail">
               <span className="label">Gas Limit:</span>
-              <div className="text_wrap">{txInfo.gaslimit > 0 ? `${txInfo.gaslimit} TEA` : 'Not Set'}</div>
+              <div className="text_wrap">{txInfo.gaslimit > 0 ? `${txInfo.gaslimit} PKF` : 'Not Set'}</div>
             </div>
             <div className="row_detail">
               <span className="label">Nonce:</span>
